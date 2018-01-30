@@ -53,6 +53,21 @@ public class Util {
                 || ticker.contains("答题狂欢马上开始") || ticker.contains("本场奖金");
     }
 
+    public static boolean isMatchChannel(String channel, String key) {
+        if (key.equals(channel)) {
+            return true;
+        }
+        switch (channel) {
+            case "hj":
+            case "xigua":
+            case "cddh":
+            case "zscr":
+            case "hjsm":
+                return true;
+        }
+        return false;
+    }
+
     /**
      * dp转 px.
      *

@@ -7,6 +7,7 @@ import com.chyrain.quizassistant.V5Application;
 import com.chyrain.quizassistant.util.HttpResponseHandler;
 import com.chyrain.quizassistant.util.HttpUtil;
 import com.chyrain.quizassistant.util.Logger;
+import com.chyrain.quizassistant.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -151,7 +152,7 @@ public class AITask {
                                         int ansIndex = quiz.getAnsIndex();
 
                                         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(result)
-                                                && key.equals(channel)) {
+                                                && Util.isMatchChannel(channel, key)) {
                                             int index = 0;
                                             try {
                                                 // 解析题目序号

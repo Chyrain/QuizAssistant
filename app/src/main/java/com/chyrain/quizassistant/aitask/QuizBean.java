@@ -47,7 +47,8 @@ public class QuizBean {
         if (TextUtils.isEmpty(result)) {
             result = json.getString("recommend");
         }
-        if (TextUtils.isEmpty(result) || result.equals("啊呀，这题汪仔还在想")) {
+        if (TextUtils.isEmpty(result) || json.optInt("error") == 1) {
+            // 啊呀，这题汪仔还在想（没有答案，随机一个）
             int rId = (int)Math.floor(Math.random() * 3);
             // 随机获取 0、1、2
             result = answers.get(rId);
