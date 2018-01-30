@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+            android:title="开启AI自动答题助手">
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="机器人开关"
+            android:summary="同一时间只支持一个答题平台，需打开对应平台直播页面（打开[全自动托管]模式并开启对应直播App的通知权限可自动进入App，并自动答题）"
+            android:key="KEY_ENABLE_WECHAT"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="芝士超人"
+            android:summary="开启【芝士超人】直播答题助手"
+            android:icon="@mipmap/settings_ic_zscr"
+            android:key="KEY_ENABLE_ZSCR"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="冲顶大会"
+            android:summary="开启【冲顶大会】直播答题助手"
+            android:icon="@mipmap/settings_ic_cddh"
+            android:key="KEY_ENABLE_CDDH"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="西瓜视频"
+            android:summary="开启西瓜视频【百万英雄】直播答题助手"
+            android:icon="@mipmap/settings_ic_xigua"
+            android:key="KEY_ENABLE_XIGUA"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="映客直播"
+            android:summary="开启映客直播【芝士超人】直播答题助手"
+            android:icon="@mipmap/settings_ic_inke"
+            android:key="KEY_ENABLE_INKE"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="花椒直播"
+            android:summary="开启花椒直播【百万赢家】直播答题助手"
+            android:icon="@mipmap/settings_ic_huajiao"
+            android:key="KEY_ENABLE_HUAJIAO"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="黄金十秒"
+            android:summary="开启【黄金十秒】直播答题助手"
+            android:icon="@mipmap/settings_ic_hjsm"
+            android:key="KEY_ENABLE_HJSM"/>
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:title="答题助手浮动开关"
+            android:summary="便捷浮动开关，控制全局开关，您比AI更确定答案时可点击浮动按钮临时关闭AI答题"
+            android:defaultValue="false"
+            android:key="KEY_ENABLE_FLOAT_BUTTON"/>
+        
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:title="监听通知栏"
+            android:summary="直播开始前会收到对应App的通知，开启通知监听自动打开App答题"
+            android:defaultValue="true"
+            android:key="KEY_NOTIFICATION_SERVICE_TEMP_ENABLE"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="答题设置"
+        android:summary="建议全部开启，至少开启一项">
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="全自动托管"
+            android:summary="开启此选项机器人可自动为您提交答案"
+            android:key="KEY_AUTO_TRUST"/>
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="机器人提示答案"
+            android:summary="机器人会在答案选项后面加“（推荐）”字样"
+            android:key="KEY_SHOW_ANSWER"/>
+
+    </PreferenceCategory>
+
+    <!--<PreferenceCategory-->
+        <!--android:title="平台设置">-->
+
+        <!--<Preference-->
+            <!--android:title="微信设置"-->
+            <!--android:summary="更改抢红包模式，自由控制"-->
+            <!--android:key="WECHAT_SETTINGS"/>-->
+
+    <!--</PreferenceCategory>-->
+
+    <!--<PreferenceCategory android:title="高级设置">-->
+        <!--<Preference-->
+            <!--android:title="@string/notify_settings"-->
+            <!--android:key="NOTIFY_SETTINGS"/>-->
+    <!--</PreferenceCategory>-->
+    
+    <PreferenceCategory
+        android:title="关于">
+
+        <Preference
+            android:title="@string/app_intro"
+            android:summary="必读"
+            android:key="KEY_INSTRUCTION"/>
+
+        <!--<Preference-->
+            <!--android:title="@string/follow_preference_title"-->
+            <!--android:summary="@string/follow_preference_summary"-->
+            <!--android:key="KEY_FOLLOW_ME"/>-->
+
+        <Preference
+            android:title="@string/donate_title"
+            android:summary="@string/donate_summary"
+            android:key="KEY_DONATE_ME"/>
+        
+        <Preference
+            android:title="联系客服"
+            android:summary="联系在线客服提交您的反馈"
+            android:key="KEY_KEFU"/>
+    </PreferenceCategory>
+</PreferenceScreen>

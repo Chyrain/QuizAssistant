@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="@string/notify_settings">
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:key="KEY_NOTIFY_SOUND"
+            android:title="声音"
+            android:defaultValue="true"/>
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:key="KEY_NOTIFY_VIBRATE"
+            android:title="震动"
+            android:defaultValue="true"/>
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:key="KEY_NOTIFY_NIGHT_ENABLE"
+            android:title="夜间免打扰设置"
+            android:defaultValue="true"/>
+        
+        <Preference
+            android:title="免打扰开启时间"
+            android:key="KEY_NOTIFY_NIGHT_START" />
+
+        <Preference
+            android:title="免打扰结束时间"
+            android:key="KEY_NOTIFY_NIGHT_END" />
+    </PreferenceCategory>
+</PreferenceScreen>

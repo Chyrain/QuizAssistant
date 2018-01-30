@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorPrimary">#1f98b9</color>
+    <color name="colorPrimaryDark">#1f98b9</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="black">#000</color>
+    <color name="dark_gray">#cecece</color>
+    <color name="base_item_normal">#fff</color>
+    <color name="base_item_select">#dadada</color>
+    <color name="info_activity_item_divider_inner">#DEDFE0</color>
+    <color name="base_color_text_dark_gray">#787878</color>
+    <color name="info_item_right_text_color">#787878</color>
+</resources>
