@@ -118,7 +118,12 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
 
                 if (getConfig().isEnableAutoTrust()) {
                     // 进入答题页面
-                    clickAtNodeWithContent("点击进入");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            clickAtNodeWithContent("点击进入");
+                        }
+                    }, 2000);
                 }
             } else if (event.getClassName().equals("com.inke.trivia.room.RoomActivity")) {
                 mLastWindow = mCurrentWindow;
@@ -139,12 +144,15 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
                     + " mLastWindow:" + mLastWindow + " mCurrentWindow:" + mCurrentWindow + " event=>" + event);
             // 进入答题页面查找"点击进入"按钮并点击
             if ((mCurrentWindow == WINDOW_MAIN_PAGE || mCurrentWindow == WINDOW_OTHER_PAGE) && getConfig().isEnableAutoTrust()) {
-                clickAtNodeWithContent("点击进入");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        clickAtNodeWithContent("点击进入");
+                    }
+                }, 2000);
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
                 //clickAtNodeWithContent("继续观看");
-                if (mCurrentQuiz != null) {
-                    handleReceiveQuizAnswer();
-                }
+                handleReceiveQuizAnswer();
             }
         }
     }

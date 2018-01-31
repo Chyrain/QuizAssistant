@@ -118,10 +118,15 @@ public class InkeAccessbilityJob extends DatiAccessbilityJob {
                 Logger.i(TAG, "mCurrentWindow:" + mCurrentWindow + " activity=>" + event.getClassName());
 
                 if (getConfig().isEnableAutoTrust()) {
-                    //点击浮动按钮进入芝士超人页面
-                    clickAtNodeWithId("floatwindow_img");
-                    // 进入答题页面
-                    clickAtNodeWithContent("点击进入");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //点击浮动按钮进入芝士超人页面
+                            clickAtNodeWithId("floatwindow_img");
+                            // 进入答题页面
+                            clickAtNodeWithContent("点击进入");
+                        }
+                    }, 2000);
                 }
             } else if (event.getClassName().equals("com.meelive.ingkee.business.room.ui.activity.RoomActivity")) {
                 mLastWindow = mCurrentWindow;
@@ -142,15 +147,18 @@ public class InkeAccessbilityJob extends DatiAccessbilityJob {
                     + " mLastWindow:" + mLastWindow + " mCurrentWindow:" + mCurrentWindow + " event=>" + event);
             // 进入答题页面查找"点击进入"按钮并点击
             if ((mCurrentWindow == WINDOW_MAIN_PAGE || mCurrentWindow == WINDOW_OTHER_PAGE) && getConfig().isEnableAutoTrust()) {
-                //点击浮动按钮进入芝士超人页面
-                clickAtNodeWithId("floatwindow_img");
-                // 进入答题页面
-                clickAtNodeWithContent("点击进入");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //点击浮动按钮进入芝士超人页面
+                        clickAtNodeWithId("floatwindow_img");
+                        // 进入答题页面
+                        clickAtNodeWithContent("点击进入");
+                    }
+                }, 2000);
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
                 //clickAtNodeWithContent("继续观看");
-                if (mCurrentQuiz != null) {
-                    handleReceiveQuizAnswer();
-                }
+                handleReceiveQuizAnswer();
             }
         }
     }

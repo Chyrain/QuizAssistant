@@ -116,8 +116,13 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
                 Logger.i(TAG, "mCurrentWindow:" + mCurrentWindow + " activity=>" + event.getClassName());
 
                 if (getConfig().isEnableAutoTrust()) {
-                    // 进入答题页面
-                    clickAtNodeWithContent("进入直播间");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 进入答题页面
+                            clickAtNodeWithContent("进入直播间");
+                        }
+                    }, 2000);
                 }
             } else if (event.getClassName().equals("com.yixia.liveplay.activity.AnswerActivity")) {
                 mLastWindow = mCurrentWindow;
@@ -138,12 +143,16 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
                     + " mLastWindow:" + mLastWindow + " mCurrentWindow:" + mCurrentWindow + " event=>" + event);
             // 进入答题页面查找"点击进入"按钮并点击
             if ((mCurrentWindow == WINDOW_MAIN_PAGE || mCurrentWindow == WINDOW_OTHER_PAGE) && getConfig().isEnableAutoTrust()) {
-                clickAtNodeWithContent("进入直播间");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 进入答题页面
+                        clickAtNodeWithContent("进入直播间");
+                    }
+                }, 2000);
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
                 //clickAtNodeWithContent("继续观看");
-                if (mCurrentQuiz != null) {
-                    handleReceiveQuizAnswer();
-                }
+                handleReceiveQuizAnswer();
             }
         }
     }

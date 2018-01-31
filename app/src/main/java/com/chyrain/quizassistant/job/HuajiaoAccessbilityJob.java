@@ -118,16 +118,26 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                 Logger.i(TAG, "mCurrentWindow:" + mCurrentWindow + " activity=>" + event.getClassName());
 
                 if (getConfig().isEnableAutoTrust()) {
-                    //点击浮动按钮进入百万赢家页面
-                    clickAtNodeWithContent("百万赢家");
-                    clickAtNodeWithId("urgent_activity_img");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //点击浮动按钮进入百万赢家页面
+                            clickAtNodeWithContent("百万赢家");
+                            clickAtNodeWithId("urgent_activity_img");
+                        }
+                    }, 2000);
                 }
             } else if (event.getClassName().equals("com.huajiao.dispatch.ActivityH5Inner")) {
                 mLastWindow = mCurrentWindow;
                 mCurrentWindow = WINDOW_WEB_PAGE;
                 if (getConfig().isEnableAutoTrust()) {
-                    // 进入答题页面
-                    clickAtNodeWithContent("开始答题");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 进入答题页面
+                            clickAtNodeWithContent("开始答题");
+                        }
+                    }, 2000);
                 }
             } else if (event.getClassName().equals("com.huajiao.detail.WatchesListActivity")) {
                 mLastWindow = mCurrentWindow;
@@ -149,10 +159,15 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
             // 进入答题页面查找"点击进入"按钮并点击
             if (mCurrentWindow == WINDOW_MAIN_PAGE) {
                 if (getConfig().isEnableAutoTrust()) {
-                    //点击浮动按钮进入芝士超人页面
-                    clickAtNodeWithId("urgent_activity_img");
-                    // 进入答题页面
-                    clickAtNodeWithContent("开始答题");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //点击浮动按钮进入百万赢家页面
+                            clickAtNodeWithId("urgent_activity_img");
+                            // 进入答题页面
+                            clickAtNodeWithContent("开始答题");
+                        }
+                    }, 2000);
                 }
             } else if (mCurrentWindow == WINDOW_OTHER_PAGE) {
                 // 进入答题页面
@@ -165,9 +180,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                 }
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
                 //clickAtNodeWithContent("继续观看");
-                if (mCurrentQuiz != null && getConfig().isEnableAutoTrust()) {
-                    handleReceiveQuizAnswer();
-                }
+                handleReceiveQuizAnswer();
             }
         }
     }

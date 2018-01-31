@@ -5,9 +5,9 @@
     <string name="action_share">分享</string>
     <string name="about_home">官网</string>
     <string name="about_version">版本</string>
-    <string name="about_tips">注：本应用采用较为高级的辅助模式和浮动窗口功能实现答题辅助，需要使用者授权，本应用不做任何盈利性目的，特此声明，如有侵权请联系告知。</string>
+    <string name="about_tips">注：本应用采用较为高级的辅助模式和浮动窗口功能实现答题辅助，需要使用者授权，本应用不做任何非法盈利目的，特此声明，如有侵权请联系告知。</string>
     <string name="v5_version_info"><Data><![CDATA[ v%s ]]></Data></string>
-    <string name="v5_copyright"><Data><![CDATA[ Copyright © 2012-2016 CHYRAIN \n All Rights Reserved.]]></Data></string>
+    <string name="v5_copyright"><Data><![CDATA[ Copyright © 2017-2018 CHYRAIN \n All Rights Reserved.]]></Data></string>
     <string name="share_title">直播答题神器杀到</string>
     <string name="share_content_fmt">答题助手终极杀器，直播答题绝对神器，来不及解释了快上车[http://t.cn/RMbZKDt]~——来自[%s]</string>
     <string name="app_intro">使用说明</string>
@@ -15,7 +15,7 @@
     <string name="main_name">答题辅助</string>
     <string name="accessibility_description">启动直播答题辅助服务，帮您找到答案并自动作答，【必须开启】，否则无法自动答题。\n目前支持《芝士超人》《冲顶大会》《映客直播》《西瓜视频》《花椒直播》《黄金十秒》等App的直播答题。\n注：答案来自AI机器人，不确保答案正确性，从历史数据来看平均正确率约为85%。</string>
     <string name="service_name">V5答题助手（直播答题赢奖金）</string>
-    <string name="open_service_title">需要开启辅助服务正常使用</string>
+    <string name="open_service_title">需要开启辅助服务才能正常使用</string>
     <string name="open_service_button">打开辅助服务</string>
     <string name="open_notify_service">打开通知栏服务</string>
     <string name="check_update">检查更新</string>
@@ -32,13 +32,13 @@
     <string name="donate_summary">如果这个工具能帮到你，可以给开发者一点赞赏</string>
 
     <string name="agreement_title">免责声明</string>
-    <string name="agreement_message">本软件仅供学习使用，全托管模式答题时会进行一些自动化操作，答案来自AI机器人，不确保答案正确性，不对使用此软件带来的任何错误负责，不涉及任何第三方软件接口，本软件无病毒、不收集用户隐私信息，禁止使用本软件参与赌博活动。一切因使用“%1$s”造成的任何后果，%1$s概不负责，亦不承担任何法律责任!</string>
+    <string name="agreement_message">本软件仅供学习使用，全自动托管模式答题时会进行一些自动化操作（需要开启辅助功能和悬浮窗显示），答案来自AI机器人，准确率并非100%%，不涉及任何第三方软件接口，本软件无病毒、不收集用户隐私信息，禁止使用本软件参与赌博活动。一切因使用“%1$s”造成的任何后果，“%1$s”概不负责，亦不承担任何法律责任!</string>
 
     <string name="overlay_permission_title">悬浮窗权限未获取</string>
     <string name="overlay_permission_message">请到“应用管理” -> “%1$s” -> “权限管理” ->  中允许显示“悬浮窗”(不同手机品牌设置有所区别)</string>
 
-    <string name="qr_wx_id">v5kf_com</string>
-    <string name="qr_tips">点击复制微信号:v5kf_com</string>
+    <string name="qr_wx_id">v5zhike</string>
+    <string name="qr_tips">点击复制微信号:v5zhike</string>
 
     <string name="about_title">关于V5答题助手</string>
     <string name="about_url">http://chyrain.github.io/quizassistant</string>

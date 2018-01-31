@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-            android:title="开启AI自动答题助手">
+            android:title="开启V5答题助手">
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="true"
@@ -54,7 +54,7 @@
         
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:title="监听通知栏"
-            android:summary="直播开始前会收到对应App的通知，开启通知监听自动打开App答题"
+            android:summary="直播开始前会收到对应App的通知，开启通知监听可自动打开App答题"
             android:defaultValue="true"
             android:key="KEY_NOTIFICATION_SERVICE_TEMP_ENABLE"/>
 

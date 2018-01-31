@@ -9,11 +9,10 @@ import android.content.SharedPreferences.Editor;
 /**
  * 配置
  * @author Chyrain
- * <p>Created: 2016-12-26 上午10:02:42.</p>
+ * <p>Created: 2018-1-26 上午10:02:42.</p>
  * <p>Email: <a href="mailto:chyrain_v5kf@qq.com">chyrain_v5kf@qq.com</a></p>
- * <p>Blog: <a href="http://www.chyrain.com">chyrain.com</a></p>
- * @copyright <a href="http://www.v5kf.com">深圳市智客网络科技有限公司</a>
- * @edit
+ * <p>Blog: <a href="http://chyrain.github.io">chyrain.github.io</a></p>
+ * Edit
  *		TODO
  */
 public class Config {
@@ -22,7 +21,7 @@ public class Config {
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
-    public static final String URL_HOST = "http://www.v5kf.com/";
+    public static final String URL_HOST = "http://chyrain.github.io/quizassistant";
     public static final String URL_ABOUT = URL_HOST;
     public static final String SHARE_IMAGE_LINK = URL_HOST + "app/wxbot/share_img.png";
     public static final String APP_LINK = URL_HOST + "app/wxbot/app.html"; //index.html
@@ -32,14 +31,14 @@ public class Config {
 
     // 自定义服务广播 -> eventbus
     @Deprecated
-    public static final String ACTION_QIANGHONGBAO_SERVICE_DISCONNECT = "com.v5kf.v5wxbot.ACCESSBILITY_DISCONNECT";
+    public static final String ACTION_QIANGHONGBAO_SERVICE_DISCONNECT = "com.chyrain.quizassistant.ACCESSBILITY_DISCONNECT";
     @Deprecated
-    public static final String ACTION_QIANGHONGBAO_SERVICE_CONNECT = "com.v5kf.v5wxbot.ACCESSBILITY_CONNECT";
+    public static final String ACTION_QIANGHONGBAO_SERVICE_CONNECT = "com.chyrain.quizassistant.ACCESSBILITY_CONNECT";
     // 自定义通知栏广播 -> eventbus
     @Deprecated
-    public static final String ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT = "com.v5kf.v5wxbot.NOTIFY_LISTENER_DISCONNECT";
+    public static final String ACTION_NOTIFY_LISTENER_SERVICE_DISCONNECT = "com.chyrain.quizassistant.NOTIFY_LISTENER_DISCONNECT";
     @Deprecated
-    public static final String ACTION_NOTIFY_LISTENER_SERVICE_CONNECT = "com.v5kf.v5wxbot.NOTIFY_LISTENER_CONNECT";
+    public static final String ACTION_NOTIFY_LISTENER_SERVICE_CONNECT = "com.chyrain.quizassistant.NOTIFY_LISTENER_CONNECT";
 
     public static final String PREFERENCE_NAME = "v5wxbot_config"; // shared preference name
     public static final String KEY_ENABLE_WECHAT = "KEY_ENABLE_WECHAT"; // 允许微信机器人？
@@ -409,6 +408,5 @@ public class Config {
     public void setAgreement(boolean agreement) {
         preferences.edit().putBoolean(KEY_AGREEMENT, agreement).apply();
     }
-
 }
 

@@ -149,9 +149,7 @@ public class XiguaAccessbilityJob extends DatiAccessbilityJob {
                 clickAtNodeWithContent("点击进入");
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
                 //clickAtNodeWithContent("继续观看");
-                if (mCurrentQuiz != null) {
-                    handleReceiveQuizAnswer();
-                }
+                handleReceiveQuizAnswer();
             }
         }
     }

@@ -111,7 +111,7 @@ public class WxBotService extends AccessibilityService {
                         "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
                 Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
                 job.onReceiveAnswer(quiz);
-                EventBus.getDefault().post(job.getCurrentQuiz(), Config.EVENT_TAG_UPDATE_QUIZ);
+                EventBus.getDefault().post(quiz, Config.EVENT_TAG_UPDATE_QUIZ);
             }
         });
     }

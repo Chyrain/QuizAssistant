@@ -117,7 +117,12 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
 
                 if (Config.getConfig(getContext()).isEnableWechat()) {
                     // 进入答题页面
-                    clickAtNodeWithContent("点击观看");
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            clickAtNodeWithContent("点击观看");
+                        }
+                    }, 2000);
                 }
             } else if (event.getClassName().equals("com.chongdingdahui.app.ui.LiveActivity")) {
                 mLastWindow = mCurrentWindow;
@@ -138,12 +143,15 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
                     + " mLastWindow:" + mLastWindow + " mCurrentWindow:" + mCurrentWindow + " event=>" + event);
             // 进入答题页面查找"点击观看"按钮并点击
             if (mCurrentWindow == WINDOW_MAIN_PAGE || mCurrentWindow == WINDOW_OTHER_PAGE) {
-                clickAtNodeWithContent("点击观看");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        clickAtNodeWithContent("点击观看");
+                    }
+                }, 2000);
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
                 clickAtNodeWithContent("继续观看");//??
-                if (mCurrentQuiz != null) {
-                    handleReceiveQuizAnswer();
-                }
+                handleReceiveQuizAnswer();
             }
         }
     }
