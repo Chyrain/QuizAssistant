@@ -367,8 +367,8 @@ public class MainActivity extends BaseSettingsActivity {
     	 */
         wmParams.gravity = Gravity.START|Gravity.TOP;   //调整悬浮窗口至左上角，便于调整坐标
         //以屏幕左上角为原点，设置x、y初始值
-        wmParams.x = Util.dp2px(120, mActivity);
-        wmParams.y = Util.dp2px(15, mActivity);
+        wmParams.x = Util.dp2px(60, mActivity);
+        wmParams.y = Util.dp2px(10, mActivity);
         //设置悬浮窗口长宽数据
         wmParams.width = wFV.getMeasuredWidth() > 80 ? wFV.getMeasuredWidth() : Util.dp2px(190, mActivity);
         wmParams.height = wFV.getMeasuredHeight() > 40 ? wFV.getMeasuredHeight() : Util.dp2px(40, mActivity);
