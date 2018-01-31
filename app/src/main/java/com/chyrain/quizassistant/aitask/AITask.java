@@ -170,7 +170,9 @@ public class AITask {
 
                                             quiz.setIndex(index);
                                             if (!mQuizMap.containsKey(title)) {
-                                                mQuizMap.put(title, result);
+                                                if (!quiz.isRandom()) {
+                                                    mQuizMap.put(title, result);
+                                                }
                                                 // 新题
                                                 callback.onReceiveNextAnswer(accessbilityJob, quiz);
                                             }
