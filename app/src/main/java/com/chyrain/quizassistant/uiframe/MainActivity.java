@@ -3,8 +3,6 @@ package com.chyrain.quizassistant.uiframe;
 import java.io.File;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
@@ -30,7 +28,6 @@ import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +38,7 @@ import android.widget.Toast;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.V5Application;
+import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.job.WechatAccessbilityJob;
 import com.chyrain.quizassistant.service.WxBotNotificationService;
@@ -49,10 +47,10 @@ import com.chyrain.quizassistant.util.BitmapUtils;
 import com.chyrain.quizassistant.util.DeviceUtil;
 import com.chyrain.quizassistant.util.Logger;
 import com.chyrain.quizassistant.util.Util;
+import com.chyrain.quizassistant.view.QuizFloatView;
 import com.chyrain.quizassistant.view.WechatFloatView;
 import com.chyrain.quizassistant.R;
 import com.tencent.android.tpush.XGPushConfig;
-import com.umeng.analytics.MobclickAgent;
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.client.lib.V5ClientConfig;
 
@@ -66,8 +64,12 @@ public class MainActivity extends BaseSettingsActivity {
     // 浮动开关按钮
     private WindowManager wm = null;
     private WindowManager.LayoutParams wmParams = null;
-    private WechatFloatView wFV = null;
+    private QuizFloatView wFV = null;
     private boolean permitForFV = false;
+//    private View wFV = null;
+//    private CircleImageView mAppIconIv;
+//    private TextView mAppNameTv;
+//    private TextView mAnswerTv;
 
     @Override
     public void onBackPressed() {
@@ -305,13 +307,9 @@ public class MainActivity extends BaseSettingsActivity {
         Logger.i(TAG, "[显示浮动按钮]【createFloatView】:" + V5Application.getInstance());
         //设置LayoutParams(全局变量）相关参数
         wmParams = V5Application.getInstance().getWechatWmParams();
-        wFV = new WechatFloatView(mActivity, wmParams);
-        if (WxBotService.isEnable(mActivity)) {
-            wFV.setImageResource(R.mipmap.v5_avatar_robot_red);  //这里简单的用自带的Icom来做演示
-        } else {
-            wFV.setImageResource(R.mipmap.v5_avatar_robot_gray);
-        }
-        wFV.setOnClickListener(new View.OnClickListener() {
+        wFV = new QuizFloatView(mActivity, wmParams);
+        updateWFV(WxBotService.isEnable(mActivity));
+        wFV.getAppIconIv().setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -371,8 +369,8 @@ public class MainActivity extends BaseSettingsActivity {
         wmParams.x = Util.dp2px(120, mActivity);
         wmParams.y = Util.dp2px(15, mActivity);
         //设置悬浮窗口长宽数据
-        wmParams.width = Util.dp2px(36, mActivity);
-        wmParams.height = Util.dp2px(36, mActivity);
+        wmParams.width = wFV.getMeasuredWidth() > 80 ? wFV.getMeasuredWidth() : Util.dp2px(190, mActivity);
+        wmParams.height = wFV.getMeasuredHeight() > 40 ? wFV.getMeasuredHeight() : Util.dp2px(40, mActivity);
 
         //显示myFloatView图像
         wm.addView(wFV, wmParams);
@@ -384,11 +382,8 @@ public class MainActivity extends BaseSettingsActivity {
             Logger.e(TAG, "updateWFV: null wFV");
             return;
         }
-        if (light) {
-            wFV.setImageResource(R.mipmap.v5_avatar_robot_red);  //这里简单的用自带的Icom来做演示
-        } else {
-            wFV.setImageResource(R.mipmap.v5_avatar_robot_gray);
-        }
+        // wFV
+        wFV.updateFloatEnable(light);
     }
 
     /** 打开本界面 **/
@@ -970,7 +965,24 @@ public class MainActivity extends BaseSettingsActivity {
         Logger.i(TAG, "<v5kf>EVENT_TAG_ACCESSBILITY_JOB_CHANGE key: " + accessbilityJob.getAppName()
             + " key: " + accessbilityJob.getJobKey());
         Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
-        // TODO 切换答题应用
+        if (wFV != null) {
+            wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
+        }
+    }
+
+    @Subscriber(tag = Config.EVENT_TAG_UPDATE_QUIZ, mode=ThreadMode.MAIN)
+    private void updateCurrentQuiz(QuizBean quiz) {
+        Logger.i(TAG, "<v5kf>EVENT_TAG_UPDATE_QUIZ key: " + quiz);
+        if (wFV != null) {
+            wFV.updateFloatQuiz(quiz);
+        }
+
+        if (Config.getConfig(MainActivity.this).isEnableShowAnswer()) {
+            // 选择
+            if (quiz != null) {
+                Toast.makeText(MainActivity.this, "推荐答案：" + quiz.getResult(), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }
 

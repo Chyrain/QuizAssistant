@@ -24,6 +24,8 @@ public class QuizBean {
     private String result;
     private int ansIndex; // 答案序号
 
+    private boolean random; // 答不上，随机选答
+
     public QuizBean(String title, ArrayList<String> answers, String result) {
         this.title = title;
         this.answers = answers;
@@ -52,6 +54,7 @@ public class QuizBean {
             int rId = (int)Math.floor(Math.random() * 3);
             // 随机获取 0、1、2
             result = answers.get(rId);
+            setRandom(true);
             Logger.w(TAG, "随机获取答案id：" + rId + " 答案：" + result);
         }
         // 答案序号
@@ -103,5 +106,13 @@ public class QuizBean {
 
     public void setAnsIndex(int ansIndex) {
         this.ansIndex = ansIndex;
+    }
+
+    public boolean isRandom() {
+        return random;
+    }
+
+    public void setRandom(boolean random) {
+        this.random = random;
     }
 }

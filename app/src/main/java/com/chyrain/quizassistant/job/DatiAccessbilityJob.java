@@ -24,23 +24,28 @@ import com.chyrain.quizassistant.util.NotifyHelper;
 public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
     private static final String TAG = "DatiAccessbilityJob";
 
-    public static final int WINDOW_OTHER = -1; // 锁屏页
-    public static final int WINDOW_NONE = 0; // 未知页面
+    private static final int WINDOW_OTHER = -1; // 锁屏页
+    private static final int WINDOW_NONE = 0; // 未知页面
 
-    String mCurrChat = "";
+//    String mCurrChat = "";
     int mContentChangeCount = 0;
     int mLastWindow = WINDOW_NONE;
     int mCurrentWindow = WINDOW_NONE;
 
     QuizBean mCurrentQuiz;
-    ScreenListener mScreenListener;
-    boolean isReceivingHongbao;
+    private ScreenListener mScreenListener;
+    private boolean isReceivingHongbao;
 //    AITask mAITask;
-    PendingIntent mPendingIntent; // 收到通知时赋值
+    private PendingIntent mPendingIntent; // 收到通知时赋值
 
     public abstract String getJobKey();
     public abstract void onReceiveAnswer(QuizBean quiz);
     public abstract String getAppName();
+
+
+    public QuizBean getCurrentQuiz() {
+        return mCurrentQuiz;
+    }
 
     @Override
     public void onCreateJob(WxBotService service) {
@@ -66,7 +71,7 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
 //            }
 //        });
 
-        /** 屏幕状态监听 **/
+        /* 屏幕状态监听 **/
         mScreenListener = new ScreenListener(getContext());
         mScreenListener.begin(new ScreenListener.ScreenStateListener() {
 
@@ -115,11 +120,13 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
     @Override
     public void onEnableChange(boolean enable) {
         Logger.d(TAG, TAG + ".onEnableChange: " + enable + " mCurrentWindow: " + mCurrentWindow);
-//        if (enable && mCurrentWindow == WINDOW_QUIZ_PAGE) {
-//            mAITask.startTask();
-//        } else {
-//            mAITask.stopTask();
-//        }
+/*
+if (enable && mCurrentWindow == WINDOW_QUIZ_PAGE) {
+mAITask.startTask();
+} else {
+mAITask.stopTask();
+}
+*/
     }
 
     /** 打开通知栏消息*/
@@ -155,17 +162,6 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
     }
 
     protected void handleReceiveQuizAnswer() {
-//        if (getConfig().isEnableShowAnswer()) {
-//            // 选择
-//            mHandler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (mCurrentQuiz != null) {
-//                        Toast.makeText(getContext(), "推荐答案：" + mCurrentQuiz.getResult(), Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            });
-//        }
         // 查找答案并处理
         handleNodeWithContent(mCurrentQuiz.getResult());
     }

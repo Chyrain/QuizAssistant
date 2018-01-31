@@ -12,19 +12,10 @@ import org.simple.eventbus.ThreadMode;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.View;
-import android.view.WindowManager;
-import android.view.WindowManager.LayoutParams;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
@@ -32,7 +23,6 @@ import android.widget.Toast;
 import com.chyrain.quizassistant.BuildConfig;
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
-import com.chyrain.quizassistant.V5Application;
 import com.chyrain.quizassistant.aitask.AITask;
 import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.job.ChongdingAccessbilityJob;
@@ -42,11 +32,8 @@ import com.chyrain.quizassistant.job.HuajiaoAccessbilityJob;
 import com.chyrain.quizassistant.job.InkeAccessbilityJob;
 import com.chyrain.quizassistant.job.XiguaAccessbilityJob;
 import com.chyrain.quizassistant.job.ZhishiAccessbilityJob;
-import com.chyrain.quizassistant.uiframe.MainActivity;
 import com.chyrain.quizassistant.util.Logger;
 import com.chyrain.quizassistant.util.NotifyHelper;
-import com.chyrain.quizassistant.util.Util;
-import com.chyrain.quizassistant.view.WechatFloatView;
 
 /**
  * <p>Created by LeonLee on 15/2/17 下午10:25.</p>
@@ -55,10 +42,6 @@ import com.chyrain.quizassistant.view.WechatFloatView;
  * 答题辅助服务
  */
 public class WxBotService extends AccessibilityService {
-	// 浮动开关按钮
- 	private WindowManager wm = null;
- 	private LayoutParams wmParams = null;
- 	private WechatFloatView wFV = null;
 
     private static final String TAG = "WxBotService";
     private static WxBotService service;
@@ -128,6 +111,7 @@ public class WxBotService extends AccessibilityService {
                         "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
                 Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
                 job.onReceiveAnswer(quiz);
+                EventBus.getDefault().post(job.getCurrentQuiz(), Config.EVENT_TAG_UPDATE_QUIZ);
             }
         });
     }
@@ -147,9 +131,6 @@ public class WxBotService extends AccessibilityService {
                 job.onStopJob();
             }
             mAccessbilityJobs.clear();
-        }
-        if (wFV != null && wm != null) {
-        	wm.removeView(wFV);
         }
 
         if (mAITask != null) {
@@ -211,10 +192,7 @@ public class WxBotService extends AccessibilityService {
     }
 
     public static boolean isEnable(Context context) {
-        if (isRunning() && Config.getConfig(context).isEnableWechat()) {
-            return true;
-        }
-        return false;
+        return isRunning() && Config.getConfig(context).isEnableWechat();
     }
 
     /**
@@ -286,6 +264,7 @@ public class WxBotService extends AccessibilityService {
         if(info == null) {
             return false;
         }
+        assert accessibilityManager != null;
         List<AccessibilityServiceInfo> list = accessibilityManager.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_GENERIC);
         Iterator<AccessibilityServiceInfo> iterator = list.iterator();
 
@@ -300,39 +279,6 @@ public class WxBotService extends AccessibilityService {
         return isConnect;
     }
 
-    public static boolean isBackground(String packageName, Context context) {
-        ActivityManager activityManager = (ActivityManager) context
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
-                .getRunningAppProcesses();
-        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
-            Logger.d(context.getPackageName(), "此appimportace ="
-                    + appProcess.importance
-                    + ",context.getClass().getName()="
-                    + context.getClass().getName());
-            if (appProcess.processName.equals(packageName)) {
-                /*
-                BACKGROUND=400 EMPTY=500 FOREGROUND=100
-                GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
-                 */
-                Logger.i(context.getPackageName(), "此appimportace ="
-                        + appProcess.importance
-                        + ",context.getClass().getName()="
-                        + context.getClass().getName());
-                if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
-                    Log.i(context.getPackageName(), "处于后台"
-                            + appProcess.processName);
-                    return true;
-                } else {
-                    Log.i(context.getPackageName(), "处于前台"
-                            + appProcess.processName);
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
-
     /** 快速读取通知栏服务是否启动*/
     public static boolean isNotificationServiceRunning() {
         //部份手机没有NotificationService服务
@@ -341,144 +287,64 @@ public class WxBotService extends AccessibilityService {
         }
         try {
             return WxBotNotificationService.isRunning();
-        } catch (Throwable t) {}
+        } catch (Throwable t) {
+            t.printStackTrace();
+        }
         return false;
     }
-    
+
+//    public static boolean isBackground(String packageName, Context context) {
+//        ActivityManager activityManager = (ActivityManager) context
+//                .getSystemService(Context.ACTIVITY_SERVICE);
+//        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+//                .getRunningAppProcesses();
+//        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+//            Logger.d(context.getPackageName(), "此appimportace ="
+//                    + appProcess.importance
+//                    + ",context.getClass().getName()="
+//                    + context.getClass().getName());
+//            if (appProcess.processName.equals(packageName)) {
+//                /*
+//                BACKGROUND=400 EMPTY=500 FOREGROUND=100
+//                GONE=1000 PERCEPTIBLE=130 SERVICE=300 ISIBLE=200
+//                 */
+//                Logger.i(context.getPackageName(), "此appimportace ="
+//                        + appProcess.importance
+//                        + ",context.getClass().getName()="
+//                        + context.getClass().getName());
+//                if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+//                    Log.i(context.getPackageName(), "处于后台"
+//                            + appProcess.processName);
+//                    return true;
+//                } else {
+//                    Log.i(context.getPackageName(), "处于前台"
+//                            + appProcess.processName);
+//                    return false;
+//                }
+//            }
+//        }
+//        return false;
+//    }
+//
 //    @Subscriber(tag = Config.EVENT_TAG_STOP_WXBOT, mode=ThreadMode.MAIN)
 //	private void stopWxBotService(WxBotNotificationService service) {
 //		Logger.i("event-tag", "EVENT_TAG_STOP_WXBOT");
 //		this.stopSelf();
 //	}
-
-    private void createFloatView(){
-    	//设置LayoutParams(全局变量）相关参数
-    	//设置LayoutParams(全局变量）相关参数
-    	wmParams = ((V5Application)getApplicationContext()).getWechatWmParams();
-    	wFV = new WechatFloatView(getActivityContext(), wmParams);
-    	if (WxBotService.isEnable(getActivityContext())) {
-    		wFV.setImageResource(R.mipmap.v5_avatar_robot_red);  //这里简单的用自带的Icom来做演示
-    	} else {
-    		wFV.setImageResource(R.mipmap.v5_avatar_robot_gray);
-    	}
-    	wFV.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Logger.i(TAG, "浮钮click");
-				EventBus.getDefault().post(wFV, Config.EVENT_TAG_FLOAT_CLICK);
-			}
-		});
-    	wFV.setOnLongClickListener(new View.OnLongClickListener() {
-			
-			@Override
-			public boolean onLongClick(View v) {
-				Logger.i(TAG, "浮钮longClick");
-				EventBus.getDefault().post(wFV, Config.EVENT_TAG_FLOAT_LONG_CLICK);
-				startMainActivity();
-				return true;
-			}
-		});
-    	
-    	//获取WindowManager
-    	wm= (WindowManager)getApplicationContext().getSystemService(WINDOW_SERVICE);
-    	/**
-    	 *以下都是WindowManager.LayoutParams的相关属性
-    	 * 具体用途可参考SDK文档
-    	 */
-    	wmParams.type = LayoutParams.TYPE_PHONE;   //设置window type
-    	wmParams.format= PixelFormat.RGBA_8888;   //设置图片格式，效果为背景透明
-    	
-    	//设置Window flag
-    	wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL
-    			| LayoutParams.FLAG_NOT_FOCUSABLE;
-    	/*
-    	 * 下面的flags属性的效果形同“锁定”。
-    	 * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
-    		wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL
-    			| LayoutParams.FLAG_NOT_FOCUSABLE
-    			| LayoutParams.FLAG_NOT_TOUCHABLE;
-    	 */
-    	wmParams.gravity = Gravity.START|Gravity.TOP;   //调整悬浮窗口至左上角，便于调整坐标
-    	//以屏幕左上角为原点，设置x、y初始值
-    	wmParams.x = Util.dp2px(120, getActivityContext());
-    	wmParams.y = Util.dp2px(15, getActivityContext());
-    	//设置悬浮窗口长宽数据
-    	wmParams.width = Util.dp2px(30, getActivityContext());
-    	wmParams.height = Util.dp2px(30, getActivityContext());
-    	
-    	//显示myFloatView图像
-    	wm.addView(wFV, wmParams);
-    }
-    
-    private boolean isAllowFloat() {
-    	//isHome isWechat isWxBot
-    	return true;
-    }
-    
-    /** 更新浮动窗口显示状态 **/
-	private void updateWFV(boolean light) {
-		if (wFV == null) {
-			return;
-		}
-		if (light) {
-    		wFV.setImageResource(R.mipmap.v5_avatar_robot_red);  //这里简单的用自带的Icom来做演示
-    	} else {
-    		wFV.setImageResource(R.mipmap.v5_avatar_robot_gray);
-    	}
-	}
-    
-    protected void hideFloatView() {
-		Logger.d(TAG, "closeFloat");
-    	if (wFV != null) {
-			wFV.setVisibility(View.GONE);
-		}
-	}
-
-	protected void showFloatView() {
-		if (!isAllowFloat()){
-			return;
-		}
-		if (wFV != null) {
-			wFV.setVisibility(View.VISIBLE);
-		} else {
-			createFloatView();
-		}
-	}
-	
-	protected void destroyFloatView() {
-		if (wm != null && wFV != null) {
-			wm.removeView(wFV);
-			wFV = null;
-		}
-	}
-	
-	/** 打开本界面 **/
-	private void startMainActivity() {
-		Intent i = new Intent(this, MainActivity.class);
-		i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-		startActivity(i);
-	}
-	
-	private Context getActivityContext() {
-		Activity act = V5Application.getContextActivity();
-		return act != null ? act : this;
-	}
+//
+//	/** 打开本界面 **/
+//	private void startMainActivity() {
+//		Intent i = new Intent(this, MainActivity.class);
+//		i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+//		startActivity(i);
+//	}
+//
+//	private Context getActivityContext() {
+//		Activity act = V5Application.getContextActivity();
+//		return act != null ? act : this;
+//	}
 	
 	/** event **/
-	
-    @Subscriber(tag = Config.EVENT_TAG_SHOW_FLOAT, mode=ThreadMode.MAIN)
-	private void onShowFloatEvent(Activity activity) {
-		Logger.i("event-tag", "EVENT_TAG_SHOW_FLOAT");
-		// 改在MainActivity控制显示
-		showFloatView();
-	}
-
-    @Subscriber(tag = Config.EVENT_TAG_HIDE_FLOAT, mode=ThreadMode.MAIN)
-    private void onHideFloatEvent(Activity activity) {
-    	Logger.i("event-tag", "EVENT_TAG_HIDE_FLOAT");
-    	hideFloatView();
-    }
     
     @Subscriber(tag = Config.EVENT_TAG_UPDATE_FLOAT_STATUS, mode=ThreadMode.MAIN)
     private void onUpdateFloatStatusEvent(Boolean light) {

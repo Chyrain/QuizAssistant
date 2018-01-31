@@ -5,14 +5,12 @@ import android.app.Notification;
 import android.os.Build;
 import android.os.Parcelable;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.service.IStatusBarNotification;
 import com.chyrain.quizassistant.service.WxBotService;
 import com.chyrain.quizassistant.util.Logger;
-import com.chyrain.quizassistant.util.Util;
 
 import java.util.List;
 
@@ -35,7 +33,7 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
     private static final String THE_JOBKEY = "cddh";
 
     /** 红包消息的关键字*/
-    private static final String APP_NAME = "[冲顶大会]";
+    private static final String APP_NAME = "冲顶大会";
 
     private static final int WINDOW_MAIN_PAGE = 1; // 主页（答题前一页）
     private static final int WINDOW_QUIZ_PAGE = 2; // 答题页
@@ -167,17 +165,6 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
         Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
 
-        if (getConfig().isEnableShowAnswer()) {
-            // 选择
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mCurrentQuiz != null) {
-                        Toast.makeText(getContext(), "推荐答案：" + mCurrentQuiz.getResult(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
         handleReceiveQuizAnswer();
         // id点击处理
         if (getConfig().isEnableAutoTrust() && mCurrentQuiz != null) {

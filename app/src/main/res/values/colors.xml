@@ -8,6 +8,8 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="black">#000</color>
+    <color name="answer_unsure_color">#FF5566</color>
+    <color name="answer_color">#0099CC</color>
     <color name="dark_gray">#cecece</color>
     <color name="base_item_normal">#fff</color>
     <color name="base_item_select">#dadada</color>

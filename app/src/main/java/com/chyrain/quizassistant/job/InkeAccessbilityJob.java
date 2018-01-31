@@ -33,7 +33,7 @@ public class InkeAccessbilityJob extends DatiAccessbilityJob {
     private static final String THE_JOBKEY = "zscr";
 
     /** 红包消息的关键字*/
-    private static final String APP_NAME = "[映客直播]";
+    private static final String APP_NAME = "映客直播";
 
     /** 当前所在页面 */
     private static final int WINDOW_MAIN_PAGE = 1; // 主页（答题前一页）

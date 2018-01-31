@@ -12,7 +12,6 @@ import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.service.IStatusBarNotification;
 import com.chyrain.quizassistant.service.WxBotService;
 import com.chyrain.quizassistant.util.Logger;
-import com.chyrain.quizassistant.util.Util;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
     private static final String THE_JOBKEY = "zscr";
 
     /** 红包消息的关键字*/
-    private static final String APP_NAME = "[芝士超人]";
+    private static final String APP_NAME = "芝士超人";
 
     /** 当前所在页面 */
     private static final int WINDOW_MAIN_PAGE = 1; // 主页（答题前一页）
@@ -167,17 +166,6 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
         Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
 
-        if (getConfig().isEnableShowAnswer()) {
-            // 选择
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mCurrentQuiz != null) {
-                        Toast.makeText(getContext(), "推荐答案：" + mCurrentQuiz.getResult(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
         handleReceiveQuizAnswer();
         if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
             String id = "";

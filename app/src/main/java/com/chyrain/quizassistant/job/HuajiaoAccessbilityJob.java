@@ -11,7 +11,6 @@ import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.service.IStatusBarNotification;
 import com.chyrain.quizassistant.service.WxBotService;
 import com.chyrain.quizassistant.util.Logger;
-import com.chyrain.quizassistant.util.Util;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
     private static final String THE_JOBKEY = "huajiao";
 
     /** 红包消息的关键字*/
-    private static final String APP_NAME = "[花椒直播]";
+    private static final String APP_NAME = "花椒直播";
 
     /** 当前所在页面 */
     private static final int WINDOW_MAIN_PAGE = 1; // 主页（答题前一页）

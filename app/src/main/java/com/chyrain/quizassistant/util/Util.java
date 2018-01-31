@@ -10,7 +10,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Binder;
@@ -21,6 +26,11 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+
+import com.chyrain.quizassistant.R;
+import com.chyrain.quizassistant.V5Application;
+import com.chyrain.quizassistant.view.CircleImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -41,6 +51,76 @@ public class Util {
     public static final int REQUEST_PERMISSION_ACCESS_COARSE_LOCATION = 105; // 网络位置权限
     public static final int REQUEST_PERMISSION_SYSTEM_ALERT_WINDOW = 106; // 网络位置权限
     public static final int REQUEST_PERMISSION_ALL = 100; // 全部权限
+
+
+    /**
+     * 使图片失去饱和度变灰
+     * @param iv
+     */
+    public static void grayImageView(ImageView iv) {
+        if (iv instanceof CircleImageView) {
+            ((CircleImageView)iv).setBorderColor(getColor(R.color.v5_transparent));
+            ((CircleImageView)iv).setBorderWidth(0);
+        }
+        Logger.d("DisplayUtil", "[grayImageView] ImageView:" + iv + " drawable:" + iv.getDrawable());
+        Bitmap bmp = ((BitmapDrawable)iv.getDrawable()).getBitmap();
+        iv.setImageBitmap(getGrayBitmap(bmp));
+//    	Drawable drawable = iv.getDrawable();
+////    	iv.setDrawingCacheEnabled(true);
+////    	iv.setColorFilter(Color.GRAY, android.graphics.PorterDuff.Mode.MULTIPLY);
+//        drawable.mutate();
+//        ColorMatrix cm = new ColorMatrix();
+//        cm.setSaturation(0);
+//        ColorMatrixColorFilter cf = new ColorMatrixColorFilter(cm);
+//        drawable.setColorFilter(cf);
+//        iv.setImageDrawable(drawable);
+    }
+
+    /**
+     * 图片灰化处理
+     * @return
+     */
+    public static Bitmap getGrayBitmap(Bitmap mBitmap) {
+        if (null == mBitmap) {
+            return null;
+        }
+        Bitmap mGrayBitmap = Bitmap.createBitmap(mBitmap.getWidth(), mBitmap.getHeight(), android.graphics.Bitmap.Config.ARGB_8888);
+        Canvas mCanvas = new Canvas(mGrayBitmap);
+        Paint mPaint = new Paint();
+
+        //创建颜色变换矩阵
+        ColorMatrix mColorMatrix = new ColorMatrix();
+        //设置灰度影响范围
+        mColorMatrix.setSaturation(0);
+        //创建颜色过滤矩阵
+        ColorMatrixColorFilter mColorFilter = new ColorMatrixColorFilter(mColorMatrix);
+        //设置画笔的颜色过滤矩阵
+        mPaint.setColorFilter(mColorFilter);
+        //使用处理后的画笔绘制图像
+        mCanvas.drawBitmap(mBitmap, 0, 0, mPaint);
+
+        return mGrayBitmap;
+    }
+
+    public static int getColor(int resId) {
+        return getColor(V5Application.getInstance(), resId);
+    }
+
+
+    /**
+     * 获得color.xml的颜色值
+     * @param resId
+     * @param context
+     * @return
+     */
+    @TargetApi(23)
+    public static int getColor(Context context, int resId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return context.getColor(resId);
+        } else {
+            return context.getResources().getColor(resId);
+        }
+    }
 
     /**
      * dp转 px.

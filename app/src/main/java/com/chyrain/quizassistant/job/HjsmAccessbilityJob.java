@@ -5,7 +5,6 @@ import android.app.Notification;
 import android.os.Build;
 import android.os.Parcelable;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.aitask.QuizBean;
@@ -33,7 +32,7 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
     private static final String THE_JOBKEY = "hjsm";
 
     /** 红包消息的关键字*/
-    private static final String APP_NAME = "[黄金十秒]";
+    private static final String APP_NAME = "黄金十秒";
 
     /** 当前所在页面 */
     private static final int WINDOW_MAIN_PAGE = 1; // 主页（答题前一页）
@@ -167,17 +166,6 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
         Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
 
-        if (getConfig().isEnableShowAnswer()) {
-            // 选择
-            mHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    if (mCurrentQuiz != null) {
-                        Toast.makeText(getContext(), "推荐答案：" + mCurrentQuiz.getResult(), Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
         handleReceiveQuizAnswer();
         if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
             String id = "";
