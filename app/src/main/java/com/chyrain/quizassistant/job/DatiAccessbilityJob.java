@@ -238,6 +238,7 @@ mAITask.stopTask();
     protected boolean shouldResponseToNotifyContent(String ticker) {
         return ticker.contains("答题开始") || ticker.contains("开始答题") || ticker.contains("答题就要开始")
                 || ticker.contains("答题即将开始") || ticker.contains("答题马上开始")
-                || ticker.contains("答题狂欢马上开始") || ticker.contains("本场奖金");
+                || ticker.contains("答题狂欢马上开始") || ticker.contains("本场奖金")
+                || ticker.contains("点击答题");
     }
 }

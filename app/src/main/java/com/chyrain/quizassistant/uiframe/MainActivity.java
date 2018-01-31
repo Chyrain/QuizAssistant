@@ -40,7 +40,6 @@ import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.V5Application;
 import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.job.DatiAccessbilityJob;
-import com.chyrain.quizassistant.job.WechatAccessbilityJob;
 import com.chyrain.quizassistant.service.WxBotNotificationService;
 import com.chyrain.quizassistant.service.WxBotService;
 import com.chyrain.quizassistant.util.BitmapUtils;
@@ -57,6 +56,8 @@ import com.v5kf.client.lib.V5ClientConfig;
 public class MainActivity extends BaseSettingsActivity {
 
     private static final String TAG = "MainActivity";
+    /** 微信的包名*/
+    private static final String WECHAT_PACKAGENAME = "com.tencent.mm";
     private Dialog mTipsDialog;
     private MainFragment mMainFragment;
     private Activity mActivity = this;
@@ -444,7 +445,7 @@ public class MainActivity extends BaseSettingsActivity {
 
                 //跳到微信
                 Intent wxIntent = getPackageManager().getLaunchIntentForPackage(
-                        WechatAccessbilityJob.WECHAT_PACKAGENAME);
+                        WECHAT_PACKAGENAME);
                 if(wxIntent != null) {
                     try {
                         startActivity(wxIntent);
