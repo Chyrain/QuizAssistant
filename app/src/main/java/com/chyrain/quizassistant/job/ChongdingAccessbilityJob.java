@@ -160,6 +160,7 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
      * 处理通知栏事件
      */
     private void notificationEvent(String ticker, Notification nf) {
+        Logger.d(TAG, "notificationEvent ticker:" + ticker + " Notification:" + nf);
         if (shouldResponseToNotifyContent(ticker)) {
             // 点击通知打开App
             openNotification(nf);
@@ -171,13 +172,14 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
         mCurrentQuiz = quiz;
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-        Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-
-        handleReceiveQuizAnswer();
-        // id点击处理
-        if (getConfig().isEnableAutoTrust() && mCurrentQuiz != null) {
-            // 点击答案选项id
-            clickAtNodeWithId("answer" + mCurrentQuiz.getAnsIndex());
+        if (!quiz.isRandom()) {
+            Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
+            handleReceiveQuizAnswer();
+            // id点击处理
+            if (getConfig().isEnableAutoTrust() && mCurrentQuiz != null) {
+                // 点击答案选项id
+                clickAtNodeWithId("answer" + mCurrentQuiz.getAnsIndex());
+            }
         }
     }
 }

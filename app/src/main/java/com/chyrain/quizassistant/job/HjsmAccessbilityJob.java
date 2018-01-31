@@ -161,8 +161,8 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
      * 处理通知栏事件
      */
     private void notificationEvent(String ticker, Notification nf) {
-        if (ticker.contains("答题开始") || ticker.contains("开始答题") || ticker.contains("答题就要开始")
-                || ticker.contains("答题即将开始") || ticker.contains("答题马上开始")) {
+        Logger.d(TAG, "notificationEvent ticker:" + ticker + " Notification:" + nf);
+        if (shouldResponseToNotifyContent(ticker)) {
             // 点击通知打开App
             openNotification(nf);
         }
@@ -173,21 +173,22 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
         mCurrentQuiz = quiz;
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-        Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-
-        handleReceiveQuizAnswer();
-        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-            String id = "";
-            int ansIndex = quiz.getAnsIndex();
-            if (ansIndex == 0) {
-                id = "option_first";
-            } else if (ansIndex == 1) {
-                id = "option_second";
-            } else if (ansIndex == 2) {
-                id = "option_third";
+        if (!quiz.isRandom()) {
+            Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
+            handleReceiveQuizAnswer();
+            if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+                String id = "";
+                int ansIndex = quiz.getAnsIndex();
+                if (ansIndex == 0) {
+                    id = "option_first";
+                } else if (ansIndex == 1) {
+                    id = "option_second";
+                } else if (ansIndex == 2) {
+                    id = "option_third";
+                }
+                // 点击答案选项id
+                clickAtNodeWithId(id);
             }
-            // 点击答案选项id
-            clickAtNodeWithId(id);
         }
     }
 }

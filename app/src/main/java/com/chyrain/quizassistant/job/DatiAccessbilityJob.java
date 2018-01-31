@@ -162,9 +162,13 @@ mAITask.stopTask();
     }
 
     protected void handleReceiveQuizAnswer() {
-        if (mCurrentQuiz != null) {
+        if (mCurrentQuiz != null && !mCurrentQuiz.isRandom()) {
             // 查找答案并处理
             handleNodeWithContent(mCurrentQuiz.getResult());
+        } else if (mCurrentQuiz != null && mCurrentQuiz.isRandom()) {
+            // TODO 随机答案提醒自己选
+            NotifyHelper.playEffect(getContext(), getConfig());
+            mCurrentQuiz = null;
         }
     }
 

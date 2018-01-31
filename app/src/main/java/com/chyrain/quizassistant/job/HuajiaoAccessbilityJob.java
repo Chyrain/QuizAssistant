@@ -189,6 +189,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
      * 处理通知栏事件
      */
     private void notificationEvent(String ticker, Notification nf) {
+        Logger.d(TAG, "notificationEvent ticker:" + ticker + " Notification:" + nf);
         if (shouldResponseToNotifyContent(ticker)) {
             // 点击通知打开App
             openNotification(nf);
@@ -199,23 +200,24 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
         mCurrentQuiz = quiz;
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-        Logger.i(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-
-        // 查找答案并处理
-        handleReceiveQuizAnswer();
-        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-            String id = "";
-            int ansIndex = quiz.getAnsIndex();
-            // ans: tv_question
-            if (ansIndex == 0) {
-                id = "option_first";
-            } else if (ansIndex == 1) {
-                id = "option_second";
-            } else if (ansIndex == 2) {
-                id = "option_third";
+        if (!quiz.isRandom()) {
+            Logger.i(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
+            // 查找答案并处理
+            handleReceiveQuizAnswer();
+            if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+                String id = "";
+                int ansIndex = quiz.getAnsIndex();
+                // ans: tv_question
+                if (ansIndex == 0) {
+                    id = "option_first";
+                } else if (ansIndex == 1) {
+                    id = "option_second";
+                } else if (ansIndex == 2) {
+                    id = "option_third";
+                }
+                // 点击答案选项id
+                clickAtNodeWithId(id);
             }
-            // 点击答案选项id
-            clickAtNodeWithId(id);
         }
     }
 }
