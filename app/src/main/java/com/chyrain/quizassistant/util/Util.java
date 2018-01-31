@@ -43,32 +43,6 @@ public class Util {
     public static final int REQUEST_PERMISSION_ALL = 100; // 全部权限
 
     /**
-     * 内容是否包含答题信息
-     * @param ticker 内容
-     * @return
-     */
-    public static boolean shouldResponseToNotifyContent(String ticker) {
-        return ticker.contains("答题开始") || ticker.contains("开始答题") || ticker.contains("答题就要开始")
-                || ticker.contains("答题即将开始") || ticker.contains("答题马上开始")
-                || ticker.contains("答题狂欢马上开始") || ticker.contains("本场奖金");
-    }
-
-    public static boolean isMatchChannel(String channel, String key) {
-        if (key.equals(channel)) {
-            return true;
-        }
-        switch (channel) {
-            case "hj":
-            case "xigua":
-            case "cddh":
-            case "zscr":
-            case "hjsm":
-                return true;
-        }
-        return false;
-    }
-
-    /**
      * dp转 px.
      *
      * @param value   the value

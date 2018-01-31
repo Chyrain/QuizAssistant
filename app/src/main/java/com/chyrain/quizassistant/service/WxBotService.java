@@ -34,7 +34,7 @@ import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.V5Application;
 import com.chyrain.quizassistant.aitask.AITask;
-import com.chyrain.quizassistant.job.AccessbilityJob;
+import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.job.ChongdingAccessbilityJob;
 import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.job.HjsmAccessbilityJob;
@@ -63,6 +63,7 @@ public class WxBotService extends AccessibilityService {
     private static final String TAG = "WxBotService";
     private static WxBotService service;
     private AITask mAITask;
+    private DatiAccessbilityJob mCurrentJob;
 
     /**
      * 所支持的答题平台任务类名
@@ -108,11 +109,27 @@ public class WxBotService extends AccessibilityService {
             }
         }
 
-//        // 改在MainActivity
+//        // FloatView改在MainActivity
 //        boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
 //        if (showFloat) {
 //            showFloatView();
 //        }
+        mAITask = new AITask(mAccessbilityJobs.get(0), new AITask.TaskRequestCallback() {
+
+            @Override
+            public void onReceiveAnswer(DatiAccessbilityJob job, QuizBean quiz) {
+                Logger.d(TAG + ":" + job.getTargetPackageName(), quiz.getIndex() + " [onReceiveAnswer] title: " + quiz.getTitle() +
+                        "  answers: " + quiz.getAnswers() + " result: " + quiz.getResult());
+            }
+
+            @Override
+            public void onReceiveNextAnswer(DatiAccessbilityJob job, final QuizBean quiz) {
+                Logger.w(TAG + ":" + job.getTargetPackageName(), quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
+                        "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
+                Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
+                job.onReceiveAnswer(quiz);
+            }
+        });
     }
 
     @Override
@@ -126,13 +143,17 @@ public class WxBotService extends AccessibilityService {
             mPkgAccessbilityJobMap.clear();
         }
         if(mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
-            for (AccessbilityJob job : mAccessbilityJobs) {
+            for (DatiAccessbilityJob job : mAccessbilityJobs) {
                 job.onStopJob();
             }
             mAccessbilityJobs.clear();
         }
         if (wFV != null && wm != null) {
         	wm.removeView(wFV);
+        }
+
+        if (mAITask != null) {
+            mAITask.stopTask();
         }
 
         service = null;
@@ -174,12 +195,54 @@ public class WxBotService extends AccessibilityService {
             if(!getConfig().isAgreement()) {
                 return;
             }
-            for (AccessbilityJob job : mAccessbilityJobs) {
+            for (DatiAccessbilityJob job : mAccessbilityJobs) {
                 if(pkn.equals(job.getTargetPackageName()) && job.isEnable()) {
+                    if (job != mCurrentJob) {
+                        mCurrentJob = job;
+                        onAccessibilityJobChange(job);
+                    }
+                    if (mAITask.isTaskStoped()) {
+                        mAITask.startTask();
+                    }
                     job.onReceiveJob(event);
                 }
             }
         }
+    }
+
+    public static boolean isEnable(Context context) {
+        if (isRunning() && Config.getConfig(context).isEnableWechat()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 服务总开关状态变化
+     * @param enable 是否开启服务
+     */
+    public void onEnableChange(boolean enable) {
+        Logger.i(TAG, "onEnableChange: " + enable);
+        if(mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
+            for (DatiAccessbilityJob job : mAccessbilityJobs) {
+                job.onEnableChange(enable);
+            }
+        }
+        if (mAITask != null) {
+//            if (enable) {
+//                mAITask.startTask();
+//            } else {
+//                mAITask.stopTask();
+//            }
+            if (!enable) {
+                mAITask.stopTask();
+            }
+        }
+    }
+
+    public void onAccessibilityJobChange(DatiAccessbilityJob accessbilityJob) {
+        mAITask.setAccessbilityJob(accessbilityJob);
+        EventBus.getDefault().post(accessbilityJob, Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE);
     }
 
     public Config getConfig() {
@@ -199,7 +262,7 @@ public class WxBotService extends AccessibilityService {
 //        if(BuildConfig.DEBUG) {
 //        	Logger.v(TAG, "onNotificationPosted: " + pack);
 //        }
-        AccessbilityJob job = service.mPkgAccessbilityJobMap.get(pack);
+        DatiAccessbilityJob job = service.mPkgAccessbilityJobMap.get(pack);
         if(job == null) {
             return;
         }
@@ -209,25 +272,6 @@ public class WxBotService extends AccessibilityService {
         job.onNotificationPosted(notificationService);
     }
 
-    public static boolean isEnable(Context context) {
-    	if (isRunning() && Config.getConfig(context).isEnableWechat()) {
-    		return true;
-    	}
-    	return false;
-    }
-
-    /**
-     * 服务总开关状态变化
-     * @param enable 是否开启服务
-     */
-    public void onEnableChange(boolean enable) {
-        Logger.i(TAG, "onEnableChange: " + enable);
-        if(mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
-            for (AccessbilityJob job : mAccessbilityJobs) {
-                job.onEnableChange(enable);
-            }
-        }
-    }
 
     /**
      * 判断当前服务是否正在运行

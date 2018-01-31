@@ -119,6 +119,8 @@ public class Config {
     public static final String EVENT_TAG_NOTIFY_LISTENER_SERVICE_DISCONNECT = "ETAG_NOTIFY_LISTENER_SERVICE_DISCONNECT";
     // 关闭服务
     public static final String EVENT_TAG_STOP_WXBOT = "EVENT_TAG_STOP_WXBOT";
+    // 答题渠道变化 accessbilityJob
+    public static final String EVENT_TAG_ACCESSBILITY_JOB_CHANGE = "EVENT_TAG_ACCESSBILITY_JOB_CHANGE";
     // 浮动窗口按钮
     public static final String EVENT_TAG_FLOAT_CLICK = "EVENT_TAG_FLOAT_CLICK";
     public static final String EVENT_TAG_FLOAT_LONG_CLICK = "EVENT_TAG_FLOAT_LONG_CLICK";

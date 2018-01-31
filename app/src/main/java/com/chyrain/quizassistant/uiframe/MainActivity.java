@@ -41,6 +41,7 @@ import android.widget.Toast;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.V5Application;
+import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.job.WechatAccessbilityJob;
 import com.chyrain.quizassistant.service.WxBotNotificationService;
 import com.chyrain.quizassistant.service.WxBotService;
@@ -962,6 +963,14 @@ public class MainActivity extends BaseSettingsActivity {
     private void onFloatViewLongClick(WechatFloatView floatView) {
         Logger.i(TAG, "<v5kf>EVENT_TAG_FLOAT_LONG_CLICK");
 
+    }
+
+    @Subscriber(tag = Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE, mode=ThreadMode.MAIN)
+    private void notifyServiceConnect(DatiAccessbilityJob accessbilityJob) {
+        Logger.i(TAG, "<v5kf>EVENT_TAG_ACCESSBILITY_JOB_CHANGE key: " + accessbilityJob.getAppName()
+            + " key: " + accessbilityJob.getJobKey());
+        Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
+        // TODO 切换答题应用
     }
 }
 

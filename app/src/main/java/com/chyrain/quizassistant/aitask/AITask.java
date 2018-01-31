@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.V5Application;
+import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.util.HttpResponseHandler;
 import com.chyrain.quizassistant.util.HttpUtil;
 import com.chyrain.quizassistant.util.Logger;
@@ -26,11 +27,11 @@ public class AITask {
     private static final String TAG = "AITask";
 
     public interface TaskRequestCallback {
-        public void onReceiveAnswer(QuizBean quiz);
-        public void onReceiveNextAnswer(QuizBean quiz);
+        public void onReceiveAnswer(DatiAccessbilityJob accessbilityJob, QuizBean quiz);
+        public void onReceiveNextAnswer(DatiAccessbilityJob accessbilityJob, QuizBean quiz);
     }
 
-    private String key;
+    private DatiAccessbilityJob accessbilityJob;
     private TaskRequestCallback callback;
     private String cbPrefix;
     private int maxQuizIndex;
@@ -38,9 +39,9 @@ public class AITask {
 
     private HashMap<String, String> mQuizMap;
 
-    public AITask(String key, TaskRequestCallback _cb) {
+    public AITask(DatiAccessbilityJob accessbilityJob, TaskRequestCallback _cb) {
         Date date = new Date();
-        this.key = key;
+        this.accessbilityJob = accessbilityJob;
         this.cbPrefix = "jQuery1124027865239162929356_" + date.getTime();
 //        String _url = "http://140.143.49.31/api/ans2?key=" + key + "&wdcallback=" + cbPrefix + "&_=";
         this.callback = _cb;
@@ -75,12 +76,12 @@ public class AITask {
         }
     }
 
-    public String getKey() {
-        return key;
+    public DatiAccessbilityJob getAccessbilityJob() {
+        return accessbilityJob;
     }
 
-    public void setKey(String url) {
-        this.key = url;
+    public void setAccessbilityJob(DatiAccessbilityJob accessbilityJob) {
+        this.accessbilityJob = accessbilityJob;
     }
 
     public int getMaxQuizIndex() {
@@ -99,16 +100,20 @@ public class AITask {
         private TaskRequestCallback callback;
         //运行状态，下一步骤有大用
         public boolean isRunning = true;
+
         public TaskThread(TaskRequestCallback _cb) {
             this.callback = _cb;
         }
+
         public void setRunning(boolean running) {
             isRunning = running;
         }
+
         public void run() {
             Logger.i(TAG, "Thread.run:" + isRunning);
             while(isRunning){
                 try {
+                    final String key = accessbilityJob.getJobKey();
                     // 获取服务器消息
                     if (key == null || this.callback == null) {
                         Logger.w(TAG, "未设置参数url 和 callback");
@@ -135,7 +140,6 @@ public class AITask {
 
                         @Override
                         public void onSuccess(int statusCode, String responseString) {
-//                            Logger.d(TAG, "[onSuccess] statusCode" + statusCode + " responseString：" + responseString);
                             String jsonStr = responseString.substring(cbPrefix.length() + 1, responseString.length() - 1);
                             Logger.v(TAG, "httpSync: " + _url + "\n[onSuccess] json：" + jsonStr);
                             try {
@@ -152,7 +156,7 @@ public class AITask {
                                         int ansIndex = quiz.getAnsIndex();
 
                                         if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(result)
-                                                && Util.isMatchChannel(channel, key)) {
+                                                && isMatchChannel(channel, key)) {
                                             int index = 0;
                                             try {
                                                 // 解析题目序号
@@ -168,13 +172,13 @@ public class AITask {
                                             if (!mQuizMap.containsKey(title)) {
                                                 mQuizMap.put(title, result);
                                                 // 新题
-                                                callback.onReceiveNextAnswer(quiz);
+                                                callback.onReceiveNextAnswer(accessbilityJob, quiz);
                                             }
 //                                            if (index > maxQuizIndex || (maxQuizIndex == 12 && index == 1) || (index == 0 && maxQuizIndex == 0)) {
 //                                                maxQuizIndex = index;
 //                                                callback.onReceiveNextAnswer(title, result, index, ansIndex);
 //                                            }
-                                            callback.onReceiveAnswer(quiz);
+                                            callback.onReceiveAnswer(accessbilityJob, quiz);
                                         }
                                     }
                                 }
@@ -198,4 +202,21 @@ public class AITask {
         }
     }
 
+    public boolean isMatchChannel(String channel, String key) {
+        if (key.equals(channel)) {
+            return true;
+        }
+        switch (channel) {
+            case "huajiao":
+            case "hj": // huajiao
+            case "bwyx":
+            case "bwyj":
+            case "xigua": //bwyx
+            case "cddh":
+            case "zscr":
+            case "hjsm":
+                return true;
+        }
+        return false;
+    }
 }

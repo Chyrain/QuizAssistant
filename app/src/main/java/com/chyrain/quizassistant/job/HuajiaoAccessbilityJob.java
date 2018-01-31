@@ -48,8 +48,9 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
 
     @Override
     public void onStopJob() {
-        mScreenListener.unregisterListener();
-        mAITask.stopTask();
+        super.onStopJob();
+        Logger.i(TAG, "onStopJob: " + THE_PACKAGENAME);
+        //mScreenListener.unregisterListener();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -82,16 +83,6 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
     @Override
     public boolean isEnable() {
         return getConfig().isEnableWechat() && getConfig().isEnableHuajiao();
-    }
-
-    @Override
-    public void onEnableChange(boolean enable) {
-        Logger.d(TAG, TAG + ".onEnableChange: " + enable + " mCurrentWindow: " + mCurrentWindow);
-        if (enable && mCurrentWindow == WINDOW_QUIZ_PAGE) {
-            mAITask.startTask();
-        } else {
-            mAITask.stopTask();
-        }
     }
 
     @Override
@@ -161,9 +152,10 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                 if (getConfig().isEnableAutoTrust()) {
                     //点击浮动按钮进入芝士超人页面
                     clickAtNodeWithId("urgent_activity_img");
+                    // 进入答题页面
+                    clickAtNodeWithContent("开始答题");
                 }
             } else if (mCurrentWindow == WINDOW_OTHER_PAGE) {
-                clickAtNodeWithContent("百万赢家");
                 // 进入答题页面
                 clickAtNodeWithContent("开始答题");
 
@@ -185,7 +177,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
      * 处理通知栏事件
      */
     private void notificationEvent(String ticker, Notification nf) {
-        if (Util.shouldResponseToNotifyContent(ticker)) {
+        if (shouldResponseToNotifyContent(ticker)) {
             // 点击通知打开App
             openNotification(nf);
         }

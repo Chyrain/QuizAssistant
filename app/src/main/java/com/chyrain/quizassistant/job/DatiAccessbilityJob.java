@@ -35,7 +35,7 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
     QuizBean mCurrentQuiz;
     ScreenListener mScreenListener;
     boolean isReceivingHongbao;
-    AITask mAITask;
+//    AITask mAITask;
     PendingIntent mPendingIntent; // 收到通知时赋值
 
     public abstract String getJobKey();
@@ -48,23 +48,23 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
 
         Logger.i(TAG + ":" + getTargetPackageName(), "onCreateJob: " + getTargetPackageName());
 
-        mAITask = new AITask(getJobKey(), new AITask.TaskRequestCallback() {
-
-            @Override
-            public void onReceiveAnswer(QuizBean quiz) {
-                Logger.d(TAG + ":" + getTargetPackageName(), quiz.getIndex() + " [onReceiveAnswer] title: " + quiz.getTitle() +
-                        "  answers: " + quiz.getAnswers() + " result: " + quiz.getResult());
-            }
-
-            @Override
-            public void onReceiveNextAnswer(final QuizBean quiz) {
-                mCurrentQuiz = quiz;
-                Logger.w(TAG + ":" + getTargetPackageName(), quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
-                        "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-                Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-                onReceiveAnswer(quiz);
-            }
-        });
+//        mAITask = new AITask(getJobKey(), new AITask.TaskRequestCallback() {
+//
+//            @Override
+//            public void onReceiveAnswer(QuizBean quiz) {
+//                Logger.d(TAG + ":" + getTargetPackageName(), quiz.getIndex() + " [onReceiveAnswer] title: " + quiz.getTitle() +
+//                        "  answers: " + quiz.getAnswers() + " result: " + quiz.getResult());
+//            }
+//
+//            @Override
+//            public void onReceiveNextAnswer(final QuizBean quiz) {
+//                mCurrentQuiz = quiz;
+//                Logger.w(TAG + ":" + getTargetPackageName(), quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
+//                        "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
+//                Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
+//                onReceiveAnswer(quiz);
+//            }
+//        });
 
         /** 屏幕状态监听 **/
         mScreenListener = new ScreenListener(getContext());
@@ -105,6 +105,21 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
                 onEnableChange(false);
             }
         });
+    }
+
+    @Override
+    public void onStopJob() {
+        mScreenListener.unregisterListener();
+    }
+
+    @Override
+    public void onEnableChange(boolean enable) {
+        Logger.d(TAG, TAG + ".onEnableChange: " + enable + " mCurrentWindow: " + mCurrentWindow);
+//        if (enable && mCurrentWindow == WINDOW_QUIZ_PAGE) {
+//            mAITask.startTask();
+//        } else {
+//            mAITask.stopTask();
+//        }
     }
 
     /** 打开通知栏消息*/
@@ -217,5 +232,16 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
                 }
             }
         }
+    }
+
+    /**
+     * 内容是否包含答题信息
+     * @param ticker 内容
+     * @return
+     */
+    protected boolean shouldResponseToNotifyContent(String ticker) {
+        return ticker.contains("答题开始") || ticker.contains("开始答题") || ticker.contains("答题就要开始")
+                || ticker.contains("答题即将开始") || ticker.contains("答题马上开始")
+                || ticker.contains("答题狂欢马上开始") || ticker.contains("本场奖金");
     }
 }

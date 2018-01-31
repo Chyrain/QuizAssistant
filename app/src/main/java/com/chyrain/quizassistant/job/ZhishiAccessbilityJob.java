@@ -49,8 +49,9 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
 
     @Override
     public void onStopJob() {
-        mScreenListener.unregisterListener();
-        mAITask.stopTask();
+        super.onStopJob();
+        Logger.i(TAG, "onStopJob: " + THE_PACKAGENAME);
+        //mScreenListener.unregisterListener();
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -83,16 +84,6 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
     @Override
     public boolean isEnable() {
         return getConfig().isEnableWechat() && getConfig().isEnableZscr();
-    }
-
-    @Override
-    public void onEnableChange(boolean enable) {
-        Logger.d(TAG, TAG + ".onEnableChange: " + enable + " mCurrentWindow: " + mCurrentWindow);
-        if (enable && mCurrentWindow == WINDOW_QUIZ_PAGE) {
-            mAITask.startTask();
-        } else {
-            mAITask.stopTask();
-        }
     }
 
     @Override
@@ -163,7 +154,7 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
      * 处理通知栏事件
      */
     private void notificationEvent(String ticker, Notification nf) {
-        if (Util.shouldResponseToNotifyContent(ticker)) {
+        if (shouldResponseToNotifyContent(ticker)) {
             // 点击通知打开App
             openNotification(nf);
         }

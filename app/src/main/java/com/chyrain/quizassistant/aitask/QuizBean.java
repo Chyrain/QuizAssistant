@@ -52,7 +52,7 @@ public class QuizBean {
             int rId = (int)Math.floor(Math.random() * 3);
             // 随机获取 0、1、2
             result = answers.get(rId);
-            Logger.e(TAG, "随机获取答案id：" + rId + " 答案：" + result);
+            Logger.w(TAG, "随机获取答案id：" + rId + " 答案：" + result);
         }
         // 答案序号
         if (result != null) {
