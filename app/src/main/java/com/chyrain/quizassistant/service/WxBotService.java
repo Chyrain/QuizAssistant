@@ -109,7 +109,6 @@ public class WxBotService extends AccessibilityService {
             public void onReceiveNextAnswer(DatiAccessbilityJob job, final QuizBean quiz) {
                 Logger.w(TAG + ":" + job.getTargetPackageName(), quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                         "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-                Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
                 job.onReceiveAnswer(quiz);
                 EventBus.getDefault().post(quiz, Config.EVENT_TAG_UPDATE_QUIZ);
             }

@@ -129,7 +129,8 @@ public class AITask {
                     headers.put("Connection", "keep-alive");
                     headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 4.4.4; SAMSUNG-SM-N900A Build/tt) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 Mobile Safari/537.36 SogouSearch Android1.0 version3.0 AppVersion/5903");
                     headers.put("Referer", "http://nb.sa.sogou.com");
-                    headers.put("X-Requested-With", "com.sogou.activity.src");;
+                    headers.put("X-Requested-With", "com.sogou.activity.src");
+
                     // 同步请求
                     HttpUtil.httpSync(
                             _url,
@@ -169,12 +170,22 @@ public class AITask {
                                             }
 
                                             quiz.setIndex(index);
-                                            if (!mQuizMap.containsKey(title)) {
+                                            String res = mQuizMap.get(title);
+                                            if (TextUtils.isEmpty(res)) {
                                                 if (!quiz.isRandom()) {
                                                     mQuizMap.put(title, result);
+                                                } else {
+                                                    mQuizMap.put(title, "");
                                                 }
-                                                // 新题
-                                                callback.onReceiveNextAnswer(accessbilityJob, quiz);
+                                                if (quiz.isRandom()) {
+                                                    Logger.w(TAG, "答案" + (quiz.isRandom() ? "(随机)" : "") + "：" + result + " 题目：" + title);
+                                                } else {
+                                                    Logger.e(TAG, "答案" + "：" + result + " 题目：" + title);
+                                                }
+                                                if (res == null || res.length() > 0) {
+                                                    // 新题(第一次答题给出随机答案或者有答案的情况下)
+                                                    callback.onReceiveNextAnswer(accessbilityJob, quiz);
+                                                }
                                             }
 //                                            if (index > maxQuizIndex || (maxQuizIndex == 12 && index == 1) || (index == 0 && maxQuizIndex == 0)) {
 //                                                maxQuizIndex = index;

@@ -177,6 +177,9 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
             handleReceiveQuizAnswer();
             // id点击处理
             if (getConfig().isEnableAutoTrust() && mCurrentQuiz != null) {
+                // 倒计时ID：tvNumber
+                // 题号ID：从题目获取
+                // 题目ID：tvMessage
                 // 点击答案选项id
                 clickAtNodeWithId("answer" + mCurrentQuiz.getAnsIndex());
             }

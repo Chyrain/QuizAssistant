@@ -185,7 +185,7 @@ mAITask.stopTask();
         }
         AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, content);
         if(targetNode != null) {
-            Logger.e(TAG, "自动点击(" + content + "):" + targetNode);
+            Logger.e(TAG, "[clickAtNodeWithContent] 成功点击(" + content + "):" + targetNode);
             AccessibilityHelper.performClick(targetNode);
         }
     }
@@ -203,7 +203,7 @@ mAITask.stopTask();
         }
         AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosById(nodeInfo, getTargetPackageName() + ":id/" + id);
         if(targetNode != null) {
-            Logger.e(TAG, "[clickAtNodeWithId] 自动点击(id=" + id + "):" + targetNode);
+            Logger.e(TAG, "[clickAtNodeWithId] 成功点击(id=" + id + "):" + targetNode);
             AccessibilityHelper.performClick(targetNode);
             mCurrentQuiz = null; //已点击则置空
         }
@@ -222,7 +222,7 @@ mAITask.stopTask();
         AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, content);
         if(targetNode != null) {
             if (getConfig().isEnableAutoTrust()) {
-                Logger.e(TAG + ":" + getTargetPackageName(), "自动点击(" + content + "):" + targetNode);
+                Logger.e(TAG + ":" + getTargetPackageName(), "成功点击(" + content + "):" + targetNode);
                 AccessibilityHelper.performClick(targetNode);
                 mCurrentQuiz = null; //已点击则置空
             }
@@ -242,6 +242,7 @@ mAITask.stopTask();
      * @return
      */
     protected boolean shouldResponseToNotifyContent(String ticker) {
-        return ticker.contains("答题") || ticker.contains("本场奖金");
+        return ticker.contains("答题") || ticker.contains("本场奖金") || ticker.contains("万奖金")
+                || ticker.contains("点题成金");
     }
 }

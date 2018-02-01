@@ -9,7 +9,7 @@
     <string name="v5_version_info"><Data><![CDATA[ v%s ]]></Data></string>
     <string name="v5_copyright"><Data><![CDATA[ Copyright © 2017-2018 CHYRAIN \n All Rights Reserved.]]></Data></string>
     <string name="share_title">直播答题神器杀到</string>
-    <string name="share_content_fmt">答题助手终极杀器，直播答题绝对神器，来不及解释了快上车[http://t.cn/RMbZKDt]~——来自[%s]</string>
+    <string name="share_content_fmt">答题助手终极杀器，直播答题绝对神器，来不及解释了快上车[https://0x9.me/ZFKHs]~——来自[%s]</string>
     <string name="app_intro">使用说明</string>
 
     <string name="main_name">答题辅助</string>
@@ -17,6 +17,7 @@
     <string name="service_name">V5答题助手（直播答题赢奖金）</string>
     <string name="open_service_title">需要开启辅助服务才能正常使用</string>
     <string name="open_service_button">打开辅助服务</string>
+    <string name="open_float_service">设置悬浮窗权限</string>
     <string name="open_notify_service">打开通知栏服务</string>
     <string name="check_update">检查更新</string>
     <string name="share">分享</string>

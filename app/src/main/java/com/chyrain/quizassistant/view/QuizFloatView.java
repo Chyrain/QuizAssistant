@@ -86,6 +86,8 @@ public class QuizFloatView extends LinearLayout {
         Logger.i(TAG, "[updateFloatQuiz] result:" + quiz.getResult() + " quiz:" + mCurrentQuiz);
         if (mAnswerTv != null && mCurrentQuiz != null) {
             if (mCurrentQuiz.isRandom()) {
+                mAnswerTv.setTextColor(Util.getColor(R.color.answer_unknow_color));
+            } else if (mCurrentQuiz.isUnsure()) {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_unsure_color));
             } else {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_color));

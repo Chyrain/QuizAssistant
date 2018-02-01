@@ -162,6 +162,10 @@
             android:name="com.v5kf.client.ui.ShowImageActivity" >
         </activity>
 
+        <!-- Umeng analytics SDK -->
+        <meta-data android:value="5a726a848f4a9d2456000176" android:name="UMENG_APPKEY"/>
+        <meta-data android:value="open_download" android:name="UMENG_CHANNEL"/>
+
     </application>
 
 </manifest>

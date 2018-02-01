@@ -163,6 +163,10 @@ public class MainActivity extends BaseSettingsActivity {
                 openAccessibilityServiceSettings();
                 V5Application.eventStatistics(this, "menu_service");
                 return true;
+            case R.id.action_float:
+                Util.gotoPermission(this);
+                V5Application.eventStatistics(this, "menu_float");
+                break;
             case R.id.action_notify:
                 openNotificationServiceSettings();
                 V5Application.eventStatistics(this, "menu_notify");

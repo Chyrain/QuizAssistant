@@ -9,6 +9,19 @@
             android:title="机器人开关"
             android:summary="同一时间只支持一个答题平台，需打开对应平台直播页面（打开[全自动托管]模式并开启对应直播App的通知权限可自动进入App，并自动答题）"
             android:key="KEY_ENABLE_WECHAT"/>
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:title="答题助手浮动开关"
+            android:summary="便捷浮动开关，控制全局开关，您比AI更确定答案时可点击浮动按钮临时关闭AI答题"
+            android:defaultValue="false"
+            android:key="KEY_ENABLE_FLOAT_BUTTON"/>
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:title="监听通知栏"
+            android:summary="直播开始前会收到对应App的通知，开启通知监听可自动打开App答题"
+            android:defaultValue="true"
+            android:key="KEY_NOTIFICATION_SERVICE_TEMP_ENABLE"/>
+
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="true"
             android:title="芝士超人"
@@ -45,18 +58,6 @@
             android:summary="开启【黄金十秒】直播答题助手"
             android:icon="@mipmap/settings_ic_hjsm"
             android:key="KEY_ENABLE_HJSM"/>
-
-        <com.chyrain.quizassistant.view.CustomSwitchPreference
-            android:title="答题助手浮动开关"
-            android:summary="便捷浮动开关，控制全局开关，您比AI更确定答案时可点击浮动按钮临时关闭AI答题"
-            android:defaultValue="false"
-            android:key="KEY_ENABLE_FLOAT_BUTTON"/>
-        
-        <com.chyrain.quizassistant.view.CustomSwitchPreference
-            android:title="监听通知栏"
-            android:summary="直播开始前会收到对应App的通知，开启通知监听可自动打开App答题"
-            android:defaultValue="true"
-            android:key="KEY_NOTIFICATION_SERVICE_TEMP_ENABLE"/>
 
     </PreferenceCategory>
 

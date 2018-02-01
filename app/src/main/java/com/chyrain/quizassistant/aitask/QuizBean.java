@@ -25,6 +25,7 @@ public class QuizBean {
     private int ansIndex; // 答案序号
 
     private boolean random; // 答不上，随机选答
+    private boolean unsure; // 有答案但不确定
 
     public QuizBean(String title, ArrayList<String> answers, String result) {
         this.title = title;
@@ -46,16 +47,20 @@ public class QuizBean {
                 answers.add(arr.getString(i));
             }
         }
-        if (TextUtils.isEmpty(result)) {
-            result = json.getString("recommend");
-        }
-        if (TextUtils.isEmpty(result) || json.optInt("error") == 1) {
+//        if (TextUtils.isEmpty(result)) {
+//            result = json.getString("recommend");
+//        }
+        if (!TextUtils.isEmpty(result) && result.equals("啊呀，这题汪仔还在想")
+                && json.optInt("error") == 1) {
             // 啊呀，这题汪仔还在想（没有答案，随机一个）
             int rId = (int)Math.floor(Math.random() * 3);
             // 随机获取 0、1、2
             result = answers.get(rId);
             setRandom(true);
             Logger.w(TAG, "随机获取答案id：" + rId + " 答案：" + result);
+
+        } else if (!TextUtils.isEmpty(result) && json.optInt("error") == 1) {
+            setUnsure(true);
         }
         // 答案序号
         if (result != null) {
@@ -114,5 +119,13 @@ public class QuizBean {
 
     public void setRandom(boolean random) {
         this.random = random;
+    }
+
+    public boolean isUnsure() {
+        return unsure;
+    }
+
+    public void setUnsure(boolean unsure) {
+        this.unsure = unsure;
     }
 }

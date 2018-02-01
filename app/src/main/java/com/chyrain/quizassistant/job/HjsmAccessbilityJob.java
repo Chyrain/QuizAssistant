@@ -180,12 +180,16 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
                 String id = "";
                 int ansIndex = quiz.getAnsIndex();
                 if (ansIndex == 0) {
-                    id = "option_first";
+                    id = "option_one";
                 } else if (ansIndex == 1) {
-                    id = "option_second";
+                    id = "option_two";
                 } else if (ansIndex == 2) {
-                    id = "option_third";
+                    id = "option_three";
                 }
+                // 答题dialog ID：com.yixia.liveshow:id/answer_mode_dialog => inner_dialog_container
+                // 倒计时ID ImageView:timer_down
+                // 答题序号ID：com.yixia.liveshow:id/text_number text:6/10
+                // 题目ID：com.yixia.liveshow:id/text_question
                 // 点击答案选项id
                 clickAtNodeWithId(id);
             }

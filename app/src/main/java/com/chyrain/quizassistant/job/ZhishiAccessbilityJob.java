@@ -186,6 +186,10 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
                 } else if (ansIndex == 2) {
                     id = "option_third";
                 }
+                // 倒计时ID：tv_time
+                // 当前题号：tv_index
+                // 全部题数：tv_total
+                // 题目ID：tv_question
                 // 点击答案选项id
                 clickAtNodeWithId(id);
             }

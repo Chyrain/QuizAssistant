@@ -19,7 +19,6 @@ import com.v5kf.client.lib.callback.V5InitCallback;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class V5Application extends Application {
@@ -35,8 +34,8 @@ public class V5Application extends Application {
         }
 
         // Umeng
-        String tag = "v5wxbot";
-// 		MobclickAgent.startWithConfigure(new UMAnalyticsConfig(getApplicationContext(), "579b2005e0f55a5353002023", tag));
+        String tag = "v5quizassistant";
+// 		MobclickAgent.startWithConfigure(new AnalyticsConfig(getApplicationContext(), "579b2005e0f55a5353002023", tag));
         UmengShareConfig();
         XGConfig(tag);
         mInstance = this;
@@ -156,12 +155,12 @@ public class V5Application extends Application {
 
     /** 事件统计*/
     public static void eventStatistics(Context context, String event) {
-
+        MobclickAgent.onEvent(context, event);
     }
 
     /** 事件统计*/
     public static void eventStatistics(Context context, String event, String tag) {
-
+        MobclickAgent.onEvent(context, event, tag);
     }
 
     /** 关闭除指定activity外的所有activity **/
