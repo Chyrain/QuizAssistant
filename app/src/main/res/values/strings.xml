@@ -33,7 +33,7 @@
     <string name="donate_summary">如果这个工具能帮到你，可以给开发者一点赞赏</string>
 
     <string name="agreement_title">免责声明</string>
-    <string name="agreement_message">本软件仅供学习使用，全自动托管模式答题时会进行一些自动化操作（需要开启辅助功能和悬浮窗显示），答案来自AI机器人，准确率并非100%%，不涉及任何第三方软件接口，本软件无病毒、不收集用户隐私信息，禁止使用本软件参与赌博活动。一切因使用“%1$s”造成的任何后果，“%1$s”概不负责，亦不承担任何法律责任!</string>
+    <string name="agreement_message">本软件仅供学习使用，全自动托管模式答题时会进行一些自动化操作（需要开启辅助功能和悬浮窗显示），答案来自AI机器人，准确率并非100%%，不涉及任何第三方软件接口，本软件无病毒、不收集用户隐私信息，禁止使用本软件参与任何非法活动。一切因使用“%1$s”造成的任何后果，“%1$s”概不负责，亦不承担任何法律责任!</string>
 
     <string name="overlay_permission_title">悬浮窗权限未获取</string>
     <string name="overlay_permission_message">请到“应用管理” -> “%1$s” -> “权限管理” ->  中允许显示“悬浮窗”(不同手机品牌设置有所区别)</string>
@@ -42,6 +42,6 @@
     <string name="qr_tips">点击复制微信号:v5zhike</string>
 
     <string name="about_title">关于V5答题助手</string>
-    <string name="about_url">http://chyrain.github.io/quizassistant</string>
+    <string name="about_url">https://chyrain.github.io/app/quizassistant</string>
 
 </resources>

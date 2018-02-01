@@ -213,6 +213,9 @@ public class WxBotService extends AccessibilityService {
 //            }
             if (!enable) {
                 mAITask.stopTask();
+            } else if (enable && mCurrentJob != null && mCurrentJob.getJobKey().equals("xigua")) {
+                // 西瓜视频需要特殊处理去开启
+                mAITask.startTask();
             }
         }
     }

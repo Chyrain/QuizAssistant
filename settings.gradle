@@ -1,1 +1,2 @@
-include ':app'
+include ':app', ':V5ClientSDK'
+project(':V5ClientSDK').projectDir = new File('V5ClientLibrary')

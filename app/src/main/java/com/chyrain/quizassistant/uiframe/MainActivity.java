@@ -518,7 +518,6 @@ public class MainActivity extends BaseSettingsActivity {
 
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    // TODO 使用说明
                     ((MainActivity)getActivity()).gotoWebViewActivity(Config.INTRO_LINK, R.string.app_intro);
                     return true;
                 }
@@ -622,10 +621,6 @@ public class MainActivity extends BaseSettingsActivity {
             floatBtnPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-//	                	if (!((MainActivity)getActivity()).permitForFV) {
-//	                		((MainActivity)getActivity()).showOpenOverlayPermissionDialog();
-//	                		return false;
-//	                	}
                     if((Boolean) newValue) { // 开
                         return ((MainActivity)getActivity()).showFloat();
                     } else { // 关
@@ -643,11 +638,6 @@ public class MainActivity extends BaseSettingsActivity {
                         Toast.makeText(getActivity(), "该功能只支持安卓4.3以上的系统", Toast.LENGTH_SHORT).show();
                         return false;
                     }
-
-//	                    if(!notificationChangeByUser) {
-//	                        notificationChangeByUser = true;
-//	                        return true;
-//	                    }
 
                     boolean enable = (Boolean) newValue;
                     Logger.d(TAG, "notificationPref：" + enable);
