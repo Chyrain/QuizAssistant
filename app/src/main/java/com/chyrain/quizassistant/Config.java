@@ -22,12 +22,12 @@ public class Config {
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
     public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
-    public static final String URL_ABOUT = URL_HOST;
     public static final String SHARE_IMAGE_LINK = URL_HOST + "app/quizassistant/share_img.png";
     public static final String APP_LINK = URL_HOST + "app/quizassistant/app.html"; //index.html
     public static final String DOWNLOAD_LINK = URL_HOST + "app/quizassistant/download/QuizAssistant.apk";
     public static final String UPDATE_LINK = URL_HOST + "app/quizassistant/download/version.xml";
     public static final String INTRO_LINK = URL_HOST + "app/quizassistant/intro.html";
+    public static final String URL_ABOUT = APP_LINK;
 
     // 自定义服务广播 -> eventbus
     @Deprecated
