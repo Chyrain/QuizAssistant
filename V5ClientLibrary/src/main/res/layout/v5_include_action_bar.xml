@@ -36,7 +36,7 @@
         android:layout_alignParentRight="true"
         android:gravity="center_vertical|end"
         android:orientation="horizontal" >
-                
+
         <Button
             android:id="@+id/header_right_btn"
             android:visibility="visible"
