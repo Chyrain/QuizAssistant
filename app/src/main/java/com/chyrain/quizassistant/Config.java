@@ -28,6 +28,7 @@ public class Config {
     public static final String UPDATE_LINK = URL_HOST + "app/quizassistant/download/version.xml";
     public static final String INTRO_LINK = URL_HOST + "app/quizassistant/intro.html";
     public static final String URL_ABOUT = APP_LINK;
+    public static final String URL_ME = "https://chyrain.github.io/about/";
 
     // 自定义服务广播 -> eventbus
     @Deprecated
@@ -232,7 +233,7 @@ public class Config {
 
     /** 是否启动机器人全自动托管，自动提交答案 **/
     public boolean isEnableAutoTrust() {
-        return preferences.getBoolean(KEY_AUTO_TRUST, true);
+        return preferences.getBoolean(KEY_AUTO_TRUST, false);
     }
 
     public void setEnableAutoTrust(boolean enable) {
@@ -407,6 +408,19 @@ public class Config {
     /** 设置是否同意 **/
     public void setAgreement(boolean agreement) {
         preferences.edit().putBoolean(KEY_AGREEMENT, agreement).apply();
+    }
+
+    public void saveString(String key, String val) {
+        preferences.edit().putString(key, val).commit();
+    }
+    public String readString(String key) {
+        return preferences.getString(key, null);
+    }
+    public void saveInt(String key, int val) {
+        preferences.edit().putInt(key, val).commit();
+    }
+    public int readInt(String key) {
+        return preferences.getInt(key, 0);
     }
 }
 

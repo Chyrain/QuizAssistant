@@ -9,16 +9,22 @@ import android.content.pm.PackageManager;
 import android.view.WindowManager;
 
 import com.chyrain.quizassistant.util.Logger;
+import com.chyrain.quizassistant.util.UmengShareHelper;
 import com.tencent.android.tpush.XGIOperateCallback;
 import com.tencent.android.tpush.XGPushConfig;
 import com.tencent.android.tpush.XGPushManager;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareConfig;
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.client.lib.V5ClientConfig;
 import com.v5kf.client.lib.callback.V5InitCallback;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class V5Application extends Application {
@@ -82,12 +88,34 @@ public class V5Application extends Application {
     }
 
     private void UmengShareConfig() {
-//        com.umeng.socialize.Config.DEBUG = true;
-//        PlatformConfig.setWeixin("wx83853a593404c73d", "ffc055842dfc65f75a311612b24d1565");
-//        PlatformConfig.setSinaWeibo("409092997", "7500ea126022460b0e293b1351969dc9");
-//        PlatformConfig.setQQZone("1105678497", "dCT4UTfMeQlbF8aY");
-//        com.umeng.socialize.Config.REDIRECT_URL = "http://sns.whalecloud.com/sina2/callback";
-//        UMShareAPI.get(this);
+        /**
+         * 初始化common库
+         * 参数1:上下文，不能为空
+         * 参数2:设备类型，UMConfigure.DEVICE_TYPE_PHONE为手机、UMConfigure.DEVICE_TYPE_BOX为盒子，默认为手机
+         * 参数3:Push推送业务的secret
+         */
+        UMConfigure.init(this, UMConfigure.DEVICE_TYPE_PHONE, "5a726a848f4a9d2456000176");
+
+        /**
+         * 设置组件化的Log开关
+         * 参数: boolean 默认为false，如需查看LOG设置为true
+         */
+        UMConfigure.setLogEnabled(true);
+
+        /**
+         * 设置日志加密
+         * 参数：boolean 默认为false（不加密）
+         */
+        UMConfigure.setEncryptEnabled(true);
+
+        com.umeng.socialize.Config.DEBUG = true;
+        PlatformConfig.setWeixin("wx83853a593404c73d", "ffc055842dfc65f75a311612b24d1565");
+        PlatformConfig.setSinaWeibo("245659854", "bd5d09a61e30a7828843364f5a62d031", "http://sns.whalecloud.com/sina2/callback");
+        PlatformConfig.setQQZone("1106642111", "X7oD0Eka06IFxMsL");
+
+        UMShareConfig config = new UMShareConfig();
+        config.isOpenShareEditActivity(true);
+        UMShareAPI.get(this).setShareConfig(config);
     }
 
     private static V5Application mInstance;
@@ -110,11 +138,12 @@ public class V5Application extends Application {
      */
     public static void showShare(final Activity activity) {
         // 友盟分享
-//        UmengShareHelper shareHelper = new UmengShareHelper(activity);
-//        shareHelper.share(activity.getString(R.string.share_title),
-//                String.format(Locale.getDefault(), activity.getString(R.string.share_content_fmt), getInstance().getString(R.string.app_name)),
+        UmengShareHelper shareHelper = new UmengShareHelper(activity);
+        shareHelper.share(activity.getString(R.string.share_title),
+                String.format(Locale.getDefault(), activity.getString(R.string.share_content_fmt), getInstance().getString(R.string.app_name)),
 //                Config.SHARE_IMAGE_LINK,
-//                Config.APP_LINK);
+                R.mipmap.share_img,
+                Config.APP_LINK);
     }
 
     /** 显示分享*/

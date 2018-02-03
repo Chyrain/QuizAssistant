@@ -158,7 +158,7 @@ mAITask.stopTask();
 //        		&& getConfig().getWechatMode() != Config.WX_HONGBAO_MODE_1)) {
 //            NotifyHelper.playEffect(getContext(), getConfig());
 //        }
-        NotifyHelper.playEffect(getContext(), getConfig());
+        NotifyHelper.playEffect(getContext(), getConfig(), 0);
     }
 
     protected void handleReceiveQuizAnswer() {
@@ -167,7 +167,7 @@ mAITask.stopTask();
             handleNodeWithContent(mCurrentQuiz.getResult());
         } else if (mCurrentQuiz != null && mCurrentQuiz.isRandom()) {
             // TODO 随机答案提醒自己选
-            NotifyHelper.playEffect(getContext(), getConfig());
+            NotifyHelper.playEffect(getContext(), getConfig(), -1);
             mCurrentQuiz = null;
         }
     }
@@ -226,13 +226,13 @@ mAITask.stopTask();
                 AccessibilityHelper.performClick(targetNode);
                 mCurrentQuiz = null; //已点击则置空
             }
-            if (getConfig().isEnableShowAnswer()) {
-                try {
-                    targetNode.setText(targetNode.getText() + "（推荐）");
-                } catch (Exception e) {
-//                    e.printStackTrace();
-                }
-            }
+//            if (getConfig().isEnableShowAnswer()) {
+//                try {
+//                    targetNode.setText(targetNode.getText() + "（推荐）");
+//                } catch (Exception e) {
+////                    e.printStackTrace();
+//                }
+//            }
         }
     }
 
@@ -242,7 +242,7 @@ mAITask.stopTask();
      * @return
      */
     protected boolean shouldResponseToNotifyContent(String ticker) {
-        return ticker.contains("答题") || ticker.contains("本场奖金") || ticker.contains("万奖金")
+        return ticker.contains("答题") || ticker.contains("本场奖金") || ticker.contains("奖金")
                 || ticker.contains("点题成金");
     }
 }

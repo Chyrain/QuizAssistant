@@ -55,7 +55,7 @@ public class WxBotService extends AccessibilityService {
             ZhishiAccessbilityJob.class,
             ChongdingAccessbilityJob.class,
             XiguaAccessbilityJob.class,
-            InkeAccessbilityJob.class, // 暂不支持
+//            InkeAccessbilityJob.class, // 暂不支持22:30场
             HuajiaoAccessbilityJob.class,
             HjsmAccessbilityJob.class
     };

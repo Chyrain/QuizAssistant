@@ -85,14 +85,16 @@ public class QuizFloatView extends LinearLayout {
         }
         Logger.i(TAG, "[updateFloatQuiz] result:" + quiz.getResult() + " quiz:" + mCurrentQuiz);
         if (mAnswerTv != null && mCurrentQuiz != null) {
+            mAnswerTv.setText(mCurrentQuiz.getResult());
             if (mCurrentQuiz.isRandom()) {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_unknow_color));
+                mAnswerTv.setText("抱歉，这题小五不会T.T");
             } else if (mCurrentQuiz.isUnsure()) {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_unsure_color));
             } else {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_color));
             }
-            mAnswerTv.setText((mCurrentQuiz.isRandom() ? "(随机)" : "") + mCurrentQuiz.getResult());
+//            mAnswerTv.setText((mCurrentQuiz.isRandom() ? "(随机)" : "") + mCurrentQuiz.getResult());
         }
         if (mAppNameTv != null) {
             mAppNameTv.setText(mCurrentApp +

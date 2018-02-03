@@ -4,17 +4,16 @@
     <PreferenceCategory
             android:title="开启V5答题助手">
 
+        <Preference
+            android:title="@string/app_intro"
+            android:summary="必读"
+            android:key="KEY_INSTRUCTION"/>
+
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:title="答题助手浮动窗口"
             android:summary="开启浮动窗口显示，显示推荐答案与快捷开关，全自动托管模式下您比AI更确定答案时可点击浮动条上的图标临时关闭AI答题"
             android:defaultValue="false"
             android:key="KEY_ENABLE_FLOAT_BUTTON"/>
-
-        <com.chyrain.quizassistant.view.CustomSwitchPreference
-            android:title="监听通知栏"
-            android:summary="直播开始前会收到对应App的通知，开启通知监听可自动打开App答题"
-            android:defaultValue="true"
-            android:key="KEY_NOTIFICATION_SERVICE_TEMP_ENABLE"/>
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="true"
@@ -40,12 +39,12 @@
             android:summary="开启西瓜视频【百万英雄】直播答题助手"
             android:icon="@mipmap/settings_ic_xigua"
             android:key="KEY_ENABLE_XIGUA"/>
-        <com.chyrain.quizassistant.view.CustomSwitchPreference
-            android:defaultValue="true"
-            android:title="映客直播"
-            android:summary="开启映客直播【芝士超人】直播答题助手"
-            android:icon="@mipmap/settings_ic_inke"
-            android:key="KEY_ENABLE_INKE"/>
+        <!--<com.chyrain.quizassistant.view.CustomSwitchPreference-->
+            <!--android:defaultValue="true"-->
+            <!--android:title="映客直播"-->
+            <!--android:summary="开启映客直播【芝士超人】直播答题助手"-->
+            <!--android:icon="@mipmap/settings_ic_inke"-->
+            <!--android:key="KEY_ENABLE_INKE"/>-->
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="true"
             android:title="花椒直播"
@@ -68,14 +67,20 @@
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="true"
             android:title="全自动托管"
-            android:summary="开启此选项机器人可自动为您答题，无需盯着屏幕(暂不支持西瓜视频)"
+            android:summary="开启此选项机器人可自动为您答题，无需盯着屏幕(暂不支持西瓜视频)，最好同时开启[监听通知栏]，到点自动答题"
             android:key="KEY_AUTO_TRUST"/>
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:title="监听通知栏"
+            android:summary="直播开始前会收到对应App的通知，开启通知监听可自动打开App答题"
             android:defaultValue="true"
-            android:title="机器人提示答案"
-            android:summary="答案显示在可拖动的浮动条上"
-            android:key="KEY_SHOW_ANSWER"/>
+            android:key="KEY_NOTIFICATION_SERVICE_TEMP_ENABLE"/>
+
+        <!--<com.chyrain.quizassistant.view.CustomSwitchPreference-->
+            <!--android:defaultValue="true"-->
+            <!--android:title="机器人提示答案"-->
+            <!--android:summary="答案显示在可拖动的浮动条上"-->
+            <!--android:key="KEY_SHOW_ANSWER"/>-->
 
     </PreferenceCategory>
 
@@ -99,9 +104,9 @@
         android:title="关于">
 
         <Preference
-            android:title="@string/app_intro"
-            android:summary="必读"
-            android:key="KEY_INSTRUCTION"/>
+            android:title="@string/action_share"
+            android:summary="好用就分享给你的小伙伴吧！"
+            android:key="KEY_SHARE"/>
 
         <Preference
             android:title="@string/donate_title"
@@ -112,5 +117,10 @@
             android:title="联系客服"
             android:summary="联系在线客服提交您的反馈"
             android:key="KEY_KEFU"/>
+
+        <Preference
+            android:title="关于"
+            android:key="KEY_ABOUT"/>
+
     </PreferenceCategory>
 </PreferenceScreen>

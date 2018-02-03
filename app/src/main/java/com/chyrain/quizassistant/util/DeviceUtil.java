@@ -42,11 +42,6 @@ public class DeviceUtil {
 	public static void setUsePush(int use) {
 		usePushType = use;
 	}
-
-	public static boolean isXGToken(String token) {
-		String validate = "(?i)[0-9a-f]+";
-		return token.matches(validate);
-	}
 	
 	public static boolean isMIUI() {
 //		if (BuildConfig.DEBUG) {

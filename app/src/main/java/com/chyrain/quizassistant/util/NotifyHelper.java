@@ -33,7 +33,7 @@ public class NotifyHelper {
     public static SoundPool sSoundPool;// = new SoundPool(10, AudioManager.STREAM_RING,5);
 
     /** 播放声音*/
-    public static void sound(Context context) {
+    public static void sound(Context context, int resId) {
         try {
         	if (null == sSoundPool) {
         		sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
@@ -43,7 +43,7 @@ public class NotifyHelper {
         	Logger.i("NotifyHelper", "播放提示音"+rst);
         	if (rst == 0) {
 	            MediaPlayer player = 
-	                    MediaPlayer.create(context, R.raw.hongbao);
+	                    MediaPlayer.create(context, resId > 0 ? resId : R.raw.hongbao);
 	            player.start();
         	}
         } catch (Exception e) {
@@ -131,14 +131,14 @@ public class NotifyHelper {
   }
 
     /** 播放效果、声音与震动*/
-    public static void playEffect(Context context, Config config) {
+    public static void playEffect(Context context, Config config, int sound) {
         //夜间模式，不处理
         if(NotifyHelper.isNightTime(context) && config.isNotifyNight()) {
             return;
         }
         // 播放声音
-        if(config.isNotifySound()) {
-            sound(context);
+        if(config.isNotifySound() && sound >= 0) {
+            sound(context, sound);
         }
         if(config.isNotifyVibrate()) {
             vibrator(context);

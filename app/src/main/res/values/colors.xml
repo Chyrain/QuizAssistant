@@ -7,6 +7,7 @@
     <color name="colorPrimaryDark">#1f98b9</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="welcome_bg">#58C5E2</color>
     <color name="black">#000</color>
     <color name="answer_unknow_color">#FF5566</color>
     <color name="answer_unsure_color">#b19610</color>

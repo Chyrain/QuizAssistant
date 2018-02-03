@@ -7,6 +7,7 @@ import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -27,6 +28,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.Menu;
@@ -50,6 +52,7 @@ import com.chyrain.quizassistant.view.QuizFloatView;
 import com.chyrain.quizassistant.view.WechatFloatView;
 import com.chyrain.quizassistant.R;
 import com.tencent.android.tpush.XGPushConfig;
+import com.umeng.socialize.UMShareAPI;
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.client.lib.V5ClientConfig;
 
@@ -96,6 +99,11 @@ public class MainActivity extends BaseSettingsActivity {
         boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
         if (showFloat) {
             showFloat();
+        }
+
+        if(Build.VERSION.SDK_INT>=23){
+            String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS,Manifest.permission.WRITE_APN_SETTINGS};
+            ActivityCompat.requestPermissions(this,mPermissionList,123);
         }
     }
 
@@ -163,10 +171,10 @@ public class MainActivity extends BaseSettingsActivity {
                 openAccessibilityServiceSettings();
                 V5Application.eventStatistics(this, "menu_service");
                 return true;
-            case R.id.action_float:
-                Util.gotoPermission(this);
-                V5Application.eventStatistics(this, "menu_float");
-                break;
+//            case R.id.action_float:
+//                Util.gotoPermission(this);
+//                V5Application.eventStatistics(this, "menu_float");
+//                break;
             case R.id.action_notify:
                 openNotificationServiceSettings();
                 V5Application.eventStatistics(this, "menu_notify");
@@ -374,7 +382,7 @@ public class MainActivity extends BaseSettingsActivity {
         wmParams.x = Util.dp2px(60, mActivity);
         wmParams.y = Util.dp2px(10, mActivity);
         //设置悬浮窗口长宽数据
-        wmParams.width = wFV.getMeasuredWidth() > 80 ? wFV.getMeasuredWidth() : Util.dp2px(190, mActivity);
+        wmParams.width = wFV.getMeasuredWidth() > 80 ? wFV.getMeasuredWidth() : Util.dp2px(180, mActivity);
         wmParams.height = wFV.getMeasuredHeight() > 40 ? wFV.getMeasuredHeight() : Util.dp2px(40, mActivity);
 
         //显示myFloatView图像
@@ -500,12 +508,11 @@ public class MainActivity extends BaseSettingsActivity {
         private SwitchPreference zscrPref;
         private SwitchPreference cddhPref;
         private SwitchPreference xiguaPref;
-        private SwitchPreference inkePref;
         private SwitchPreference huajiaoPref;
         private SwitchPreference hjsmPref;
         private SwitchPreference floatBtnPref;
         private SwitchPreference autoTrustPref;
-        private SwitchPreference showAnswerPref;
+//        private SwitchPreference showAnswerPref;
         private boolean notificationChangeByUser = true;
 
         @Override
@@ -570,19 +577,6 @@ public class MainActivity extends BaseSettingsActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     Config.getConfig(getActivity()).setEnableXigua((Boolean) newValue);
-                    if((Boolean) newValue && !WxBotService.isRunning()) {
-                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-                    }
-                    return true;
-                }
-            });
-
-            //映客直播开关
-            inkePref = (SwitchPreference) findPreference(Config.KEY_ENABLE_INKE);
-            inkePref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setEnableInke((Boolean) newValue);
                     if((Boolean) newValue && !WxBotService.isRunning()) {
                         ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
                     }
@@ -663,14 +657,14 @@ public class MainActivity extends BaseSettingsActivity {
             });
 
             // KEY_SHOW_ANSWER
-            showAnswerPref = (SwitchPreference) findPreference(Config.KEY_AUTO_TRUST);
-            showAnswerPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setNotificationServiceEnable((Boolean) newValue);
-                    return true;
-                }
-            });
+//            showAnswerPref = (SwitchPreference) findPreference(Config.KEY_AUTO_TRUST);
+//            showAnswerPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//                @Override
+//                public boolean onPreferenceChange(Preference preference, Object newValue) {
+//                    Config.getConfig(getActivity()).setNotificationServiceEnable((Boolean) newValue);
+//                    return true;
+//                }
+//            });
 
 //            Preference preference = findPreference("KEY_FOLLOW_ME");
 //            if(preference != null) {
@@ -683,6 +677,21 @@ public class MainActivity extends BaseSettingsActivity {
 //                    }
 //                });
 //            }
+            findPreference("KEY_ABOUT").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(new Intent(getActivity(), AboutMeActivity.class));
+                    return true;
+                }
+            });
+
+            findPreference("KEY_SHARE").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    ((MainActivity) getActivity()).showShareDialog();
+                    return true;
+                }
+            });
 
             Preference preference = findPreference("KEY_DONATE_ME");
             if(preference != null) {
@@ -811,7 +820,6 @@ public class MainActivity extends BaseSettingsActivity {
                 zscrPref.setEnabled(true);
                 cddhPref.setEnabled(true);
                 xiguaPref.setEnabled(true);
-                inkePref.setEnabled(true);
                 huajiaoPref.setEnabled(true);
                 hjsmPref.setEnabled(true);
             } else {
@@ -819,7 +827,6 @@ public class MainActivity extends BaseSettingsActivity {
                 zscrPref.setEnabled(false);
                 cddhPref.setEnabled(false);
                 xiguaPref.setEnabled(false);
-                inkePref.setEnabled(false);
                 huajiaoPref.setEnabled(false);
                 hjsmPref.setEnabled(false);
             }
@@ -854,7 +861,7 @@ public class MainActivity extends BaseSettingsActivity {
         super.onActivityResult(requestCode, resultCode, data);
         /** attention to this below ,must add this**/
         //UMShareAPI.get(this).HandleQQError(mActivity, requestCode, umAuthListener);
-//        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
         Logger.d("MainActivity", "onActivityResult intent:" + data);
         if (requestCode == Util.REQUEST_PERMISSION_SYSTEM_ALERT_WINDOW) {
             Logger.i("MainActivity", "resultCode:" + resultCode + " data:" + data);
@@ -867,6 +874,14 @@ public class MainActivity extends BaseSettingsActivity {
             }
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Logger.i(TAG, "[onRequestPermissionsResult] code:" + requestCode
+                + " permissions:" + permissions + " grantResults:" + grantResults);
+    }
+
 
     /***** event *****/
 

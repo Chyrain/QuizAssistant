@@ -132,6 +132,12 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
                 if (Config.getConfig(getContext()).isEnableWechat()) {
                     // 开启轮询
                     onEnableChange(true);
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            clickAtNodeWithContent("继续观看");
+                        }
+                    }, 1000);
                 }
             } else {
                 mLastWindow = mCurrentWindow;
@@ -150,7 +156,12 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
                     }
                 }, 2000);
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
-                clickAtNodeWithContent("继续观看");//??
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        clickAtNodeWithContent("继续观看");
+                    }
+                }, 1000);
                 handleReceiveQuizAnswer();
             }
         }
