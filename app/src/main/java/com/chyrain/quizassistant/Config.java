@@ -52,27 +52,25 @@ public class Config {
     public static final String KEY_ENABLE_HJSM = "KEY_ENABLE_HJSM"; // 允许黄金十秒
     public static final String KEY_AUTO_TRUST = "KEY_AUTO_TRUST"; // 启用全自动托管
     public static final String KEY_SHOW_ANSWER = "KEY_SHOW_ANSWER"; // 启用答案推荐
+    public static final String KEY_THROTTLE_TIME = "KEY_THROTTLE_TIME"; // 答案轮询间隔
     public static final String KEY_ENABLE_FLOAT_BUTTON = "KEY_ENABLE_FLOAT_BUTTON"; // 开启浮动开关
+    public static final String KEY_NOTIFY_SOUND = "KEY_NOTIFY_SOUND"; // 声音？
+    public static final String KEY_NOTIFY_VIBRATE = "KEY_NOTIFY_VIBRATE"; // 震动？
+    private static final String KEY_AGREEMENT = "KEY_AGREEMENT"; // 同意免责协议？
+    public static final String KEY_NOTIFICATION_SERVICE_ENABLE = "KEY_NOTIFICATION_SERVICE_ENABLE"; // 允许监听通知？
+
     public static final String KEY_WECHAT_AFTER_RESPONSE_TEXT = "KEY_WECHAT_AFTER_RESPONSE_TEEXT"; // 回复完消息处理方式
     public static final String KEY_WECHAT_AFTER_OPEN_HONGBAO = "KEY_WECHAT_AFTER_OPEN_HONGBAO"; // 点击红包后处理方式
     public static final String KEY_WECHAT_AFTER_GET_HONGBAO = "KEY_WECHAT_AFTER_GET_HONGBAO"; // 拆完红包后处理方式
     public static final String KEY_WECHAT_DELAY_TIME_MSG = "KEY_WECHAT_DELAY_TIME_MSG"; // 消息延迟
-    public static final String KEY_WECHAT_DELAY_TIME_HONGBAO = "KEY_WECHAT_DELAY_TIME_HONGBAO"; // 红包延迟
     public static final String KEY_WECHAT_MODE_TEXT = "KEY_WECHAT_MODE_TEXT"; // 收到文本消息处理模式
     public static final String KEY_WECHAT_MODE_HONGBAO = "KEY_WECHAT_MODE_HONGBAO"; // 收到红包处理模式
     public static final String KEY_KEFU = "KEY_KEFU"; //联系客服
-    // 答题助手
-    public static final String KEY_THROTTLE_TIME = "KEY_THROTTLE_TIME"; //  答案轮询时间间隔
 
-    public static final String KEY_NOTIFICATION_SERVICE_ENABLE = "KEY_NOTIFICATION_SERVICE_ENABLE"; // 允许监听通知？
-
-    public static final String KEY_NOTIFY_SOUND = "KEY_NOTIFY_SOUND"; // 声音？
-    public static final String KEY_NOTIFY_VIBRATE = "KEY_NOTIFY_VIBRATE"; // 震动？
     public static final String KEY_NOTIFY_NIGHT_ENABLE = "KEY_NOTIFY_NIGHT_ENABLE"; // 夜间免打扰？
     public static final String KEY_NOTIFY_NIGHT_START = "KEY_NOTIFY_NIGHT_START"; // 免打扰起始时间
     public static final String KEY_NOTIFY_NIGHT_END = "KEY_NOTIFY_NIGHT_END"; // 免打扰结束时间
 
-    private static final String KEY_AGREEMENT = "KEY_AGREEMENT"; // 同意免责协议？
 
     /**
      * 收到消息处理模式KEY_WECHAT_MODE_TEXT
@@ -271,7 +269,11 @@ public class Config {
     /** 答案轮询时间间隔 **/
     public int getThrottleTime() {
         int defaultValue = DEFAULT_THROTTLE_TIME;
-        return preferences.getInt(KEY_THROTTLE_TIME, defaultValue);
+        String result = preferences.getString(KEY_THROTTLE_TIME, "" + DEFAULT_THROTTLE_TIME);
+        try {
+            return Integer.parseInt(result);
+        } catch (Exception e) {}
+        return defaultValue;
     }
 
     /** 是否启动通知栏模式 **/
@@ -287,6 +289,36 @@ public class Config {
     public boolean isNotifySound() {
         return preferences.getBoolean(KEY_NOTIFY_SOUND, true);
     }
+
+    /** 是否开启震动 **/
+    public boolean isNotifyVibrate() {
+        return preferences.getBoolean(KEY_NOTIFY_VIBRATE, true);
+    }
+
+    /** 免费声明/免责声明 **/
+    public boolean isAgreement() {
+        return preferences.getBoolean(KEY_AGREEMENT, false);
+    }
+
+    /** 设置是否同意 **/
+    public void setAgreement(boolean agreement) {
+        preferences.edit().putBoolean(KEY_AGREEMENT, agreement).apply();
+    }
+
+    public void saveString(String key, String val) {
+        preferences.edit().putString(key, val).commit();
+    }
+    public String readString(String key) {
+        return preferences.getString(key, null);
+    }
+    public void saveInt(String key, int val) {
+        preferences.edit().putInt(key, val).commit();
+    }
+    public int readInt(String key) {
+        return preferences.getInt(key, 0);
+    }
+
+//  @deprecated
 
     /** 微信打开红包后的事件 **/
     public int getWechatAfterOpenHongBaoEvent() {
@@ -338,16 +370,6 @@ public class Config {
         return defaultValue;
     }
 
-    /** 微信打开红包后延时时间 **/
-    public int getWechatOpenDelayTime() {
-        int defaultValue = 0;
-        String result =  preferences.getString(KEY_WECHAT_DELAY_TIME_HONGBAO, String.valueOf(defaultValue));
-        try {
-            return Integer.parseInt(result);
-        } catch (Exception e) {}
-        return defaultValue;
-    }
-
     /** 获取抢微信红包的模式 **/
     public int getWechatMode() {
         int defaultValue = 0;
@@ -356,11 +378,6 @@ public class Config {
             return Integer.parseInt(result);
         } catch (Exception e) {}
         return defaultValue;
-    }
-
-    /** 是否开启震动 **/
-    public boolean isNotifyVibrate() {
-        return preferences.getBoolean(KEY_NOTIFY_VIBRATE, true);
     }
 
     /** 是否开启夜间免打扰模式 **/
@@ -400,27 +417,5 @@ public class Config {
         return String.format(Locale.getDefault(), "%2d:00", getNotifyNightEnd());
     }
 
-    /** 免费声明/免责声明 **/
-    public boolean isAgreement() {
-        return preferences.getBoolean(KEY_AGREEMENT, false);
-    }
-
-    /** 设置是否同意 **/
-    public void setAgreement(boolean agreement) {
-        preferences.edit().putBoolean(KEY_AGREEMENT, agreement).apply();
-    }
-
-    public void saveString(String key, String val) {
-        preferences.edit().putString(key, val).commit();
-    }
-    public String readString(String key) {
-        return preferences.getString(key, null);
-    }
-    public void saveInt(String key, int val) {
-        preferences.edit().putInt(key, val).commit();
-    }
-    public int readInt(String key) {
-        return preferences.getInt(key, 0);
-    }
 }
 

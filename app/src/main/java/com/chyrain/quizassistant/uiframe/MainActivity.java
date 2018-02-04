@@ -382,7 +382,7 @@ public class MainActivity extends BaseSettingsActivity {
         wmParams.x = Util.dp2px(60, mActivity);
         wmParams.y = Util.dp2px(10, mActivity);
         //设置悬浮窗口长宽数据
-        wmParams.width = wFV.getMeasuredWidth() > 80 ? wFV.getMeasuredWidth() : Util.dp2px(180, mActivity);
+        wmParams.width = wFV.getMeasuredWidth() > 80 ? wFV.getMeasuredWidth() : Util.dp2px(185, mActivity);
         wmParams.height = wFV.getMeasuredHeight() > 40 ? wFV.getMeasuredHeight() : Util.dp2px(40, mActivity);
 
         //显示myFloatView图像
@@ -646,6 +646,14 @@ public class MainActivity extends BaseSettingsActivity {
                 }
             });
 
+            findPreference("NOTIFY_SETTINGS").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivity(new Intent(getActivity(), NotifySettingsActivity.class));
+                    return true;
+                }
+            });
+
             // KEY_AUTO_TRUST
             autoTrustPref = (SwitchPreference) findPreference(Config.KEY_AUTO_TRUST);
             autoTrustPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -771,14 +779,6 @@ public class MainActivity extends BaseSettingsActivity {
 //                    return true;
 //                }
 //            });
-//
-//            findPreference("NOTIFY_SETTINGS").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-//                @Override
-//                public boolean onPreferenceClick(Preference preference) {
-//                    startActivity(new Intent(getActivity(), NotifySettingsActivity.class));
-//                    return true;
-//                }
-//            });
         }
 
         /** 更新快速读取通知的设置 */
@@ -788,12 +788,12 @@ public class MainActivity extends BaseSettingsActivity {
             }
             boolean running = WxBotService.isNotificationServiceRunning();
             boolean enable = Config.getConfig(getActivity()).isEnableNotificationService();
-            Logger.d(TAG, "[updateNotifyPreference] running:"+running+" enable:"+enable);
+            Logger.i(TAG, "[updateNotifyPreference] running:"+running+" enable:"+enable);
             if( enable && running && !notificationPref.isChecked()) {
                 V5Application.eventStatistics(getActivity(), "notify_service", String.valueOf(true));
                 notificationChangeByUser = false;
                 notificationPref.setChecked(true);
-            } else if((!enable || !running) && notificationPref.isChecked()) {
+            } else if((!enable || !running) && notificationPref.isChecked()) { //(!enable || !running)
                 notificationChangeByUser = false;
                 notificationPref.setChecked(false);
             }
@@ -974,7 +974,7 @@ public class MainActivity extends BaseSettingsActivity {
     private void notifyServiceConnect(DatiAccessbilityJob accessbilityJob) {
         Logger.i(TAG, "<v5kf>EVENT_TAG_ACCESSBILITY_JOB_CHANGE key: " + accessbilityJob.getAppName()
             + " key: " + accessbilityJob.getJobKey());
-        Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
         if (wFV != null) {
             wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
         }
@@ -987,12 +987,12 @@ public class MainActivity extends BaseSettingsActivity {
             wFV.updateFloatQuiz(quiz);
         }
 
-        if (Config.getConfig(MainActivity.this).isEnableShowAnswer()) {
-            // 选择
-            if (quiz != null) {
-                Toast.makeText(MainActivity.this, "推荐答案：" + quiz.getResult(), Toast.LENGTH_LONG).show();
-            }
-        }
+//        if (Config.getConfig(MainActivity.this).isEnableShowAnswer()) {
+//            // 选择
+//            if (quiz != null) {
+//                Toast.makeText(MainActivity.this, "推荐答案：" + quiz.getResult(), Toast.LENGTH_LONG).show();
+//            }
+//        }
     }
 }
 

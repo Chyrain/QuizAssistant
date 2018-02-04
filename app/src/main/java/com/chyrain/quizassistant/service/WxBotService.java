@@ -73,7 +73,8 @@ public class WxBotService extends AccessibilityService {
         EventBus.getDefault().register(this);
         
         NotifyHelper.sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
-        NotifyHelper.sSoundPool.load(getApplicationContext(), R.raw.hongbao,1);
+        NotifyHelper.sSoundPool.load(getApplicationContext(), R.raw.start,1);
+//        NotifyHelper.sSoundPool.load(getApplicationContext(), R.raw.hongbao,1);
         mAccessbilityJobs = new ArrayList<>();
         mPkgAccessbilityJobMap = new HashMap<>();
 

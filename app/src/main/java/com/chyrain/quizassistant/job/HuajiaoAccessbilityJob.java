@@ -125,7 +125,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                             clickAtNodeWithContent("百万赢家");
                             clickAtNodeWithId("urgent_activity_img");
                         }
-                    }, 2000);
+                    }, 3000);
                 }
             } else if (event.getClassName().equals("com.huajiao.dispatch.ActivityH5Inner")) {
                 mLastWindow = mCurrentWindow;
@@ -137,7 +137,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                             // 进入答题页面
                             clickAtNodeWithContent("开始答题");
                         }
-                    }, 2000);
+                    }, 3000);
                 }
             } else if (event.getClassName().equals("com.huajiao.detail.WatchesListActivity")) {
                 mLastWindow = mCurrentWindow;
@@ -167,7 +167,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                             // 进入答题页面
                             clickAtNodeWithContent("开始答题");
                         }
-                    }, 2000);
+                    }, 3000);
                 }
             } else if (mCurrentWindow == WINDOW_OTHER_PAGE) {
                 // 进入答题页面

@@ -94,11 +94,11 @@
 
     <!--</PreferenceCategory>-->
 
-    <!--<PreferenceCategory android:title="高级设置">-->
-        <!--<Preference-->
-            <!--android:title="@string/notify_settings"-->
-            <!--android:key="NOTIFY_SETTINGS"/>-->
-    <!--</PreferenceCategory>-->
+    <PreferenceCategory android:title="其他设置">
+        <Preference
+            android:title="@string/notify_settings"
+            android:key="NOTIFY_SETTINGS"/>
+    </PreferenceCategory>
     
     <PreferenceCategory
         android:title="关于">

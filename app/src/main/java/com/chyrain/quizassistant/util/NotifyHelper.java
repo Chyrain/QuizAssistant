@@ -37,13 +37,13 @@ public class NotifyHelper {
         try {
         	if (null == sSoundPool) {
         		sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
-            	sSoundPool.load(context, R.raw.hongbao,1);
+            	sSoundPool.load(context, resId,1);
         	}
         	int rst = sSoundPool.play(1, 1, 1, 0, 0, 1);
         	Logger.i("NotifyHelper", "播放提示音"+rst);
         	if (rst == 0) {
 	            MediaPlayer player = 
-	                    MediaPlayer.create(context, resId > 0 ? resId : R.raw.hongbao);
+	                    MediaPlayer.create(context, resId > 0 ? resId : R.raw.start);
 	            player.start();
         	}
         } catch (Exception e) {

@@ -166,7 +166,6 @@ public class AITask {
                                                     index = Integer.valueOf(rsts[0]);
                                                 }
                                             } catch (Exception e) {
-//                                                e.printStackTrace();
                                             }
 
                                             quiz.setIndex(index);
@@ -187,10 +186,6 @@ public class AITask {
                                                     callback.onReceiveNextAnswer(accessbilityJob, quiz);
                                                 }
                                             }
-//                                            if (index > maxQuizIndex || (maxQuizIndex == 12 && index == 1) || (index == 0 && maxQuizIndex == 0)) {
-//                                                maxQuizIndex = index;
-//                                                callback.onReceiveNextAnswer(title, result, index, ansIndex);
-//                                            }
                                             callback.onReceiveAnswer(accessbilityJob, quiz);
                                         }
                                     }

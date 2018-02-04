@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.os.Build;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.V5Application;
 import com.chyrain.quizassistant.aitask.AITask;
 import com.chyrain.quizassistant.aitask.QuizBean;
@@ -158,7 +159,9 @@ mAITask.stopTask();
 //        		&& getConfig().getWechatMode() != Config.WX_HONGBAO_MODE_1)) {
 //            NotifyHelper.playEffect(getContext(), getConfig());
 //        }
-        NotifyHelper.playEffect(getContext(), getConfig(), 0);
+        if (mCurrentWindow != 2) { // WINDOW_QUIZ_PAGE = 2
+            NotifyHelper.playEffect(getContext(), getConfig(), 0);
+        }
     }
 
     protected void handleReceiveQuizAnswer() {
@@ -166,8 +169,8 @@ mAITask.stopTask();
             // 查找答案并处理
             handleNodeWithContent(mCurrentQuiz.getResult());
         } else if (mCurrentQuiz != null && mCurrentQuiz.isRandom()) {
-            // TODO 随机答案提醒自己选
-            NotifyHelper.playEffect(getContext(), getConfig(), -1);
+            // 随机答案提醒自己选
+            NotifyHelper.playEffect(getContext(), getConfig(), R.raw.buhui);
             mCurrentQuiz = null;
         }
     }

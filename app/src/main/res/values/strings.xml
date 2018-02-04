@@ -25,8 +25,7 @@
     <string name="tips">找到【V5答题助手】，然后开启服务即可</string>
     <string name="meizu_tips">进入“无障碍” -> 找到【V5答题助手】并开启服务</string>
     <string name="qq_settings">QQ设置</string>
-    <string name="wechat_settings">微信设置</string>
-    <string name="notify_settings">红包提醒设置</string>
+    <string name="notify_settings">答题提醒设置</string>
 
     <string name="follow_preference_title">关注V5KF微信</string>
     <string name="follow_preference_summary">了解最新的智能客服机器人资讯动态</string>

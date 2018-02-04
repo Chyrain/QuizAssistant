@@ -99,7 +99,7 @@ public class QuizFloatView extends LinearLayout {
         if (mAppNameTv != null) {
             mAppNameTv.setText(mCurrentApp +
                     (quiz.getIndex() > 0 ? quiz.getIndex() + "题" : "")
-                    + "推荐答案：");
+                    + "推荐答案:");
         }
     }
 
