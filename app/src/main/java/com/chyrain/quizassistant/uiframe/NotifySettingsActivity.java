@@ -1,16 +1,20 @@
 package com.chyrain.quizassistant.uiframe;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.SwitchPreference;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.V5Application;
+import com.chyrain.quizassistant.service.WxBotService;
+import com.chyrain.quizassistant.util.Util;
 
 public class NotifySettingsActivity extends BaseSettingsActivity {
 
@@ -22,6 +26,7 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
     public static class NotifySettingsFragment extends BaseSettingsFragment {
 
         Config config;
+        SwitchPreference adPref;
 
         @Override
         public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -31,6 +36,20 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
 
             addPreferencesFromResource(R.xml.notify_settings);
             final PreferenceCategory categoryPref = (PreferenceCategory) getPreferenceScreen().getPreference(0);
+
+            //西瓜视频开关
+            adPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_AD);
+            adPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Config.getConfig(getActivity()).setEnableXigua((Boolean) newValue);
+                    if(!(Boolean) newValue) {
+                        ((NotifySettingsActivity)getActivity()).showOpenOverlayAdtipsDialog();
+                        return false;
+                    }
+                    return true;
+                }
+            });
 
             findPreference(Config.KEY_NOTIFY_SOUND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -72,5 +91,19 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
             delayEditTextPre.setSummary("间隔" + delay  + "毫秒" +
                     "（循环监控当前题号的答案，时间间隔建议在500-3000范围，频率太高耗流量多，太低获取答案时效慢）");
         }
+    }
+
+    private void showOpenOverlayAdtipsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle(R.string.dialog_title);
+        builder.setMessage(getString(R.string.overlay_ad_tips));
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO
+            }
+        });
+        builder.show();
     }
 }

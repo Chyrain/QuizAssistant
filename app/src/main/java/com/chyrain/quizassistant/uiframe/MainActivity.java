@@ -3,6 +3,8 @@ package com.chyrain.quizassistant.uiframe;
 import java.io.File;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.simple.eventbus.EventBus;
 import org.simple.eventbus.Subscriber;
 import org.simple.eventbus.ThreadMode;
@@ -11,15 +13,18 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
+import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
@@ -29,7 +34,7 @@ import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +49,8 @@ import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.service.WxBotNotificationService;
 import com.chyrain.quizassistant.service.WxBotService;
+import com.chyrain.quizassistant.update.UpdateService;
+import com.chyrain.quizassistant.update.VersionInfo;
 import com.chyrain.quizassistant.util.BitmapUtils;
 import com.chyrain.quizassistant.util.DeviceUtil;
 import com.chyrain.quizassistant.util.Logger;
@@ -56,7 +63,12 @@ import com.umeng.socialize.UMShareAPI;
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.client.lib.V5ClientConfig;
 
-public class MainActivity extends BaseSettingsActivity {
+import abc.abc.abc.AdManager;
+import abc.abc.abc.nm.sp.SpotManager;
+import abc.abc.abc.update.AppUpdateInfo;
+import abc.abc.abc.update.CheckAppUpdateCallBack;
+
+public class MainActivity extends BaseSettingsActivity implements CheckAppUpdateCallBack {
 
     private static final String TAG = "MainActivity";
     /** 微信的包名*/
@@ -74,6 +86,7 @@ public class MainActivity extends BaseSettingsActivity {
 //    private CircleImageView mAppIconIv;
 //    private TextView mAppNameTv;
 //    private TextView mAnswerTv;
+    private CheckUpdateReceiver mUpdateReceiver;
 
     @Override
     public void onBackPressed() {
@@ -104,6 +117,41 @@ public class MainActivity extends BaseSettingsActivity {
         if(Build.VERSION.SDK_INT>=23){
             String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS,Manifest.permission.WRITE_APN_SETTINGS};
             ActivityCompat.requestPermissions(this,mPermissionList,123);
+        }
+
+        initReceiver();
+        startUpdateService();
+    }
+
+    protected void initReceiver() {
+        mUpdateReceiver = new CheckUpdateReceiver();
+		/* 注册广播接收 */
+        IntentFilter filter=new IntentFilter();
+        filter.addAction(Config.ACTION_ON_UPDATE);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mUpdateReceiver, filter);
+    }
+
+    /**
+     * 开启友盟自动更新
+     */
+    protected void startUpdateService() {
+        AdManager.getInstance(this).asyncCheckAppUpdate(this);
+    }
+
+    @Override
+    public void onCheckAppUpdateFinish(AppUpdateInfo updateInfo) {
+        Logger.i(TAG, "[onCheckAppUpdateFinish] AppUpdateInfo version:" + updateInfo.getVersionName()
+            + " build:" + updateInfo.getVersionCode() + " tips:" + updateInfo.getUpdateTips());
+        // 检查更新回调，注意，这里是在 UI 线程回调的，因此您可以直接与 UI 交互，但不可以进行长时间的操作（如在这里访问网络是不允许的）
+        if (updateInfo == null || updateInfo.getUrl() == null) {
+            // 当前已经是最新版本
+            Logger.i(TAG, "[onCheckAppUpdateFinish] 当前已经是最新版本");
+        }
+        else {
+            Logger.i(TAG, "[onCheckAppUpdateFinish] 有更新信息");
+            // 有更新信息，开发者应该在这里实现下载新版本
+            Intent i = new Intent(this, UpdateService.class);
+            startService(i);
         }
     }
 
@@ -156,6 +204,7 @@ public class MainActivity extends BaseSettingsActivity {
         Logger.w(TAG, "[onDestroy] "+TAG);
         mTipsDialog = null;
         destroyFloatView();
+        SpotManager.getInstance(this).onAppExit();
     }
 
     @Override
@@ -753,19 +802,16 @@ public class MainActivity extends BaseSettingsActivity {
 //                        e.printStackTrace();
 //                    }
 //                    config.setBaseInfo(baseInfo);
-//
-//                    // 客户信息键值对，下面为示例（JSONObject）
-//                    JSONObject customContent = new JSONObject();
-//                    try {
-//                        customContent.put("用户名", "V5KF");
-//                        customContent.put("用户级别", "VIP");
-//                        customContent.put("用户积分", "3000");
-//                        customContent.put("浏览商品", "衬衣");
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    // 设置客户信息（自定义字段名称与值，自定义JSONObjectjian键值对，开启会话前设置，替代之前通过`setUserWillSendMessageListener`在消息中携带信息的方式，此方式更加安全便捷）
-//                    config.setUserInfo(customContent);
+
+                    // 客户信息键值对，下面为示例（JSONObject）
+                    JSONObject customContent = new JSONObject();
+                    try {
+                        customContent.put("Token", XGPushConfig.getToken(getActivity()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    // 设置客户信息（自定义字段名称与值，自定义JSONObjectjian键值对，开启会话前设置，替代之前通过`setUserWillSendMessageListener`在消息中携带信息的方式，此方式更加安全便捷）
+                    config.setUserInfo(customContent);
                     // 开启对话界面
                     V5ClientAgent.getInstance().startV5ChatActivity(getActivity());
                     return true;
@@ -880,6 +926,34 @@ public class MainActivity extends BaseSettingsActivity {
                                            String permissions[], int[] grantResults) {
         Logger.i(TAG, "[onRequestPermissionsResult] code:" + requestCode
                 + " permissions:" + permissions + " grantResults:" + grantResults);
+    }
+
+    /****** Update Broadcast receiver ******/
+    class CheckUpdateReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null) {
+                return;
+            }
+            Logger.d("BaseLoginActivity", "[onReceive] " + intent.getAction());
+            if (intent.getAction().equals(Config.ACTION_ON_UPDATE)) {
+                Bundle bundle = intent.getExtras();
+                int intent_type = bundle.getInt(Config.EXTRA_KEY_INTENT_TYPE);
+                switch (intent_type) {
+                    case Config.EXTRA_TYPE_UP_ENABLE:
+                        // 显示确认更新对话框
+//				String version = bundle.getString("version");
+//				String displayMessage = bundle.getString("displayMessage");
+//				Logger.i(TAG, "【新版特性】：" + displayMessage);
+                        VersionInfo versionInfo = (VersionInfo) bundle.getSerializable("versionInfo");
+                        if (isForeground) {
+                            alertUpdateInfo(versionInfo);
+                        }
+                        break;
+                }
+            }
+        }
     }
 
 

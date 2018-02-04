@@ -1,0 +1,25 @@
+<!-- ?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/v5_loading"
+    android:fromDegrees="0"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:toDegrees="360" /-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!--<item android:drawable="@mipmap/v5kf_loading_outer"/>-->
+    <item>
+        <rotate
+            android:fromDegrees="0"
+            android:interpolator="@android:anim/linear_interpolator"
+            android:pivotX="50%"
+            android:pivotY="50%"
+            android:toDegrees="360" >
+            <bitmap
+                android:antialias="true"
+                android:filter="true"
+                android:src="@mipmap/v5kf_loading_outer" />
+        </rotate>
+    </item>
+
+</layer-list>

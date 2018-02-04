@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -23,10 +25,12 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.V5Application;
@@ -52,6 +56,13 @@ public class Util {
     public static final int REQUEST_PERMISSION_SYSTEM_ALERT_WINDOW = 106; // 网络位置权限
     public static final int REQUEST_PERMISSION_ALL = 100; // 全部权限
 
+    public static void copyText(Context context, String text) {
+        // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
+        ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+//        cm.setText(text);
+        cm.setPrimaryClip(ClipData.newPlainText("", text));
+    }
 
     /**
      * 使图片失去饱和度变灰
@@ -597,5 +608,18 @@ public class Util {
             Logger.e(TAG, "android.permission.SYSTEM_ALERT_WINDOW no permission");
         }
         return permitForFV;
+    }
+
+    private static Uri getUriForFile(Context context, File file) {
+        if (context == null || file == null) {
+            throw new NullPointerException();
+        }
+        Uri uri;
+        if (Build.VERSION.SDK_INT >= 24) {
+            uri = FileProvider.getUriForFile(context.getApplicationContext(), "com.chyrain.quizassistant.fileProvider", file);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
     }
 }

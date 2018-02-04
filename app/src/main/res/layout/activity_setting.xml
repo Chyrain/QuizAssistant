@@ -12,4 +12,12 @@
         android:layout_weight="1">    
     </FrameLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_banner"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal">
+    </LinearLayout>
+
 </LinearLayout>

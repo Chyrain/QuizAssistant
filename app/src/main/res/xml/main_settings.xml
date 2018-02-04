@@ -96,7 +96,7 @@
 
     <PreferenceCategory android:title="其他设置">
         <Preference
-            android:title="@string/notify_settings"
+            android:title="其他设置"
             android:key="NOTIFY_SETTINGS"/>
     </PreferenceCategory>
     

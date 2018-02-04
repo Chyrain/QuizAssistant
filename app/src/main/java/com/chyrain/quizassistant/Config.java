@@ -16,19 +16,37 @@ import android.content.SharedPreferences.Editor;
  *		TODO
  */
 public class Config {
+    public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final int LOG_LEVEL = 5;
     public static final int DEFAULT_THROTTLE_TIME = 1500; // 【答题】轮询时间间隔
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
+//    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
     public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
+//    public static final String URL_HOST = "https://desk.v5kf.com/";//app/quizassistant/
     public static final String SHARE_IMAGE_LINK = URL_HOST + "app/quizassistant/share_img.png";
     public static final String APP_LINK = URL_HOST + "app/quizassistant/app.html"; //index.html
     public static final String DOWNLOAD_LINK = URL_HOST + "app/quizassistant/download/QuizAssistant.apk";
     public static final String UPDATE_LINK = URL_HOST + "app/quizassistant/download/version.xml";
+//    "http://chyrain.com/app/quizassistant/download/version.xml";
     public static final String INTRO_LINK = URL_HOST + "app/quizassistant/intro.html";
-    public static final String URL_ABOUT = APP_LINK;
+    public static final String URL_ABOUT = "https://chyrain.com/app/quizassistant/app.html";
     public static final String URL_ME = "https://chyrain.github.io/about/";
+
+    /* 更新广播 */
+    public static final String ACTION_ON_UPDATE = "com.chyrain.quizassistant.update.updateservice";
+    /* Intent ACTION_ON_UPDATE 的广播消息类别 */
+    public static final int EXTRA_TYPE_UP_ENABLE = 1;			/* 有更新 */
+    public static final int EXTRA_TYPE_UP_DOWNLOAD_FINISH = 2;	/* 下载完成 */
+    public static final int EXTRA_TYPE_UP_DOWNLOAD = 3;			/* 允许下载 */
+    public static final int EXTRA_TYPE_UP_INSTALL = 4; 			/* 允许安装 */
+    public static final int EXTRA_TYPE_UP_NO_NEWVERSION = 5; 	/* 无更新 */
+    public static final int EXTRA_TYPE_UP_FAILED = 6; 			/* 获取更新失败 */
+    public static final int EXTRA_TYPE_UP_CANCEL = 7; 			/* 取消下载更新 */
+    public static final String EXTRA_KEY_INTENT_TYPE = "intent_type"; /* intent类别，每个携带Extra的intent必带此key */
+    public static final int EXTRA_TYPE_NULL = 0;
+    public static final String EXTRA_KEY_DOWN_ONLYWIFI = "only_wifi";
 
     // 自定义服务广播 -> eventbus
     @Deprecated
@@ -42,6 +60,7 @@ public class Config {
     public static final String ACTION_NOTIFY_LISTENER_SERVICE_CONNECT = "com.chyrain.quizassistant.NOTIFY_LISTENER_CONNECT";
 
     public static final String PREFERENCE_NAME = "v5wxbot_config"; // shared preference name
+    public static final String KEY_ENABLE_AD = "KEY_ENABLE_AD"; // 允许AD
     public static final String KEY_ENABLE_WECHAT = "KEY_ENABLE_WECHAT"; // 允许微信机器人？
     public static final String KEY_ENABLE_ZSCR = "KEY_ENABLE_ZSCR"; // 允许芝士超人
     public static final String KEY_ENABLE_ZSCR_INKE = "KEY_ENABLE_ZSCR_INKE"; // 允许芝士超人——映客直播版
@@ -152,6 +171,16 @@ public class Config {
     private Config(Context context) {
         mContext = context;
         preferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+    }
+
+    /** 是否显示广告 */
+    public boolean isEnableAd() {
+        return preferences.getBoolean(KEY_ENABLE_AD, true);
+    }
+    public void setEnableAd(boolean enable) {
+        Editor editor = preferences.edit();
+        editor.putBoolean(KEY_ENABLE_AD, enable);
+        editor.commit();
     }
 
     /** 是否启动微信机器人和辅助服务(全局) **/
@@ -317,6 +346,18 @@ public class Config {
     public int readInt(String key) {
         return preferences.getInt(key, 0);
     }
+
+    public void saveBoolean(String key, boolean val) {
+        preferences.edit().putBoolean(key, val).commit();
+    }
+    public boolean readBoolean(String key) {
+        return preferences.getBoolean(key, false);
+    }
+
+    public void remove(String key) {
+        preferences.edit().remove(key).commit();
+    }
+
 
 //  @deprecated
 

@@ -8,4 +8,7 @@
     <dimen name="info_item_margin_h">16dp</dimen>
     <dimen name="info_item_padding_inner">8dp</dimen>
     <dimen name="base_line_width_s">1px</dimen>
+
+    <dimen name="dialog_width">283dp</dimen>
+    <dimen name="chat_list_item_search_width">25dip</dimen>
 </resources>

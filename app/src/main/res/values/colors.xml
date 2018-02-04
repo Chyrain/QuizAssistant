@@ -18,4 +18,12 @@
     <color name="info_activity_item_divider_inner">#DEDFE0</color>
     <color name="base_color_text_dark_gray">#787878</color>
     <color name="info_item_right_text_color">#787878</color>
+
+    <color name="dialog_alert_empty_bg">#ffffff</color>
+    <color name="alertdialog_line">#c6c6c6</color>
+    <color name="actionsheet_blue">#037BFF</color>
+    <color name="actionsheet_red">#FD4A2E</color>
+    <color name="actionsheet_gray">#8F8F8F</color>
+    <color name="actionsheet_divider">@color/alertdialog_line</color><!-- #07F0F0F0 -->
+
 </resources>

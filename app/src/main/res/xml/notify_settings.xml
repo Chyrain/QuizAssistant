@@ -4,15 +4,6 @@
     <PreferenceCategory
         android:title="@string/notify_settings">
 
-        <EditTextPreference
-            android:title="设置搜索答案时间间隔"
-            android:summary="循环监控当前题号的答案，时间间隔建议在500-3000范围（频率太高耗流量多，太低获取答案时效慢）"
-            android:defaultValue="1500"
-            android:key="KEY_THROTTLE_TIME"
-            android:inputType="number"
-            android:dialogTitle="建议在500-3000范围"
-            android:hint="单位毫秒(1秒=1000毫秒)"/>
-
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:key="KEY_NOTIFY_SOUND"
             android:summary="开始答题通知和答不上的语音通知"
@@ -23,6 +14,21 @@
             android:key="KEY_NOTIFY_VIBRATE"
             android:summary="开始答题通知和答不上的震动通知"
             android:title="震动"
+            android:defaultValue="true"/>
+
+        <EditTextPreference
+            android:title="设置搜索答案时间间隔"
+            android:summary="循环监控当前题号的答案，时间间隔建议在500-3000范围（频率太高耗流量多，太低获取答案时效慢）"
+            android:defaultValue="1500"
+            android:key="KEY_THROTTLE_TIME"
+            android:inputType="number"
+            android:dialogTitle="建议在500-3000范围"
+            android:hint="单位毫秒(1秒=1000毫秒)"/>
+
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:key="KEY_ENABLE_AD"
+            android:summary="关闭广告需联系客服，需要提交《关于》页的机器码并收费2元"
+            android:title="广告"
             android:defaultValue="true"/>
 
     </PreferenceCategory>

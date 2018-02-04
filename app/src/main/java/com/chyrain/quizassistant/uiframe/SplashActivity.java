@@ -4,12 +4,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.util.DeviceUtil;
+import com.chyrain.quizassistant.util.Logger;
 import com.chyrain.quizassistant.util.Util;
+
+import abc.abc.abc.AdManager;
+import abc.abc.abc.nm.sp.SplashViewSettings;
+import abc.abc.abc.nm.sp.SpotListener;
+import abc.abc.abc.nm.sp.SpotManager;
+import abc.abc.abc.nm.sp.SpotRequestListener;
 
 public class SplashActivity extends BaseActivity {
 
@@ -43,14 +52,124 @@ public class SplashActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash);
+        ViewGroup splashContainer = (ViewGroup) findViewById(R.id.splash_container);
 
         mHandler = new Handler();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                gotoActivityAndFinishThis(MainActivity.class);
-            }
-        }, 3000);
+
+        // 广告
+        AdManager.getInstance(this).init("acaecce79c2609f5", "afad7c640ff80597", true);
+        if (Config.getConfig(this).isEnableAd()) {
+            // 预加载插屏广告
+            SpotManager.getInstance(this).requestSpot(new SpotRequestListener() {
+                @Override
+                public void onRequestSuccess() {
+                    Logger.i("SplashActivity", "SpotManager.onRequestSuccess");
+                    //Config.getConfig(SplashActivity.this).saveInt("SpotRequest", 1);
+                }
+
+                @Override
+                public void onRequestFailed(int i) {
+                    Logger.e("SplashActivity", "SpotManager.onRequestFailed:" + i);
+                }
+            });
+
+            // 开屏广告
+            SplashViewSettings splashViewSettings = new SplashViewSettings();
+            splashViewSettings.setAutoJumpToTargetWhenShowFailed(true);
+            splashViewSettings.setTargetClass(MainActivity.class);
+            // 使用默认布局参数
+            splashViewSettings.setSplashViewContainer(splashContainer);
+//        // 使用自定义布局参数
+//        splashViewSettings.setSplashViewContainer(ViewGroup splashViewContainer,
+//                ViewGroup.LayoutParams splashViewLayoutParams);
+            SpotManager.getInstance(this).showSplash(this, splashViewSettings, new SpotListener() {
+                @Override
+                public void onShowSuccess() {
+                    Logger.i("SplashActivity", "SpotManager.onShowSuccess");
+                }
+
+                @Override
+                public void onShowFailed(int i) {
+                    Logger.e("SplashActivity", "SpotManager.onShowFailed:" + i);
+                }
+
+                @Override
+                public void onSpotClosed() {
+                    Logger.i("SplashActivity", "SpotManager.onSpotClosed");
+
+                }
+
+                @Override
+                public void onSpotClicked(boolean b) {
+                    Logger.e("SplashActivity", "SpotManager.onSpotClicked:" + b);
+                }
+            });
+        } else {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    gotoActivityAndFinishThis(MainActivity.class);
+                }
+            }, 1000);
+        }
+
+//        // 插屏广告
+//        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
+//        // SpotManager.ANIMATION_TYPE_ADVANCED
+//        SpotManager.getInstance(this).setAnimationType(SpotManager.ANIMATION_TYPE_ADVANCED);
+//        SpotManager.getInstance(this).showSpot(this, new SpotListener() {
+//            @Override
+//            public void onShowSuccess() {
+//                Logger.i("SplashActivity", "SpotManager.onShowSuccess");
+//            }
+//
+//            @Override
+//            public void onShowFailed(int i) {
+//                Logger.e("SplashActivity", "SpotManager.onShowFailed:" + i);
+//            }
+//
+//            @Override
+//            public void onSpotClosed() {
+//                Logger.i("SplashActivity", "SpotManager.onSpotClosed");
+//
+//            }
+//
+//            @Override
+//            public void onSpotClicked(boolean b) {
+//                Logger.e("SplashActivity", "SpotManager.onSpotClicked:" + b);
+//            }
+//        });
+    }
+
+//    @Override
+//    public void onBackPressed() {
+//        // 如果有需要，可以点击后退关闭插播广告。
+//        if (SpotManager.getInstance(this).isSpotShowing()) {
+//            SpotManager.getInstance(this).hideSpot();
+//        }
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        // 插屏广告
+//        SpotManager.getInstance(this).onPause();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        // 插屏广告
+//        SpotManager.getInstance(this).onStop();
+//    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 开屏展示界面的 onDestroy() 回调方法中调用
+        SpotManager.getInstance(this).onDestroy();
+//        // 插屏广告
+//        SpotManager.getInstance(this).onDestroy();
     }
 
     @Override

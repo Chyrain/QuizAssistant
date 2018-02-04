@@ -48,7 +48,6 @@
 					android:id="@+id/layout_update"
 					android:layout_width="match_parent"
 					android:layout_height="@dimen/info_item_height_single"
-					android:visibility="gone"
 					android:background="@drawable/info_item_selector" >
 
 					<TextView
@@ -70,6 +69,19 @@
 						android:layout_marginRight="@dimen/info_item_margin_h"
 						android:layout_marginEnd="@dimen/info_item_margin_h" />
 
+					<ProgressBar
+						android:id="@+id/id_update_progress"
+						android:visibility="gone"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_alignParentRight="true"
+						android:layout_alignParentEnd="true"
+						android:layout_centerVertical="true"
+						android:layout_marginRight="@dimen/info_item_margin_h"
+						android:layout_marginEnd="@dimen/info_item_margin_h"
+						android:maxWidth="@dimen/chat_list_item_search_width"
+						style="@style/custom_progress_bar" />
+
 				</RelativeLayout>
 
 		    	<RelativeLayout
@@ -77,6 +89,14 @@
 			        android:layout_width="match_parent"
 			        android:layout_height="@dimen/info_item_height_single"
 			        android:background="@drawable/info_item_selector" >
+
+					<View
+						android:id="@+id/divider_home"
+						android:layout_marginLeft="@dimen/info_item_margin_h"
+						android:layout_marginStart="@dimen/info_item_margin_h"
+						android:layout_width="match_parent"
+						android:layout_height="@dimen/base_line_width_s"
+						android:background="@color/info_activity_item_divider_inner" />
 				    
 			        <TextView
 			            style="@style/InfoItemText_L"
@@ -102,16 +122,19 @@
 		
 			    </RelativeLayout>
 
-				<View
-					android:layout_width="match_parent"
-					android:layout_height="@dimen/base_line_width_s"
-					android:background="@color/info_activity_item_divider_inner" />
-
 				<RelativeLayout
 					android:id="@+id/layout_me"
 					android:layout_width="match_parent"
 					android:layout_height="@dimen/info_item_height_single"
 					android:background="@drawable/info_item_selector" >
+
+					<View
+						android:id="@+id/divider_me"
+						android:layout_marginLeft="@dimen/info_item_margin_h"
+						android:layout_marginStart="@dimen/info_item_margin_h"
+						android:layout_width="match_parent"
+						android:layout_height="@dimen/base_line_width_s"
+						android:background="@color/info_activity_item_divider_inner" />
 
 					<TextView
 						style="@style/InfoItemText_L"
@@ -137,40 +160,75 @@
 
 				</RelativeLayout>
 	
-			    <RelativeLayout
-			        android:id="@+id/layout_version"
-			        android:layout_width="match_parent"
-			        android:layout_height="@dimen/info_item_height_single"
-			        android:background="@drawable/info_item_selector" >			
-			        
-			        <View
-			            android:id="@+id/divider_version"
-			            android:layout_marginLeft="@dimen/info_item_margin_h"
-			            android:layout_marginStart="@dimen/info_item_margin_h"
-				        android:layout_width="match_parent"
-				        android:layout_height="@dimen/base_line_width_s"
-				        android:background="@color/info_activity_item_divider_inner" />
-				    
-			        <TextView
-			            style="@style/InfoItemText_L"
-			            android:layout_marginStart="@dimen/info_item_margin_h"
-			            android:layout_marginLeft="@dimen/info_item_margin_h"
-			            android:layout_alignParentStart="true"
-			            android:layout_alignParentLeft="true"
-			            android:layout_centerVertical="true"
-			            android:text="@string/about_version" />
-			
-			        <TextView
-			            android:id="@+id/id_version_tv"
-			            style="@style/InfoItemText_R"
-			            android:visibility="visible"
-			            android:layout_alignParentRight="true"
-			            android:layout_alignParentEnd="true"
-			            android:layout_centerVertical="true"
-			            android:layout_marginRight="@dimen/info_item_margin_h"
-			            android:layout_marginEnd="@dimen/info_item_margin_h" />
-		
-			    </RelativeLayout>
+			    <!--<RelativeLayout-->
+			        <!--android:id="@+id/layout_version"-->
+			        <!--android:layout_width="match_parent"-->
+			        <!--android:layout_height="@dimen/info_item_height_single"-->
+			        <!--android:background="@drawable/info_item_selector" >			-->
+			        <!---->
+			        <!--<View-->
+			            <!--android:id="@+id/divider_version"-->
+			            <!--android:layout_marginLeft="@dimen/info_item_margin_h"-->
+			            <!--android:layout_marginStart="@dimen/info_item_margin_h"-->
+				        <!--android:layout_width="match_parent"-->
+				        <!--android:layout_height="@dimen/base_line_width_s"-->
+				        <!--android:background="@color/info_activity_item_divider_inner" />-->
+				    <!---->
+			        <!--<TextView-->
+			            <!--style="@style/InfoItemText_L"-->
+			            <!--android:layout_marginStart="@dimen/info_item_margin_h"-->
+			            <!--android:layout_marginLeft="@dimen/info_item_margin_h"-->
+			            <!--android:layout_alignParentStart="true"-->
+			            <!--android:layout_alignParentLeft="true"-->
+			            <!--android:layout_centerVertical="true"-->
+			            <!--android:text="@string/about_version" />-->
+			<!---->
+			        <!--<TextView-->
+			            <!--android:id="@+id/id_version_tv"-->
+			            <!--style="@style/InfoItemText_R"-->
+			            <!--android:visibility="visible"-->
+			            <!--android:layout_alignParentRight="true"-->
+			            <!--android:layout_alignParentEnd="true"-->
+			            <!--android:layout_centerVertical="true"-->
+			            <!--android:layout_marginRight="@dimen/info_item_margin_h"-->
+			            <!--android:layout_marginEnd="@dimen/info_item_margin_h" />-->
+		<!---->
+			    <!--</RelativeLayout>-->
+
+				<RelativeLayout
+					android:id="@+id/layout_token"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/info_item_height_single"
+					android:background="@drawable/info_item_selector" >
+
+					<View
+						android:id="@+id/divider_token"
+						android:layout_marginLeft="@dimen/info_item_margin_h"
+						android:layout_marginStart="@dimen/info_item_margin_h"
+						android:layout_width="match_parent"
+						android:layout_height="@dimen/base_line_width_s"
+						android:background="@color/info_activity_item_divider_inner" />
+
+					<TextView
+						style="@style/InfoItemText_L"
+						android:layout_marginStart="@dimen/info_item_margin_h"
+						android:layout_marginLeft="@dimen/info_item_margin_h"
+						android:layout_alignParentStart="true"
+						android:layout_alignParentLeft="true"
+						android:layout_centerVertical="true"
+						android:text="@string/about_token" />
+
+					<TextView
+						android:id="@+id/id_token_tv"
+						style="@style/InfoItemText_R"
+						android:visibility="visible"
+						android:layout_alignParentRight="true"
+						android:layout_alignParentEnd="true"
+						android:layout_centerVertical="true"
+						android:layout_marginRight="@dimen/info_item_margin_h"
+						android:layout_marginEnd="@dimen/info_item_margin_h" />
+
+				</RelativeLayout>
 			    
 			    <TextView
 			        android:text="@string/about_tips"

@@ -94,7 +94,7 @@ public class HttpUtil {
         URL url;
         try {
             String urlStr = path; // urlStringCheck(path);
-//            Logger.d(TAG, "[httpSync] path:" + path);
+            Logger.d(TAG, "[httpSync] path:" + path);
             url = new URL(urlStr);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setConnectTimeout(30000);
