@@ -171,7 +171,7 @@ public class AITask {
 
                                             quiz.setIndex(index);
                                             String res = mQuizMap.get(title);
-                                            if (TextUtils.isEmpty(res)) {
+                                            if (TextUtils.isEmpty(res) || !res.equals(result)) {
                                                 if (!quiz.isRandom()) {
                                                     mQuizMap.put(title, result);
                                                 } else {
