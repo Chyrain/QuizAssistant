@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.util.Logger;
@@ -88,7 +89,11 @@ public class QuizFloatView extends LinearLayout {
             mAnswerTv.setText(mCurrentQuiz.getResult());
             if (mCurrentQuiz.isRandom()) {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_unknow_color));
-                mAnswerTv.setText("抱歉，这题小五不会T.T");
+                if (Config.getConfig(getContext()).getNoAnswerMode() == 1) {
+                    mAnswerTv.setText("(随机)" + quiz.getResult());
+                } else {
+                    mAnswerTv.setText("抱歉，这题小五不会T.T");
+                }
             } else if (mCurrentQuiz.isUnsure()) {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_unsure_color));
             } else {

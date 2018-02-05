@@ -26,6 +26,8 @@
     <string name="meizu_tips">进入“无障碍” -> 找到【V5答题助手】并开启服务</string>
     <string name="qq_settings">QQ设置</string>
     <string name="notify_settings">答题提醒设置</string>
+    <string name="trust_mode_0">答不上时通知提醒</string>
+    <string name="trust_mode_1">答不上时随机选一个答案</string>
 
     <string name="follow_preference_title">关注V5KF微信</string>
     <string name="follow_preference_summary">了解最新的智能客服机器人资讯动态</string>
@@ -37,7 +39,7 @@
 
     <string name="overlay_permission_title">悬浮窗权限未获取</string>
     <string name="overlay_permission_message">请到“应用管理” -> “%1$s” -> “权限管理” ->  中允许显示“悬浮窗”(不同手机品牌设置有所区别)</string>
-    <string name="overlay_ad_tips">关闭广告需联系客服，需要提交《关于》页的机器码并收费2元</string>
+    <string name="overlay_ad_tips">关闭广告需联系客服</string>
 
     <string name="dialog_title">提醒</string>
     <string name="qr_wx_id">v5zhike</string>

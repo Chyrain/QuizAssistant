@@ -165,13 +165,17 @@ mAITask.stopTask();
     }
 
     protected void handleReceiveQuizAnswer() {
-        if (mCurrentQuiz != null && !mCurrentQuiz.isRandom()) {
-            // 查找答案并处理
-            handleNodeWithContent(mCurrentQuiz.getResult());
-        } else if (mCurrentQuiz != null && mCurrentQuiz.isRandom()) {
-            // 随机答案提醒自己选
-            NotifyHelper.playEffect(getContext(), getConfig(), R.raw.buhui);
-            mCurrentQuiz = null;
+        if (mCurrentQuiz != null) {
+            if (getConfig().isEnableAutoTrust()) {
+                if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
+                    // 查找答案并处理
+                    handleNodeWithContent(mCurrentQuiz.getResult());
+                } else {
+                    // 随机答案提醒自己选
+                    NotifyHelper.playEffect(getContext(), getConfig(), R.raw.buhui);
+                    mCurrentQuiz = null;
+                }
+            }
         }
     }
 
@@ -180,6 +184,11 @@ mAITask.stopTask();
      * @param content 内容
      */
     protected void clickAtNodeWithContent(String content) {
+        if (!getConfig().isEnableAutoTrust()) {
+            // 非自动托管不处理
+            return;
+        }
+
         Logger.d(TAG, "[clickAtNodeWithContent] content:" + content);
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
         if(nodeInfo == null) {
@@ -198,6 +207,11 @@ mAITask.stopTask();
      * @param id 布局id
      */
     protected void clickAtNodeWithId(String id) {
+        if (!getConfig().isEnableAutoTrust()) {
+            // 非自动托管不处理
+            return;
+        }
+
         Logger.d(TAG, "[clickAtNodeWithId] id:" + id);
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
         if(nodeInfo == null) {
@@ -217,6 +231,11 @@ mAITask.stopTask();
      * @param content 内容
      */
     protected void handleNodeWithContent(String content) {
+        if (!getConfig().isEnableAutoTrust()) {
+            // 非自动托管不处理
+            return;
+        }
+
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
         if(nodeInfo == null) {
             Logger.e(TAG + ":" + getTargetPackageName(), "[clickAtNodeWithContent]:" + content + " rootWindow为空");
@@ -224,11 +243,9 @@ mAITask.stopTask();
         }
         AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, content);
         if(targetNode != null) {
-            if (getConfig().isEnableAutoTrust()) {
-                Logger.e(TAG + ":" + getTargetPackageName(), "成功点击(" + content + "):" + targetNode);
-                AccessibilityHelper.performClick(targetNode);
-                mCurrentQuiz = null; //已点击则置空
-            }
+            Logger.e(TAG + ":" + getTargetPackageName(), "成功点击(" + content + "):" + targetNode);
+            AccessibilityHelper.performClick(targetNode);
+            mCurrentQuiz = null; //已点击则置空
 //            if (getConfig().isEnableShowAnswer()) {
 //                try {
 //                    targetNode.setText(targetNode.getText() + "（推荐）");

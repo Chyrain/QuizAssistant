@@ -25,9 +25,18 @@
             android:dialogTitle="建议在500-3000范围"
             android:hint="单位毫秒(1秒=1000毫秒)"/>
 
+        <ListPreference
+            android:title="答不上处理"
+            android:defaultValue="0"
+            android:summary="机器人答不上时处理选择"
+            android:key="KEY_NOANSWER_MODE"
+            android:dialogTitle="设置发现红包后的事件"
+            android:entries="@array/trust_mode_settings_title"
+            android:entryValues="@array/trust_mode_settings_values"/>
+
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:key="KEY_ENABLE_AD"
-            android:summary="关闭广告需联系客服，需要提交《关于》页的机器码并收费2元"
+            android:summary="关闭广告需联系客服"
             android:title="广告"
             android:defaultValue="true"/>
 

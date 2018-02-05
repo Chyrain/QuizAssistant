@@ -84,19 +84,9 @@
 
     </PreferenceCategory>
 
-    <!--<PreferenceCategory-->
-        <!--android:title="平台设置">-->
-
-        <!--<Preference-->
-            <!--android:title="微信设置"-->
-            <!--android:summary="更改抢红包模式，自由控制"-->
-            <!--android:key="WECHAT_SETTINGS"/>-->
-
-    <!--</PreferenceCategory>-->
-
     <PreferenceCategory android:title="其他设置">
         <Preference
-            android:title="其他设置"
+            android:title="更多设置"
             android:key="NOTIFY_SETTINGS"/>
     </PreferenceCategory>
     

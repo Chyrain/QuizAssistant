@@ -81,13 +81,13 @@ public class Config {
     public static final String KEY_NOTIFY_VIBRATE = "KEY_NOTIFY_VIBRATE"; // 震动？
     private static final String KEY_AGREEMENT = "KEY_AGREEMENT"; // 同意免责协议？
     public static final String KEY_NOTIFICATION_SERVICE_ENABLE = "KEY_NOTIFICATION_SERVICE_ENABLE"; // 允许监听通知？
+    public static final String KEY_NOANSWER_MODE = "KEY_NOANSWER_MODE"; // 答不上时处理模式
 
     public static final String KEY_WECHAT_AFTER_RESPONSE_TEXT = "KEY_WECHAT_AFTER_RESPONSE_TEEXT"; // 回复完消息处理方式
     public static final String KEY_WECHAT_AFTER_OPEN_HONGBAO = "KEY_WECHAT_AFTER_OPEN_HONGBAO"; // 点击红包后处理方式
     public static final String KEY_WECHAT_AFTER_GET_HONGBAO = "KEY_WECHAT_AFTER_GET_HONGBAO"; // 拆完红包后处理方式
     public static final String KEY_WECHAT_DELAY_TIME_MSG = "KEY_WECHAT_DELAY_TIME_MSG"; // 消息延迟
     public static final String KEY_WECHAT_MODE_TEXT = "KEY_WECHAT_MODE_TEXT"; // 收到文本消息处理模式
-    public static final String KEY_WECHAT_MODE_HONGBAO = "KEY_WECHAT_MODE_HONGBAO"; // 收到红包处理模式
     public static final String KEY_KEFU = "KEY_KEFU"; //联系客服
 
     public static final String KEY_NOTIFY_NIGHT_ENABLE = "KEY_NOTIFY_NIGHT_ENABLE"; // 夜间免打扰？
@@ -318,6 +318,16 @@ public class Config {
         preferences.edit().putBoolean(KEY_NOTIFICATION_SERVICE_ENABLE, enable).apply();
     }
 
+    /** 获取答不上选择的模式 **/
+    public int getNoAnswerMode() {
+        int defaultValue = 0;
+        String result =  preferences.getString(KEY_NOANSWER_MODE, String.valueOf(defaultValue));
+        try {
+            return Integer.parseInt(result);
+        } catch (Exception e) {}
+        return defaultValue;
+    }
+
     /** 是否开启声音 **/
     public boolean isNotifySound() {
         return preferences.getBoolean(KEY_NOTIFY_SOUND, true);
@@ -409,16 +419,6 @@ public class Config {
     public int getWechatMsgMode() {
         int defaultValue = 0;
         String result =  preferences.getString(KEY_WECHAT_MODE_TEXT, String.valueOf(defaultValue));
-        try {
-            return Integer.parseInt(result);
-        } catch (Exception e) {}
-        return defaultValue;
-    }
-
-    /** 获取抢微信红包的模式 **/
-    public int getWechatMode() {
-        int defaultValue = 0;
-        String result =  preferences.getString(KEY_WECHAT_MODE_HONGBAO, String.valueOf(defaultValue));
         try {
             return Integer.parseInt(result);
         } catch (Exception e) {}

@@ -192,7 +192,9 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
                 // 题号ID：从题目获取
                 // 题目ID：tvMessage
                 // 点击答案选项id
-                clickAtNodeWithId("answer" + mCurrentQuiz.getAnsIndex());
+                if (getConfig().getNoAnswerMode() == 1) {
+                    clickAtNodeWithId("answer" + mCurrentQuiz.getAnsIndex());
+                }
             }
         }
     }

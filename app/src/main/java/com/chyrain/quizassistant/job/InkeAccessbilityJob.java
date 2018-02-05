@@ -195,7 +195,9 @@ public class InkeAccessbilityJob extends DatiAccessbilityJob {
                     id = "option_third";
                 }
                 // 点击答案选项id
-                clickAtNodeWithId(id);
+                if (getConfig().getNoAnswerMode() == 1) {
+                    clickAtNodeWithId(id);
+                }
             }
         }
     }

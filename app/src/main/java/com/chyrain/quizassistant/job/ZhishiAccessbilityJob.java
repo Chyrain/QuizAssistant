@@ -191,7 +191,9 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
                 // 全部题数：tv_total
                 // 题目ID：tv_question
                 // 点击答案选项id
-                clickAtNodeWithId(id);
+                if (getConfig().getNoAnswerMode() == 1) {
+                    clickAtNodeWithId(id);
+                }
             }
         }
     }

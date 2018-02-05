@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.SwitchPreference;
@@ -138,6 +139,18 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
             String delay = delayEditTextPre.getText();
             delayEditTextPre.setSummary("间隔" + delay  + "毫秒" +
                     "（循环监控当前题号的答案，时间间隔建议在500-3000范围，频率太高耗流量多，太低获取答案时效慢）");
+
+            // 答不上时处理模式
+            final ListPreference wxMode = (ListPreference) findPreference(Config.KEY_NOANSWER_MODE);
+            wxMode.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    int value = Integer.parseInt(String.valueOf(newValue));
+                    preference.setSummary(wxMode.getEntries()[value]);
+                    V5Application.eventStatistics(getActivity(), "noanswer_mode", String.valueOf(newValue));
+                    return true;
+                }
+            });
         }
     }
 
