@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/splash_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/welcome_bg"
@@ -25,5 +24,11 @@
         android:textSize="12sp"
         android:textColor="@color/v5_white"
         android:text="@string/v5_copyright" />
+
+    <FrameLayout
+        android:id="@+id/splash_container"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

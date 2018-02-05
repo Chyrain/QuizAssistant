@@ -67,7 +67,7 @@
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="false"
             android:title="全自动托管"
-            android:summary="开启此选项机器人可自动为您答题，无需盯着屏幕(暂不支持西瓜视频)，最好同时开启[监听通知栏]，到点自动答题"
+            android:summary="开启此选项机器人可自动为您答题，无需盯着屏幕(暂不支持西瓜视频)，需要同时开启【监听通知栏】，到点自动答题"
             android:key="KEY_AUTO_TRUST"/>
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference

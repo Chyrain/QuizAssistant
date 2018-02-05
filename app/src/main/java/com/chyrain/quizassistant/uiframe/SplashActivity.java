@@ -4,6 +4,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +24,8 @@ import abc.abc.abc.nm.sp.SpotRequestListener;
 public class SplashActivity extends BaseActivity {
 
     private Handler mHandler;
+    private ViewGroup splashContainer;
+    private Runnable callback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,7 @@ public class SplashActivity extends BaseActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             setTranslucentStatus(false);
         }
+
         if (android.os.Build.VERSION.SDK_INT >= 23){ // Build.VERSION_CODES.M
             //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         } else {
@@ -52,13 +56,22 @@ public class SplashActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_splash);
-        ViewGroup splashContainer = (ViewGroup) findViewById(R.id.splash_container);
+        splashContainer = (ViewGroup) findViewById(R.id.splash_container);
 
         mHandler = new Handler();
+        callback = new Runnable() {
+            @Override
+            public void run() {
+                gotoActivityAndFinishThis(MainActivity.class);
+            }
+        };
 
+        Logger.i("AdManager", "enable AD:" + Config.getConfig(this).isEnableAd());
         // 广告
         AdManager.getInstance(this).init("acaecce79c2609f5", "afad7c640ff80597", true);
         if (Config.getConfig(this).isEnableAd()) {
+            mHandler.postDelayed(callback, 4000);
+
             // 预加载插屏广告
             SpotManager.getInstance(this).requestSpot(new SpotRequestListener() {
                 @Override
@@ -74,7 +87,7 @@ public class SplashActivity extends BaseActivity {
             });
 
             // 开屏广告
-            SplashViewSettings splashViewSettings = new SplashViewSettings();
+            final SplashViewSettings splashViewSettings = new SplashViewSettings();
             splashViewSettings.setAutoJumpToTargetWhenShowFailed(true);
             splashViewSettings.setTargetClass(MainActivity.class);
             // 使用默认布局参数
@@ -86,6 +99,8 @@ public class SplashActivity extends BaseActivity {
                 @Override
                 public void onShowSuccess() {
                     Logger.i("SplashActivity", "SpotManager.onShowSuccess");
+                    // 使用默认布局参数
+                    splashContainer.setVisibility(View.VISIBLE);
                 }
 
                 @Override
@@ -105,12 +120,7 @@ public class SplashActivity extends BaseActivity {
                 }
             });
         } else {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    gotoActivityAndFinishThis(MainActivity.class);
-                }
-            }, 1000);
+            mHandler.postDelayed(callback, 1000);
         }
 
 //        // 插屏广告
@@ -170,6 +180,7 @@ public class SplashActivity extends BaseActivity {
         SpotManager.getInstance(this).onDestroy();
 //        // 插屏广告
 //        SpotManager.getInstance(this).onDestroy();
+        mHandler.removeCallbacks(callback);
     }
 
     @Override

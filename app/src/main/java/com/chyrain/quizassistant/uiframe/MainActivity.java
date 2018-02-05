@@ -87,6 +87,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 //    private TextView mAppNameTv;
 //    private TextView mAnswerTv;
     private CheckUpdateReceiver mUpdateReceiver;
+    private AlertDialog mAgreementDialog;
 
     @Override
     public void onBackPressed() {
@@ -109,16 +110,16 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             Logger.d(TAG, rsts + " fail title.split(\".\"): " + rsts);
         }
 
-        boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
-        if (showFloat) {
-            showFloat();
-        }
-
         if(Build.VERSION.SDK_INT>=23){
             String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS,Manifest.permission.WRITE_APN_SETTINGS};
             ActivityCompat.requestPermissions(this,mPermissionList,123);
         }
 
+        // 显示悬浮窗
+        boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
+        if (showFloat && Config.getConfig(this).readBoolean("app_once_token")) {
+            showFloat();
+        }
         initReceiver();
         startUpdateService();
     }
@@ -155,20 +156,20 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         }
     }
 
-    public void getRunningApp() {
-        ActivityManager am = (ActivityManager) getApplicationContext()
-                .getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> processes = am
-                .getRunningAppProcesses();
-        ActivityManager.RunningAppProcessInfo processInfo = processes.get(0);
-        String appPackageName = processInfo.processName.toString();
-        for (ActivityManager.RunningAppProcessInfo info : processes) {
-            String packageName = info.processName.toString();
-            Logger.i(TAG, "getRunningApp:" + appPackageName );
-        }
-
-        Logger.e(TAG, "getRunningApp:" + appPackageName );
-    }
+//    public void getRunningApp() {
+//        ActivityManager am = (ActivityManager) getApplicationContext()
+//                .getSystemService(Context.ACTIVITY_SERVICE);
+//        List<ActivityManager.RunningAppProcessInfo> processes = am
+//                .getRunningAppProcesses();
+//        ActivityManager.RunningAppProcessInfo processInfo = processes.get(0);
+//        String appPackageName = processInfo.processName.toString();
+//        for (ActivityManager.RunningAppProcessInfo info : processes) {
+//            String packageName = info.processName.toString();
+//            Logger.i(TAG, "getRunningApp:" + appPackageName );
+//        }
+//
+//        Logger.e(TAG, "getRunningApp:" + appPackageName );
+//    }
 
     @Override
     protected boolean isShowBack() {
@@ -178,8 +179,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
     @Override
     protected void onResume() {
         super.onResume();
-        boolean isAgreement = Config.getConfig(this).isAgreement();
 
+        boolean isAgreement = Config.getConfig(this).isAgreement();
         if(!isAgreement) {
             showAgreementDialog();
         } else {
@@ -205,6 +206,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         mTipsDialog = null;
         destroyFloatView();
         SpotManager.getInstance(this).onAppExit();
+        // 打开过app记录
+        Config.getConfig(this).saveBoolean("app_once_token", true);
     }
 
     @Override
@@ -242,6 +245,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 
     /** 显示免责声明的对话框*/
     private void showAgreementDialog() {
+        if (mAgreementDialog != null && mAgreementDialog.isShowing()) {
+            return;
+        }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
         builder.setTitle(R.string.agreement_title);
@@ -273,7 +279,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 finish();
             }
         });
-        builder.show();
+        mAgreementDialog = builder.show();
     }
 
     /** 显示未开启辅助服务的对话框*/
@@ -359,7 +365,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 
     private void createFloatView(){
         if (!permitForFV) {
-            Toast.makeText(this, "未授予显示浮动按钮权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "请授予显示浮动窗口权限", Toast.LENGTH_SHORT).show();
             Logger.e(TAG, "未授权");
             return;
         }
@@ -912,7 +918,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         if (requestCode == Util.REQUEST_PERMISSION_SYSTEM_ALERT_WINDOW) {
             Logger.i("MainActivity", "resultCode:" + resultCode + " data:" + data);
             if (resultCode == 0) {
-                permitForFV = true;
+                permitForFV = Util.checkOverlayPermission(mActivity);
                 showFloatView();
             }
             if(mMainFragment != null) {

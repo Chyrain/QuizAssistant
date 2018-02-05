@@ -57,7 +57,7 @@
     </style> -->
 
     <style name="WelcomeStyle" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/welcome_bg</item>
+        <item name="android:windowBackground">@mipmap/splash_bg</item>
         <item name="android:windowNoTitle">true</item>
     </style>
 

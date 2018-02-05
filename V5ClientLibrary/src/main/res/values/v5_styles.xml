@@ -15,7 +15,7 @@
     <!-- 标题栏 -->
     <style name="v5_ActionBar">
         <item name="android:orientation">horizontal</item>
-        <item name="android:background">#1f98b9</item>
+        <item name="android:background">#478dfb</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:padding">0dp</item>

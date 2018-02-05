@@ -15,6 +15,7 @@ import abc.abc.abc.nm.bn.BannerManager;
 import abc.abc.abc.nm.bn.BannerViewListener;
 
 public abstract class BaseSettingsActivity extends BaseActivity {
+    LinearLayout bannerLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,15 +33,17 @@ public abstract class BaseSettingsActivity extends BaseActivity {
         }
 
         // 获取要嵌入广告条的布局
-        LinearLayout bannerLayout = (LinearLayout) findViewById(R.id.ll_banner);
+        bannerLayout = (LinearLayout) findViewById(R.id.ll_banner);
+//        bannerLayout.setVisibility(View.GONE);
         if (Config.getConfig(this).isEnableAd()) {
-            // 广告条
+            Logger.i("SplashActivity", "广告条：" + Config.getConfig(this).isEnableAd());
             // 获取广告条
             View bannerView = BannerManager.getInstance(this)
                     .getBannerView(this, new BannerViewListener() {
                         @Override
                         public void onRequestSuccess() {
                             Logger.i("SplashActivity", "SpotManager.onRequestSuccess");
+                            bannerLayout.setVisibility(View.VISIBLE);
                         }
 
                         @Override
@@ -55,10 +58,7 @@ public abstract class BaseSettingsActivity extends BaseActivity {
                     });
             // 将广告条加入到布局中
             bannerLayout.addView(bannerView);
-        } else {
-            bannerLayout.setVisibility(View.GONE);
         }
-
     }
 
     protected boolean isShowBack() {

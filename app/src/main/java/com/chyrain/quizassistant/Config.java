@@ -23,15 +23,19 @@ public class Config {
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
 //    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
-    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
-//    public static final String URL_HOST = "https://desk.v5kf.com/";//app/quizassistant/
+//    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
+    public static final String URL_HOST = "https://desk.v5kf.com/";//app/quizassistant/
     public static final String SHARE_IMAGE_LINK = URL_HOST + "app/quizassistant/share_img.png";
-    public static final String APP_LINK = URL_HOST + "app/quizassistant/app.html"; //index.html
     public static final String DOWNLOAD_LINK = URL_HOST + "app/quizassistant/download/QuizAssistant.apk";
-    public static final String UPDATE_LINK = URL_HOST + "app/quizassistant/download/version.xml";
 //    "http://chyrain.com/app/quizassistant/download/version.xml";
-    public static final String INTRO_LINK = URL_HOST + "app/quizassistant/intro.html";
-    public static final String URL_ABOUT = "https://chyrain.com/app/quizassistant/app.html";
+//    public static final String UPDATE_LINK = URL_HOST + "app/quizassistant/download/version.xml";
+//    public static final String APP_LINK = URL_HOST + "app/quizassistant/app.html"; //index.html
+    // 检查更新避免缓存，使用：chyrain.com
+    public static final String UPDATE_LINK = "http://chyrain.com/app/quizassistant/download/version.xml";
+    // webview页面打开用户可获取到URL页面均使用：chyrain.com
+    public static final String APP_LINK = "http://chyrain.com/app/quizassistant/app.html"; //index.html
+    public static final String INTRO_LINK = "http://chyrain.com/app/quizassistant/intro.html";
+    public static final String URL_ABOUT = "http://chyrain.com/app/quizassistant/app.html";
     public static final String URL_ME = "https://chyrain.github.io/about/";
 
     /* 更新广播 */
@@ -331,7 +335,7 @@ public class Config {
 
     /** 设置是否同意 **/
     public void setAgreement(boolean agreement) {
-        preferences.edit().putBoolean(KEY_AGREEMENT, agreement).apply();
+        preferences.edit().putBoolean(KEY_AGREEMENT, agreement).commit();
     }
 
     public void saveString(String key, String val) {
