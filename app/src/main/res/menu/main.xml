@@ -8,11 +8,6 @@
         android:orderInCategory="96"
         app:showAsAction="never"
         android:title="@string/open_service_button"/>
-    <!--<item-->
-        <!--android:id="@+id/action_float"-->
-        <!--android:orderInCategory="97"-->
-        <!--app:showAsAction="never"-->
-        <!--android:title="@string/open_float_service"/>-->
     <item
         android:id="@+id/action_notify"
         android:orderInCategory="98"

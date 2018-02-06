@@ -27,9 +27,11 @@ public class QuizFloatView extends LinearLayout {
     private WindowManager wm =(WindowManager)getContext().getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
     private WindowManager.LayoutParams wmParams;
 
+    private View mContainerView;
     private CircleImageView mAppIconIv;
     private TextView mAppNameTv;
     private TextView mAnswerTv;
+    private TextView mUnableTipTv;
 
     // 长按条件符合标志
     private boolean longClickFlag = false;
@@ -44,6 +46,7 @@ public class QuizFloatView extends LinearLayout {
 
     // 状态
     private boolean isOpen;
+    private boolean isAutoTrust;
     private QuizBean mCurrentQuiz;
     private String mCurrentApp;
     private int mCurrentImageId;
@@ -62,7 +65,9 @@ public class QuizFloatView extends LinearLayout {
         mAppIconIv = (CircleImageView) contentView.findViewById(R.id.iv_circle_app);
         mAppNameTv = (TextView) contentView.findViewById(R.id.tv_app_name);
         mAnswerTv = (TextView) contentView.findViewById(R.id.tv_quiz_answer);
+        mUnableTipTv = (TextView) contentView.findViewById(R.id.tv_unable_tip);
 
+        mContainerView = contentView; //.findViewById(R.id.layout_text)
         addView(contentView);
 
 //        //设置悬浮窗口长宽数据
@@ -70,13 +75,28 @@ public class QuizFloatView extends LinearLayout {
 //        wmParams.height = Util.dp2px(getMeasuredHeight(), context);
     }
 
-    public void updateFloatEnable(boolean light) {
-        this.isOpen = light;
+    public void updateFloatAutoTrustEnable(boolean light) {
+        this.isAutoTrust = light;
         if (mAppIconIv != null) {
             mAppIconIv.setImageResource(mCurrentImageId);  //这里简单的用自带的Icom来做演示
             if (!light) {
                 Util.grayImageView(mAppIconIv);
             }
+        }
+    }
+
+    public void updateFloatServiceEnable(boolean enable) {
+        this.isOpen = enable;
+        if (enable) {
+            mContainerView.setEnabled(true);
+            mUnableTipTv.setVisibility(View.GONE);
+            mAppNameTv.setVisibility(View.VISIBLE);
+            mAnswerTv.setVisibility(View.VISIBLE);
+        } else {
+            mContainerView.setEnabled(false);
+            mUnableTipTv.setVisibility(View.VISIBLE);
+            mAppNameTv.setVisibility(View.GONE);
+            mAnswerTv.setVisibility(View.GONE);
         }
     }
 
@@ -133,7 +153,8 @@ public class QuizFloatView extends LinearLayout {
                 mCurrentImageId = R.mipmap.v5_avatar_robot_red;
                 break;
         }
-        updateFloatEnable(this.isOpen);
+        updateFloatAutoTrustEnable(this.isAutoTrust);
+        updateFloatServiceEnable(this.isOpen);
         Logger.i(TAG, "[updateFloatJob] appName:" + appName + " jobKey:" + jobkey + " quiz:" + mCurrentQuiz);
         if (mAppNameTv != null) {
             mAppNameTv.setText(appName +

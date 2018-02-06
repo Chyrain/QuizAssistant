@@ -82,6 +82,7 @@ public class Config {
     private static final String KEY_AGREEMENT = "KEY_AGREEMENT"; // 同意免责协议？
     public static final String KEY_NOTIFICATION_SERVICE_ENABLE = "KEY_NOTIFICATION_SERVICE_ENABLE"; // 允许监听通知？
     public static final String KEY_NOANSWER_MODE = "KEY_NOANSWER_MODE"; // 答不上时处理模式
+    public static final String EVENT_TAG_UPDATE_WECHAT_ENABLE_STATUS = "EVENT_TAG_UPDATE_WECHAT_ENABLE_STATUS";
 
     public static final String KEY_WECHAT_AFTER_RESPONSE_TEXT = "KEY_WECHAT_AFTER_RESPONSE_TEEXT"; // 回复完消息处理方式
     public static final String KEY_WECHAT_AFTER_OPEN_HONGBAO = "KEY_WECHAT_AFTER_OPEN_HONGBAO"; // 点击红包后处理方式
@@ -149,7 +150,6 @@ public class Config {
     public static final String EVENT_TAG_FLOAT_LONG_CLICK = "EVENT_TAG_FLOAT_LONG_CLICK";
     public static final String EVENT_TAG_SHOW_FLOAT = "EVENT_TAG_SHOW_FLOAT";
     public static final String EVENT_TAG_HIDE_FLOAT = "EVENT_TAG_HIDE_FLOAT";
-    public static final String EVENT_TAG_UPDATE_FLOAT_STATUS = "EVENT_TAG_UPDATE_FLOAT_STATUS";
 
     private static Config current;
 

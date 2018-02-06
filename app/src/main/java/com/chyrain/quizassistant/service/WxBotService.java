@@ -391,9 +391,9 @@ public class WxBotService extends AccessibilityService {
         }
     }
 
-    @Subscriber(tag = Config.EVENT_TAG_UPDATE_FLOAT_STATUS, mode=ThreadMode.MAIN)
+    @Subscriber(tag = Config.EVENT_TAG_UPDATE_WECHAT_ENABLE_STATUS, mode=ThreadMode.MAIN)
     private void onUpdateFloatStatusEvent(Boolean light) {
-    	Logger.i("event-tag", "EVENT_TAG_UPDATE_FLOAT_STATUS");
+        Logger.i("event-tag", "EVENT_TAG_UPDATE_WECHAT_ENABLE_STATUS");
 //    	updateWFV(light);
         onEnableChange(light);
     }
