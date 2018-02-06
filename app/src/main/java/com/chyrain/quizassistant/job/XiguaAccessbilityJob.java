@@ -96,7 +96,7 @@ public class XiguaAccessbilityJob extends DatiAccessbilityJob {
         //通知栏事件
         if(eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
             Parcelable data = event.getParcelableData();
-            if(data == null || !(data instanceof Notification)) {
+            if(data == null || !(data instanceof Notification) || !getConfig().isEnableNotificationService()) {
                 return;
             }
             List<CharSequence> texts = event.getText();

@@ -91,7 +91,7 @@ public class InkeAccessbilityJob extends DatiAccessbilityJob {
         Logger.v(TAG, "onReceiveJob：" + event.getPackageName() + " type:" + AccessibilityEvent.eventTypeToString(event.getEventType()));
 
         //通知栏事件
-        if(eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+        if(eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED || !getConfig().isEnableNotificationService()) {
             Parcelable data = event.getParcelableData();
             if(data == null || !(data instanceof Notification)) {
                 return;

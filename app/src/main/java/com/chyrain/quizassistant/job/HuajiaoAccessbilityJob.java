@@ -93,7 +93,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
         //通知栏事件
         if(eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
             Parcelable data = event.getParcelableData();
-            if(data == null || !(data instanceof Notification)) {
+            if(data == null || !(data instanceof Notification) || !getConfig().isEnableNotificationService()) {
                 return;
             }
 //            if(WxBotService.isNotificationServiceRunning() && getConfig().isEnableNotificationService()) { //开启快速模式，不处理

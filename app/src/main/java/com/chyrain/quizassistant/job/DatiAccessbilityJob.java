@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.os.Build;
+import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.chyrain.quizassistant.R;
@@ -38,6 +39,14 @@ public abstract class DatiAccessbilityJob extends BaseAccessbilityJob {
     private boolean isReceivingHongbao;
 //    AITask mAITask;
     private PendingIntent mPendingIntent; // 收到通知时赋值
+
+    protected AccessibilityEvent mCurrentEvent;
+    public AccessibilityEvent getCurrentEvent() {
+        return mCurrentEvent;
+    }
+    public void setCurrentEvent(AccessibilityEvent currentEvent) {
+        this.mCurrentEvent = currentEvent;
+    }
 
     public abstract String getJobKey();
     public abstract void onReceiveAnswer(QuizBean quiz);
@@ -191,9 +200,19 @@ mAITask.stopTask();
 
         Logger.d(TAG, "[clickAtNodeWithContent] content:" + content);
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
-        if(nodeInfo == null) {
-            Logger.e(TAG, "[clickAtNodeWithContent] rootWindow为空");
-            return;
+        Logger.i(TAG, "[clickAtNodeWithContent] 0 nodeInfo: " + nodeInfo);
+//        if (nodeInfo == null && getCurrentEvent() != null) {
+//            nodeInfo = getCurrentEvent().getSource();
+//        }
+//        Logger.e(TAG, "[clickAtNodeWithContent] 1 nodeInfo: " + nodeInfo);
+        if (nodeInfo == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            nodeInfo = getService().findFocus(AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
+
+            Logger.d(TAG, "[clickAtNodeWithContent] 2 nodeInfo: " + nodeInfo);
+            if(nodeInfo == null) {
+                Logger.e(TAG, "[clickAtNodeWithContent] rootWindow为空");
+                return;
+            }
         }
         AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, content);
         if(targetNode != null) {

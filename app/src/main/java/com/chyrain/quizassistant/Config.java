@@ -144,6 +144,7 @@ public class Config {
     public static final String EVENT_TAG_ACCESSBILITY_JOB_CHANGE = "EVENT_TAG_ACCESSBILITY_JOB_CHANGE";
     public static final String EVENT_TAG_UPDATE_QUIZ = "EVENT_TAG_UPDATE_QUIZ";
     // 浮动窗口按钮
+    public static final String EVENT_TAG_FLOAT_ICON_LONF_CLICK = "EVENT_TAG_FLOAT_ICON_LONF_CLICK";
     public static final String EVENT_TAG_FLOAT_CLICK = "EVENT_TAG_FLOAT_CLICK";
     public static final String EVENT_TAG_FLOAT_LONG_CLICK = "EVENT_TAG_FLOAT_LONG_CLICK";
     public static final String EVENT_TAG_SHOW_FLOAT = "EVENT_TAG_SHOW_FLOAT";
@@ -179,7 +180,7 @@ public class Config {
 
     /** 是否显示广告 */
     public boolean isEnableAd() {
-        return preferences.getBoolean(KEY_ENABLE_AD, true);
+        return preferences.getBoolean(KEY_ENABLE_AD, false);
     }
     public void setEnableAd(boolean enable) {
         Editor editor = preferences.edit();

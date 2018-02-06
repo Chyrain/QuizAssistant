@@ -16,13 +16,15 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
+import android.view.KeyEvent;
+import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
+import android.view.accessibility.AccessibilityWindowInfo;
 import android.widget.Toast;
 
 import com.chyrain.quizassistant.BuildConfig;
 import com.chyrain.quizassistant.Config;
-import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.aitask.AITask;
 import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.job.ChongdingAccessbilityJob;
@@ -34,6 +36,7 @@ import com.chyrain.quizassistant.job.XiguaAccessbilityJob;
 import com.chyrain.quizassistant.job.ZhishiAccessbilityJob;
 import com.chyrain.quizassistant.util.Logger;
 import com.chyrain.quizassistant.util.NotifyHelper;
+import com.chyrain.quizassistant.util.Util;
 
 /**
  * <p>Created by LeonLee on 15/2/17 下午10:25.</p>
@@ -47,6 +50,7 @@ public class WxBotService extends AccessibilityService {
     private static WxBotService service;
     private AITask mAITask;
     private DatiAccessbilityJob mCurrentJob;
+    private String[] mPackageNames;
 
     /**
      * 所支持的答题平台任务类名
@@ -72,13 +76,14 @@ public class WxBotService extends AccessibilityService {
         // 注册对象
         EventBus.getDefault().register(this);
         
-        NotifyHelper.sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
-        NotifyHelper.sSoundPool.load(getApplicationContext(), R.raw.start,1);
-//        NotifyHelper.sSoundPool.load(getApplicationContext(), R.raw.hongbao,1);
+//        NotifyHelper.sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
+//        NotifyHelper.sSoundPool.load(getApplicationContext(), R.raw.start,1);
         mAccessbilityJobs = new ArrayList<>();
         mPkgAccessbilityJobMap = new HashMap<>();
+        mPackageNames = new String[ACCESSBILITY_JOBS.length];
 
         //初始化辅助插件工作
+        int i = 0;
         for(Class<?> clazz : ACCESSBILITY_JOBS) {
             try {
                 Object object = clazz.newInstance();
@@ -87,6 +92,8 @@ public class WxBotService extends AccessibilityService {
                     job.onCreateJob(this);
                     mAccessbilityJobs.add(job);
                     mPkgAccessbilityJobMap.put(job.getTargetPackageName(), job);
+                    mPackageNames[i] = job.getTargetPackageName();
+                    i++;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -98,12 +105,14 @@ public class WxBotService extends AccessibilityService {
 //        if (showFloat) {
 //            showFloatView();
 //        }
+        // 获取答案task
         mAITask = new AITask(mAccessbilityJobs.get(0), new AITask.TaskRequestCallback() {
 
             @Override
             public void onReceiveAnswer(DatiAccessbilityJob job, QuizBean quiz) {
                 Logger.d(TAG + ":" + job.getTargetPackageName(), quiz.getIndex() + " [onReceiveAnswer] title: " + quiz.getTitle() +
                         "  answers: " + quiz.getAnswers() + " result: " + quiz.getResult());
+
             }
 
             @Override
@@ -157,6 +166,13 @@ public class WxBotService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
         Logger.i(TAG, "[WxBotService -> onServiceConnected]");
+        AccessibilityServiceInfo serviceInfo = new AccessibilityServiceInfo();
+        serviceInfo.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
+        serviceInfo.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
+        serviceInfo.packageNames = mPackageNames;
+        serviceInfo.notificationTimeout=100;
+        setServiceInfo(serviceInfo);
+
         service = this;
         //发送广播，已经连接上了
         //Intent intent = new Intent(Config.ACTION_QIANGHONGBAO_SERVICE_CONNECT);
@@ -172,23 +188,40 @@ public class WxBotService extends AccessibilityService {
             Logger.d(TAG, event.getPackageName() + "上的事件--->" + AccessibilityEvent.eventTypeToString(event.getEventType()));
         }
         String pkn = String.valueOf(event.getPackageName());
-        if(mAccessbilityJobs != null && !mAccessbilityJobs.isEmpty()) {
-            if(!getConfig().isAgreement()) {
-                return;
-            }
-            for (DatiAccessbilityJob job : mAccessbilityJobs) {
-                if(pkn.equals(job.getTargetPackageName()) && job.isEnable()) {
-                    if (job != mCurrentJob) {
-                        mCurrentJob = job;
-                        onAccessibilityJobChange(job);
-                    }
-                    if (mAITask.isTaskStoped()) {
-                        mAITask.startTask();
-                    }
-                    job.onReceiveJob(event);
+        if(mPkgAccessbilityJobMap != null && !mPkgAccessbilityJobMap.isEmpty()
+                && getConfig().isAgreement()) {
+            DatiAccessbilityJob job = mPkgAccessbilityJobMap.get(pkn);
+            if (job != null && job.isEnable()) {
+                if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED &&
+                        !getConfig().isEnableNotificationService()) {
+                    return;
                 }
+                if (job != mCurrentJob) {
+                    mCurrentJob = job;
+                    onAccessibilityJobChange(job);
+                }
+                if (mAITask.isTaskStoped()) {
+                    mAITask.startTask();
+                }
+                job.setCurrentEvent(event);
+                job.onReceiveJob(event);
             }
         }
+    }
+
+
+    @Override
+    protected boolean onKeyEvent(KeyEvent event) {
+        Logger.i(TAG, "action:" + event.getAction() + " keycode:" + event.getKeyCode() +
+                " onKeyEvent---> " + event);
+        if (event.getKeyCode() == KeyEvent.KEYCODE_HOME) {
+            // 回到桌面
+            if (mAITask != null) {
+                mAITask.stopTask();
+            }
+        }
+
+        return super.onKeyEvent(event);
     }
 
     public static boolean isEnable(Context context) {
@@ -348,7 +381,14 @@ public class WxBotService extends AccessibilityService {
 //	}
 	
 	/** event **/
-    
+
+	@Subscriber(tag = Config.EVENT_TAG_FLOAT_ICON_LONF_CLICK, mode=ThreadMode.MAIN)
+	private void onFloatIconLongClick(View v) {
+	    if (mCurrentJob != null) {
+            Util.openAppWithPackageName(service.getApplicationContext(), mCurrentJob.getTargetPackageName());
+        }
+    }
+
     @Subscriber(tag = Config.EVENT_TAG_UPDATE_FLOAT_STATUS, mode=ThreadMode.MAIN)
     private void onUpdateFloatStatusEvent(Boolean light) {
     	Logger.i("event-tag", "EVENT_TAG_UPDATE_FLOAT_STATUS");

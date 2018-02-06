@@ -92,7 +92,7 @@ public class QuizFloatView extends LinearLayout {
                 if (Config.getConfig(getContext()).getNoAnswerMode() == 1) {
                     mAnswerTv.setText("(随机)" + quiz.getResult());
                 } else {
-                    mAnswerTv.setText("抱歉，这题小五不会T.T");
+                    mAnswerTv.setText("抱歉，这题小五不会");
                 }
             } else if (mCurrentQuiz.isUnsure()) {
                 mAnswerTv.setTextColor(Util.getColor(R.color.answer_unsure_color));

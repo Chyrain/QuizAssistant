@@ -35,10 +35,12 @@ public class NotifyHelper {
     /** 播放声音*/
     public static void sound(Context context, int resId) {
         try {
-        	if (null == sSoundPool) {
-        		sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
-            	sSoundPool.load(context, resId,1);
-        	}
+//        	if (null == sSoundPool) {
+//        		sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
+//            	sSoundPool.load(context, resId,1);
+//        	}
+            sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
+            sSoundPool.load(context, resId,1);
         	int rst = sSoundPool.play(1, 1, 1, 0, 0, 1);
         	Logger.i("NotifyHelper", "播放提示音"+rst);
         	if (rst == 0) {

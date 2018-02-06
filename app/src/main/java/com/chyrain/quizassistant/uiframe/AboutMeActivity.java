@@ -76,7 +76,8 @@ public class AboutMeActivity extends BaseActivity {
 				String.format(getString(R.string.v5_version_info), V5Application.getInstance().getVersion())
 				+ ")");
 		mVersionTv.setText(String.format(getString(R.string.v5_version_info), V5Application.getInstance().getVersion()));
-		mTokenTv.setText(XGPushConfig.getToken(this));
+		mTokenTv.setText(XGPushConfig.getToken(this) != null ?
+				XGPushConfig.getToken(this).substring(0, 16) : XGPushConfig.getToken(this));
 
 		findViewById(R.id.layout_me).setOnClickListener(new View.OnClickListener() {
 

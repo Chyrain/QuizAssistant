@@ -36,24 +36,24 @@ public abstract class BaseSettingsActivity extends BaseActivity {
         bannerLayout = (LinearLayout) findViewById(R.id.ll_banner);
 //        bannerLayout.setVisibility(View.GONE);
         if (Config.getConfig(this).isEnableAd()) {
-            Logger.i("SplashActivity", "广告条：" + Config.getConfig(this).isEnableAd());
+            //Logger.i("BaseSettingsActivity", "广告条：" + Config.getConfig(this).isEnableAd());
             // 获取广告条
             View bannerView = BannerManager.getInstance(this)
                     .getBannerView(this, new BannerViewListener() {
                         @Override
                         public void onRequestSuccess() {
-                            Logger.i("SplashActivity", "SpotManager.onRequestSuccess");
+                            //Logger.i("BaseSettingsActivity", "BannerManager.onRequestSuccess");
                             bannerLayout.setVisibility(View.VISIBLE);
                         }
 
                         @Override
                         public void onSwitchBanner() {
-                            Logger.i("SplashActivity", "SpotManager.onSwitchBanner");
+                            //Logger.i("BaseSettingsActivity", "BannerManager.onSwitchBanner");
                         }
 
                         @Override
                         public void onRequestFailed() {
-                            Logger.e("SplashActivity", "SpotManager.onRequestFailed");
+                            Logger.e("BaseSettingsActivity", "BannerManager.onRequestFailed");
                         }
                     });
             // 将广告条加入到布局中

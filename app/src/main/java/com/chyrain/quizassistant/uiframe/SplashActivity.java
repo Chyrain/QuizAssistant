@@ -20,6 +20,7 @@ import abc.abc.abc.nm.sp.SplashViewSettings;
 import abc.abc.abc.nm.sp.SpotListener;
 import abc.abc.abc.nm.sp.SpotManager;
 import abc.abc.abc.nm.sp.SpotRequestListener;
+import abc.abc.abc.onlineconfig.OnlineConfigCallBack;
 
 public class SplashActivity extends BaseActivity {
 
@@ -122,6 +123,25 @@ public class SplashActivity extends BaseActivity {
         } else {
             mHandler.postDelayed(callback, 1000);
         }
+
+        // 在线参数(是否显示广告key:enable_ab)
+        AdManager.getInstance(this).asyncGetOnlineConfig("enableAd", new OnlineConfigCallBack() {
+            @Override
+            public void onGetOnlineConfigSuccessful(String key, String value) {
+                // 获取在线参数成功
+                Logger.i("", "获取在线参数成功:" + key + "->" + value);
+                if (key != null) {
+                    boolean ad = Boolean.valueOf(value);
+                    Config.getConfig(getApplicationContext()).setEnableAd(ad);
+                }
+            }
+
+            @Override
+            public void onGetOnlineConfigFailed(String key) {
+                // 获取在线参数失败，可能原因有：键值未设置或为空、网络异常、服务器异常
+                Logger.e("", "获取在线参数失败:" + key);
+            }
+        });
 
 //        // 插屏广告
 //        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);

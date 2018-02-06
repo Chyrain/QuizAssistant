@@ -50,9 +50,8 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
                 Logger.i("", "获取在线参数成功:" + key + "->" + value);
                 if (key != null) {
                     boolean ad = Boolean.valueOf(value);
-//                    Config.getConfig(getApplicationContext()).setEnableAd(ad);
                     if (!ad) {
-                        Config.getConfig(getApplicationContext()).saveBoolean("close_ad", true);
+                        Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
                     }
                 }
             }
@@ -92,7 +91,7 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
 //                    Config.getConfig(getActivity()).setEnableAd((Boolean) newValue);
                     // 显示广告去除提示
-                    if(!(Boolean) newValue && !Config.getConfig(getActivity()).readBoolean("close_ad")) {
+                    if(!(Boolean) newValue && !Config.getConfig(getActivity()).readBoolean("controlAd")) {
                         ((NotifySettingsActivity)getActivity()).showOpenOverlayAdtipsDialog();
                         return false;
                     }
@@ -151,6 +150,7 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
                     return true;
                 }
             });
+            wxMode.setSummary(wxMode.getEntries()[Integer.parseInt(wxMode.getValue())]);
         }
     }
 

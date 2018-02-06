@@ -1,7 +1,6 @@
 package com.chyrain.quizassistant.uiframe;
 
 import java.io.File;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,7 +11,6 @@ import org.simple.eventbus.ThreadMode;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Fragment;
@@ -56,7 +54,6 @@ import com.chyrain.quizassistant.util.DeviceUtil;
 import com.chyrain.quizassistant.util.Logger;
 import com.chyrain.quizassistant.util.Util;
 import com.chyrain.quizassistant.view.QuizFloatView;
-import com.chyrain.quizassistant.view.WechatFloatView;
 import com.chyrain.quizassistant.R;
 import com.tencent.android.tpush.XGPushConfig;
 import com.umeng.socialize.UMShareAPI;
@@ -82,11 +79,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
     private WindowManager.LayoutParams wmParams = null;
     private QuizFloatView wFV = null;
     private boolean permitForFV = false;
-//    private View wFV = null;
-//    private CircleImageView mAppIconIv;
-//    private TextView mAppNameTv;
-//    private TextView mAnswerTv;
+    // 更新receiver
     private CheckUpdateReceiver mUpdateReceiver;
+    // 免责dialog
     private AlertDialog mAgreementDialog;
 
     @Override
@@ -110,8 +105,20 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             Logger.d(TAG, rsts + " fail title.split(\".\"): " + rsts);
         }
 
+        // 权限请求
         if(Build.VERSION.SDK_INT>=23){
-            String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS,Manifest.permission.WRITE_APN_SETTINGS};
+            String[] mPermissionList = new String[]{
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+//                Manifest.permission.CALL_PHONE,
+                Manifest.permission.READ_LOGS,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.SET_DEBUG_APP,
+                Manifest.permission.SYSTEM_ALERT_WINDOW,
+//                Manifest.permission.GET_ACCOUNTS,
+                Manifest.permission.WRITE_APN_SETTINGS
+            };
             ActivityCompat.requestPermissions(this,mPermissionList,123);
         }
 
@@ -141,6 +148,10 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 
     @Override
     public void onCheckAppUpdateFinish(AppUpdateInfo updateInfo) {
+        if (updateInfo == null) {
+            Logger.w(TAG, "[onCheckAppUpdateFinish] null");
+            return;
+        }
         Logger.i(TAG, "[onCheckAppUpdateFinish] AppUpdateInfo version:" + updateInfo.getVersionName()
             + " build:" + updateInfo.getVersionCode() + " tips:" + updateInfo.getUpdateTips());
         // 检查更新回调，注意，这里是在 UI 线程回调的，因此您可以直接与 UI 交互，但不可以进行长时间的操作（如在这里访问网络是不允许的）
@@ -411,6 +422,15 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 return true;
             }
         });
+        wFV.getAppIconIv().setOnLongClickListener(new View.OnLongClickListener() {
+
+            @Override
+            public boolean onLongClick(View v) {
+                Logger.i(TAG, "应用图标longClick");
+                EventBus.getDefault().post(v, Config.EVENT_TAG_FLOAT_ICON_LONF_CLICK);
+                return true;
+            }
+        });
 
 
         //获取WindowManager
@@ -585,100 +605,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 }
             });
 
-            //全局开关
-            wechatPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_WECHAT);
-            wechatPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setEnableWechat((Boolean) newValue);
-                    if((Boolean) newValue && !WxBotService.isRunning()) {
-                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-                    }
-                    ((MainActivity)getActivity()).updateWFV((Boolean) newValue);
-                    updateWechatPreference();
-                    return true;
-                }
-            });
-
-            //芝士超人开关
-            zscrPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_ZSCR);
-            zscrPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setEnableZscr((Boolean) newValue);
-                    if((Boolean) newValue && !WxBotService.isRunning()) {
-                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-                    }
-                    return true;
-                }
-            });
-
-            //冲顶大会开关
-            cddhPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_CDDH);
-            cddhPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setEnableCddh((Boolean) newValue);
-                    if((Boolean) newValue && !WxBotService.isRunning()) {
-                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-                    }
-                    return true;
-                }
-            });
-
-            //西瓜视频开关
-            xiguaPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_XIGUA);
-            xiguaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setEnableXigua((Boolean) newValue);
-                    if((Boolean) newValue && !WxBotService.isRunning()) {
-                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-                    }
-                    return true;
-                }
-            });
-
-            //花椒直播开关
-            huajiaoPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_HUAJIAO);
-            huajiaoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setEnableHuajiao((Boolean) newValue);
-                    if((Boolean) newValue && !WxBotService.isRunning()) {
-                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-                    }
-                    return true;
-                }
-            });
-
-            //黄金十秒开关
-            hjsmPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_HJSM);
-            hjsmPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setEnableHJSM((Boolean) newValue);
-                    if((Boolean) newValue && !WxBotService.isRunning()) {
-                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-                    }
-                    return true;
-                }
-            });
-
-            //浮动按钮开关
-            floatBtnPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_FLOAT_BUTTON);
-            floatBtnPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    if((Boolean) newValue) { // 开
-                        return ((MainActivity)getActivity()).showFloat();
-                    } else { // 关
-                        ((MainActivity)getActivity()).closeFloat();
-                    }
-                    return true;
-                }
-            });
-
+            // 通知监听开关
             notificationPref = (SwitchPreference) findPreference("KEY_NOTIFICATION_SERVICE_TEMP_ENABLE");
             notificationPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
@@ -697,6 +624,96 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                         return false;
                     }
                     V5Application.eventStatistics(getActivity(), "notify_service", String.valueOf(newValue));
+                    return true;
+                }
+            });
+
+            //全局开关
+            wechatPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_WECHAT);
+            wechatPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Config.getConfig(getActivity()).setEnableWechat((Boolean) newValue);
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+//                        return false;
+                    }
+                    ((MainActivity)getActivity()).updateWFV((Boolean) newValue);
+                    updateWechatPreference();
+                    return true;
+                }
+            });
+
+            //芝士超人开关
+            zscrPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_ZSCR);
+            zscrPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
+            //冲顶大会开关
+            cddhPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_CDDH);
+            cddhPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
+            //西瓜视频开关
+            xiguaPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_XIGUA);
+            xiguaPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
+            //花椒直播开关
+            huajiaoPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_HUAJIAO);
+            huajiaoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
+            //黄金十秒开关
+            hjsmPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_HJSM);
+            hjsmPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
+            //浮动按钮开关
+            floatBtnPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_FLOAT_BUTTON);
+            floatBtnPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue) { // 开
+                        return ((MainActivity)getActivity()).showFloat();
+                    } else { // 关
+                        ((MainActivity)getActivity()).closeFloat();
+                    }
                     return true;
                 }
             });
@@ -779,7 +796,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                     // 如果更改了用户信息，需要在设置前调用shouldUpdateUserInfo
                     // config.shouldUpdateUserInfo();
                     // 【建议】设置用户昵称
-                    config.setNickname("Quiz-" + XGPushConfig.getToken(getActivity()));
+                    String token = XGPushConfig.getToken(getActivity()) != null ?
+                            XGPushConfig.getToken(getActivity()).substring(0, 16) : XGPushConfig.getToken(getActivity());
+                    config.setNickname("Quiz-" + token);
                     // 设置用户性别: 0-未知 1-男 2-女
 //                    config.setGender(1);
                     // 【建议】设置用户头像URL
@@ -831,6 +850,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 //                    return true;
 //                }
 //            });
+
+            //初始状态
+            updateWechatPreference();
         }
 
         /** 更新快速读取通知的设置 */
@@ -1023,31 +1045,6 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             mMainFragment.updateShowFloatPreference();
             mMainFragment.updateNotifyPreference();
         }
-    }
-
-    @Subscriber(tag = Config.EVENT_TAG_FLOAT_CLICK, mode=ThreadMode.MAIN)
-    private void onFloatViewClick(WechatFloatView floatView) {
-        Logger.i(TAG, "<v5kf>EVENT_TAG_FLOAT_CLICK");
-        if (Config.getConfig(mActivity).isEnableWechat()) {
-            if (WxBotService.isRunning()) {
-                // 关闭服务
-                Config.getConfig(mActivity).setEnableWechat(false);
-                updateWFV(false);
-            } else {
-                // 进入页面
-                openSelf();
-            }
-        } else {
-            // 开启服务
-            Config.getConfig(mActivity).setEnableWechat(true);
-            updateWFV(true);
-        }
-    }
-
-    @Subscriber(tag = Config.EVENT_TAG_FLOAT_LONG_CLICK, mode=ThreadMode.MAIN)
-    private void onFloatViewLongClick(WechatFloatView floatView) {
-        Logger.i(TAG, "<v5kf>EVENT_TAG_FLOAT_LONG_CLICK");
-
     }
 
     @Subscriber(tag = Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE, mode=ThreadMode.MAIN)
