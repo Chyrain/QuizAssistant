@@ -40,7 +40,7 @@
     <string name="overlay_permission_title">悬浮窗权限未获取</string>
     <string name="overlay_permission_message">请到“应用管理” -> “%1$s” -> “权限管理” ->  中允许显示“悬浮窗”(不同手机品牌设置有所区别)</string>
     <string name="overlay_ad_tips">关闭广告需联系客服</string>
-    <string name="overlay_unpoints_message">您的积分不足，做积分任务达到200积分即可永久使用此功能。</string>
+    <string name="overlay_unpoints_message">您的积分不足，做积分任务达到200积分即可永久使用此功能。或者联系客服，并发送“解锁全自动托管”。</string>
 
     <string name="dialog_title">提醒</string>
     <string name="qr_wx_id">v5zhike</string>
