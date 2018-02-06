@@ -9,10 +9,6 @@ import android.widget.LinearLayout;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
-import com.chyrain.quizassistant.util.Logger;
-
-import abc.abc.abc.nm.bn.BannerManager;
-import abc.abc.abc.nm.bn.BannerViewListener;
 
 public abstract class BaseSettingsActivity extends BaseActivity {
     LinearLayout bannerLayout;
@@ -34,30 +30,30 @@ public abstract class BaseSettingsActivity extends BaseActivity {
 
         // 获取要嵌入广告条的布局
         bannerLayout = (LinearLayout) findViewById(R.id.ll_banner);
-//        bannerLayout.setVisibility(View.GONE);
+        bannerLayout.setVisibility(View.GONE);
         if (Config.getConfig(this).isEnableAd()) {
             //Logger.i("BaseSettingsActivity", "广告条：" + Config.getConfig(this).isEnableAd());
-            // 获取广告条
-            View bannerView = BannerManager.getInstance(this)
-                    .getBannerView(this, new BannerViewListener() {
-                        @Override
-                        public void onRequestSuccess() {
-                            //Logger.i("BaseSettingsActivity", "BannerManager.onRequestSuccess");
-                            bannerLayout.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onSwitchBanner() {
-                            //Logger.i("BaseSettingsActivity", "BannerManager.onSwitchBanner");
-                        }
-
-                        @Override
-                        public void onRequestFailed() {
-                            Logger.e("BaseSettingsActivity", "BannerManager.onRequestFailed");
-                        }
-                    });
-            // 将广告条加入到布局中
-            bannerLayout.addView(bannerView);
+            // [广告]获取广告条
+//            View bannerView = BannerManager.getInstance(this)
+//                    .getBannerView(this, new BannerViewListener() {
+//                        @Override
+//                        public void onRequestSuccess() {
+//                            //Logger.i("BaseSettingsActivity", "BannerManager.onRequestSuccess");
+//                            bannerLayout.setVisibility(View.VISIBLE);
+//                        }
+//
+//                        @Override
+//                        public void onSwitchBanner() {
+//                            //Logger.i("BaseSettingsActivity", "BannerManager.onSwitchBanner");
+//                        }
+//
+//                        @Override
+//                        public void onRequestFailed() {
+//                            Logger.e("BaseSettingsActivity", "BannerManager.onRequestFailed");
+//                        }
+//                    });
+//            // 将广告条加入到布局中
+//            bannerLayout.addView(bannerView);
         }
     }
 
@@ -86,7 +82,7 @@ public abstract class BaseSettingsActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // 展示广告条窗口的 onDestroy() 回调方法中调用
-        BannerManager.getInstance(this).onDestroy();
+//        // [广告]展示广告条窗口的 onDestroy() 回调方法中调用
+//        BannerManager.getInstance(this).onDestroy();
     }
 }

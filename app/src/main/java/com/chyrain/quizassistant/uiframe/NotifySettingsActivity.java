@@ -16,16 +16,10 @@ import android.view.View;
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.V5Application;
-import com.chyrain.quizassistant.service.WxBotService;
 import com.chyrain.quizassistant.util.Logger;
-import com.chyrain.quizassistant.util.Util;
 import com.tencent.android.tpush.XGPushConfig;
 
 import java.util.Calendar;
-import java.util.Date;
-
-import abc.abc.abc.AdManager;
-import abc.abc.abc.onlineconfig.OnlineConfigCallBack;
 
 public class NotifySettingsActivity extends BaseSettingsActivity {
 
@@ -41,28 +35,28 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
         }
         Logger.i("", "Test :" + "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
         Logger.i("", "Test key = " + key);
-        // 在线参数(广告key为token或者密码+日期)
-        AdManager.getInstance(this).asyncGetOnlineConfig(key, new OnlineConfigCallBack() {
-            @Override
-            public void onGetOnlineConfigSuccessful(String key, String value) {
-                // TODO Auto-generated method stub
-                // 获取在线参数成功
-                Logger.i("", "获取在线参数成功:" + key + "->" + value);
-                if (key != null) {
-                    boolean ad = Boolean.valueOf(value);
-                    if (!ad) {
-                        Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
-                    }
-                }
-            }
-
-            @Override
-            public void onGetOnlineConfigFailed(String key) {
-                // TODO Auto-generated method stub
-                // 获取在线参数失败，可能原因有：键值未设置或为空、网络异常、服务器异常
-                Logger.e("", "获取在线参数失败:" + key);
-            }
-        });
+//        // [广告]在线参数(广告key为token或者密码+日期)
+//        AdManager.getInstance(this).asyncGetOnlineConfig(key, new OnlineConfigCallBack() {
+//            @Override
+//            public void onGetOnlineConfigSuccessful(String key, String value) {
+//                // TODO Auto-generated method stub
+//                // 获取在线参数成功
+//                Logger.i("", "获取在线参数成功:" + key + "->" + value);
+//                if (key != null) {
+//                    boolean ad = Boolean.valueOf(value);
+//                    if (!ad) {
+//                        Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onGetOnlineConfigFailed(String key) {
+//                // TODO Auto-generated method stub
+//                // 获取在线参数失败，可能原因有：键值未设置或为空、网络异常、服务器异常
+//                Logger.e("", "获取在线参数失败:" + key);
+//            }
+//        });
     }
 
     @Override

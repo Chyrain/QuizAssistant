@@ -76,6 +76,6 @@ dependencies {
     compile 'com.umeng.sdk:common:latest.integration'
     compile 'com.umeng.sdk:analytics:latest.integration'
     implementation project(':socialShareLibrary')
-    // 有米广告
-    compile name: 'YoumiSdk_v7.4.0_2018-01-16', ext: 'aar'
+    // 有米广告[去除]
+    //compile name: 'YoumiSdk_v7.4.0_2018-01-16', ext: 'aar'
 }

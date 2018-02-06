@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
@@ -60,12 +61,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.client.lib.V5ClientConfig;
 
-import abc.abc.abc.AdManager;
-import abc.abc.abc.nm.sp.SpotManager;
-import abc.abc.abc.update.AppUpdateInfo;
-import abc.abc.abc.update.CheckAppUpdateCallBack;
-
-public class MainActivity extends BaseSettingsActivity implements CheckAppUpdateCallBack {
+public class MainActivity extends BaseSettingsActivity {
 
     private static final String TAG = "MainActivity";
     /** 微信的包名*/
@@ -140,32 +136,43 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
     }
 
     /**
-     * 开启友盟自动更新
+     * 开启自动更新
      */
     protected void startUpdateService() {
-        AdManager.getInstance(this).asyncCheckAppUpdate(this);
+        // [广告]
+//        AdManager.getInstance(this).asyncCheckAppUpdate(this);
+        (new Handler(getMainLooper())).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isForeground) {
+                    Intent i = new Intent(getApplicationContext(), UpdateService.class);
+                    startService(i);
+                }
+            }
+        }, 5000);
     }
 
-    @Override
-    public void onCheckAppUpdateFinish(AppUpdateInfo updateInfo) {
-        if (updateInfo == null) {
-            Logger.w(TAG, "[onCheckAppUpdateFinish] null");
-            return;
-        }
-        Logger.i(TAG, "[onCheckAppUpdateFinish] AppUpdateInfo version:" + updateInfo.getVersionName()
-            + " build:" + updateInfo.getVersionCode() + " tips:" + updateInfo.getUpdateTips());
-        // 检查更新回调，注意，这里是在 UI 线程回调的，因此您可以直接与 UI 交互，但不可以进行长时间的操作（如在这里访问网络是不允许的）
-        if (updateInfo == null || updateInfo.getUrl() == null) {
-            // 当前已经是最新版本
-            Logger.i(TAG, "[onCheckAppUpdateFinish] 当前已经是最新版本");
-        }
-        else {
-            Logger.i(TAG, "[onCheckAppUpdateFinish] 有更新信息");
-            // 有更新信息，开发者应该在这里实现下载新版本
-            Intent i = new Intent(this, UpdateService.class);
-            startService(i);
-        }
-    }
+    // [广告]在线更新功能
+//    @Override
+//    public void onCheckAppUpdateFinish(AppUpdateInfo updateInfo) {
+//        if (updateInfo == null) {
+//            Logger.w(TAG, "[onCheckAppUpdateFinish] null");
+//            return;
+//        }
+//        Logger.i(TAG, "[onCheckAppUpdateFinish] AppUpdateInfo version:" + updateInfo.getVersionName()
+//            + " build:" + updateInfo.getVersionCode() + " tips:" + updateInfo.getUpdateTips());
+//        // 检查更新回调，注意，这里是在 UI 线程回调的，因此您可以直接与 UI 交互，但不可以进行长时间的操作（如在这里访问网络是不允许的）
+//        if (updateInfo == null || updateInfo.getUrl() == null) {
+//            // 当前已经是最新版本
+//            Logger.i(TAG, "[onCheckAppUpdateFinish] 当前已经是最新版本");
+//        }
+//        else {
+//            Logger.i(TAG, "[onCheckAppUpdateFinish] 有更新信息");
+//            // 有更新信息，开发者应该在这里实现下载新版本
+//            Intent i = new Intent(this, UpdateService.class);
+//            startService(i);
+//        }
+//    }
 
 //    public void getRunningApp() {
 //        ActivityManager am = (ActivityManager) getApplicationContext()
@@ -216,7 +223,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         Logger.w(TAG, "[onDestroy] "+TAG);
         mTipsDialog = null;
         destroyFloatView();
-        SpotManager.getInstance(this).onAppExit();
+//        // [广告]有米接口
+//        SpotManager.getInstance(this).onAppExit();
         // 打开过app记录
         Config.getConfig(this).saveBoolean("app_once_token", true);
     }
