@@ -80,7 +80,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
     private WindowManager.LayoutParams wmParams = null;
     private QuizFloatView wFV = null;
     private boolean permitForFV = false;
-    // 更新receiver
+    // 更新
+    private VersionInfo mUpdateVersionInfo;
     private CheckUpdateReceiver mUpdateReceiver;
     // 免责dialog
     private AlertDialog mAgreementDialog;
@@ -148,12 +149,10 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         (new Handler(getMainLooper())).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (isForeground) {
-                    Intent i = new Intent(getApplicationContext(), UpdateService.class);
-                    startService(i);
-                }
+                Intent i = new Intent(getApplicationContext(), UpdateService.class);
+                startService(i);
             }
-        }, 5000);
+        }, Config.getConfig(this).readBoolean("app_once_token") ? 1500 : 15000);
     }
 
     @Override
@@ -212,6 +211,10 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             } else {
                 showOpenAccessibilityServiceDialog();
             }
+        }
+        if (mUpdateVersionInfo != null) {
+            alertUpdateInfo(mUpdateVersionInfo);
+            mUpdateVersionInfo = null;
         }
     }
 
@@ -987,6 +990,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                         VersionInfo versionInfo = (VersionInfo) bundle.getSerializable("versionInfo");
                         if (isForeground) {
                             alertUpdateInfo(versionInfo);
+                        } else {
+                            MainActivity.this.mUpdateVersionInfo = versionInfo;
                         }
                         break;
                 }

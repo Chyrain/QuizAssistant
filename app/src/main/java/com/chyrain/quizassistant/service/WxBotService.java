@@ -386,6 +386,8 @@ public class WxBotService extends AccessibilityService {
 	private void onFloatIconLongClick(View v) {
 	    if (mCurrentJob != null) {
             Util.openAppWithPackageName(service.getApplicationContext(), mCurrentJob.getTargetPackageName());
+        } else {
+            Util.openAppWithPackageName(service.getApplicationContext(), "com.chyrain.quizassistant");
         }
     }
 
