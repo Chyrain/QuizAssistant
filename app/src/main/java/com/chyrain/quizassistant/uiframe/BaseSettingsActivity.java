@@ -15,6 +15,7 @@ import abc.abc.abc.nm.bn.BannerManager;
 import abc.abc.abc.nm.bn.BannerViewListener;
 
 public abstract class BaseSettingsActivity extends BaseActivity {
+    Fragment mFragment;
     LinearLayout bannerLayout;
 
     @Override

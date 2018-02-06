@@ -67,7 +67,10 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
 
     @Override
     public Fragment getSettingsFragment() {
-        return new NotifySettingsFragment();
+        if (mFragment == null) {
+            mFragment = new NotifySettingsFragment();
+        }
+        return mFragment;
     }
 
     public static class NotifySettingsFragment extends BaseSettingsFragment {

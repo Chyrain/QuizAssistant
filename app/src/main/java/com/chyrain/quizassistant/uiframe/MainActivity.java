@@ -347,7 +347,10 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 
     @Override
     public Fragment getSettingsFragment() {
-        mMainFragment = new MainFragment();
+        if (mFragment == null) {
+            mFragment = new MainFragment();
+            mMainFragment = (MainFragment)mFragment;
+        }
         return mMainFragment;
     }
 
