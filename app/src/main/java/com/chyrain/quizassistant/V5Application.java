@@ -110,7 +110,7 @@ public class V5Application extends Application {
         UMConfigure.setEncryptEnabled(true);
 
         com.umeng.socialize.Config.DEBUG = true;
-        PlatformConfig.setWeixin("wx83853a593404c73d", "ffc055842dfc65f75a311612b24d1565");
+        PlatformConfig.setWeixin("wxd9a8ab9ab6c64dc1", "318a5dc259adaea7943b130ec43ed59a");
         PlatformConfig.setSinaWeibo("245659854", "bd5d09a61e30a7828843364f5a62d031", "http://sns.whalecloud.com/sina2/callback");
         PlatformConfig.setQQZone("1106642111", "X7oD0Eka06IFxMsL");
 
