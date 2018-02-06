@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 import android.view.WindowManager;
 
 import com.chyrain.quizassistant.util.Logger;
@@ -24,9 +25,12 @@ import com.v5kf.client.lib.V5ClientConfig;
 import com.v5kf.client.lib.callback.V5InitCallback;
 
 import java.lang.ref.WeakReference;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import abc.abc.abc.os.OffersManager;
 
 public class V5Application extends Application {
 
@@ -78,6 +82,19 @@ public class V5Application extends Application {
             @Override
             public void onSuccess(Object arg0, int arg1) {
                 Logger.e("MainActivity", "信鸽注册成功token：" + (String)arg0);
+                String token = (String)arg0;
+                if (TextUtils.isEmpty(token)) {
+                    token = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                } else if (token.length() > 16) {
+                    token = token.substring(0, 16);
+                }
+                // 广告
+                // userid 不能为空 或者 空串,否则设置无效, 字符串长度必须要小于50
+                OffersManager.getInstance(getApplicationContext()).setCustomUserId(token);
+//                // 有米Android SDK v4.10之后的sdk还需要配置下面代码，以告诉sdk使用了服务器回调
+//                OffersManager.getInstance(getApplicationContext()).setUsingServerCallBack(true);
+                // 积分强广告初始化
+                OffersManager.getInstance(getApplicationContext()).onAppLaunch();
             }
 
             @Override

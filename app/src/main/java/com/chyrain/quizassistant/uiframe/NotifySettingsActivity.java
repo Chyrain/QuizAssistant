@@ -51,7 +51,7 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
                 Logger.i("", "获取在线参数成功:" + key + "->" + value);
                 if (key != null) {
                     boolean ad = Boolean.valueOf(value);
-                    if (!ad) {
+                    if (!ad && !Config.getConfig(getApplicationContext()).readBoolean("controlAd")) {
                         // 去除广告，并直接给200积分
                         boolean isSuccess = PointsManager.getInstance(NotifySettingsActivity.this).awardPoints(200);
                         Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);

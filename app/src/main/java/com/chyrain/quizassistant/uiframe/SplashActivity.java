@@ -21,6 +21,7 @@ import abc.abc.abc.nm.sp.SpotListener;
 import abc.abc.abc.nm.sp.SpotManager;
 import abc.abc.abc.nm.sp.SpotRequestListener;
 import abc.abc.abc.onlineconfig.OnlineConfigCallBack;
+import abc.abc.abc.os.OffersBrowserConfig;
 import abc.abc.abc.os.OffersManager;
 
 public class SplashActivity extends BaseActivity {
@@ -144,8 +145,17 @@ public class SplashActivity extends BaseActivity {
             }
         });
 
-        // 积分强广告初始化
-        OffersManager.getInstance(this).onAppLaunch();
+        // [广告]积分强广告初始化
+        OffersManager.getInstance(getApplicationContext()).onAppLaunch();
+//        // 获取积分墙列表页标题文字
+//        String title = OffersBrowserConfig.getInstance(this).getBrowserTitleText();
+//        // 获取积分墙标题背景颜色
+//        int color = OffersBrowserConfig.getInstance(this).getBrowserTitleBackgroundColor();
+        // 设置积分墙列表页标题文字
+        OffersBrowserConfig.getInstance(this).setBrowserTitleText("做任务赚积分");
+        // 设置积分墙标题背景颜色
+        OffersBrowserConfig.getInstance(this).setBrowserTitleBackgroundColor(Util.getColor(R.color.colorPrimary));
+
 
 //        // 插屏广告
 //        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);
