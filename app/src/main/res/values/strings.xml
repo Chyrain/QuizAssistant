@@ -9,8 +9,8 @@
     <string name="about_tips">注：本应用采用较为高级的辅助模式和浮动窗口功能实现答题辅助，需要使用者授权，本应用不做任何非法盈利目的，特此声明，如有侵权请联系告知。</string>
     <string name="v5_version_info"><Data><![CDATA[ v%s ]]></Data></string>
     <string name="v5_copyright"><Data><![CDATA[ Copyright © 2017-2018 CHYRAIN \n All Rights Reserved.]]></Data></string>
-    <string name="share_title">直播答题神器杀到</string>
-    <string name="share_content_fmt">答题助手终极杀器，直播答题绝对神器，来不及解释了快上车[https://0x9.me/ZFKHs]~——来自[%s]</string>
+    <string name="share_title">答题赢钱so easy，小窗口实时获取答案，全自动托管自动作答，来不及解释了，快上车！</string>
+    <string name="share_content_fmt">答题赢现金游戏自动解题助手，小窗口同步显示答案，全自动托管自动作答，又快又准！轻松答对12题，冲顶快人一步！——来自[%s]</string>
     <string name="app_intro">使用说明</string>
 
     <string name="main_name">答题辅助</string>
@@ -40,7 +40,7 @@
     <string name="overlay_permission_title">悬浮窗权限未获取</string>
     <string name="overlay_permission_message">请到“应用管理” -> “%1$s” -> “权限管理” ->  中允许显示“悬浮窗”(不同手机品牌设置有所区别)</string>
     <string name="overlay_ad_tips">关闭广告需联系客服</string>
-    <string name="overlay_unpoints_message">您的积分不足，做积分任务达到200积分即可永久使用此功能。或者联系客服，并发送“解锁全自动托管”。</string>
+    <string name="overlay_unpoints_message">您的积分不足，做积分任务达到200积分即可永久使用此功能。或者进入【联系客服】发送“解锁全自动托管”。</string>
 
     <string name="dialog_title">提醒</string>
     <string name="qr_wx_id">v5zhike</string>

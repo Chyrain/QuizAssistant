@@ -92,7 +92,7 @@
 
         <Preference
             android:title="积分任务"
-            android:summary="做任务赚取积分，达到200积分即可开启【全自动托管】权限，或者联系客服，并发送“解锁全自动托管”。"
+            android:summary="做任务赚取积分，达到200积分即可开启【全自动托管】权限，或者进入【联系客服】发送“解锁全自动托管”。"
             android:key="MORE_APPS" />
 
     </PreferenceCategory>
