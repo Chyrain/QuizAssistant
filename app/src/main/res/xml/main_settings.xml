@@ -11,14 +11,14 @@
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:title="答题助手浮动窗口"
-            android:summary="开启浮动窗口显示，显示推荐答案与快捷开关，全自动托管模式下您比AI更确定答案时可点击浮动条上的图标临时关闭AI答题"
+            android:summary="开启浮动窗口显示，显示推荐答案与快捷开关，窗口左侧图标为【全自动托管】快捷开关"
             android:defaultValue="false"
             android:key="KEY_ENABLE_FLOAT_BUTTON"/>
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="true"
             android:title="机器人开关"
-            android:summary="同一时间只支持一个答题平台，需打开对应平台直播页面（打开[全自动托管]模式并开启对应直播App的通知权限可自动进入App，并自动答题）"
+            android:summary="开启机器人开关以获取推荐答案，同一时间只支持一个答题平台，需打开对应平台直播页面"
             android:key="KEY_ENABLE_WECHAT"/>
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference
@@ -67,7 +67,7 @@
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="false"
             android:title="全自动托管"
-            android:summary="开启此选项机器人可自动为您答题，无需盯着屏幕(暂不支持西瓜视频)，建议同时开启【监听通知栏】，到点自动答题"
+            android:summary="开启此选项机器人可自动为您答题，无需盯着屏幕(暂不支持西瓜视频)，建议同时开启【监听通知栏】，到点提醒并自动答题"
             android:key="KEY_AUTO_TRUST"/>
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference

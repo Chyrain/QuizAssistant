@@ -205,9 +205,10 @@ public class MainActivity extends BaseSettingsActivity {
                 if(mTipsDialog != null) {
                     mTipsDialog.dismiss();
                 }
-            } else {
-                showOpenAccessibilityServiceDialog();
             }
+//            else {
+//                showOpenAccessibilityServiceDialog();
+//            }
         }
         if (mUpdateVersionInfo != null) {
             alertUpdateInfo(mUpdateVersionInfo);
@@ -399,32 +400,19 @@ public class MainActivity extends BaseSettingsActivity {
         }
         Logger.i(TAG, "[显示浮动按钮]【createFloatView】:" + V5Application.getInstance());
         //设置LayoutParams(全局变量）相关参数
-        wmParams = V5Application.getInstance().getWechatWmParams();
+        wmParams = V5Application.getInstance().getFloatWmParams();
         wFV = new QuizFloatView(mActivity, wmParams);
-        updateWFV(WxBotService.isEnable(mActivity));
+        updateWFV(Config.getConfig(mActivity).isEnableAutoTrust());
         wFV.getAppIconIv().setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Logger.i(TAG, "浮钮click");
-                if (Config.getConfig(mActivity).isEnableWechat()) {
-                    if (WxBotService.isRunning()) {
-                        // 关闭服务
-                        Config.getConfig(mActivity).setEnableWechat(false);
-                        EventBus.getDefault().post(Boolean.FALSE, Config.EVENT_TAG_UPDATE_FLOAT_STATUS);
-                        updateWFV(false);
-                    } else {
-                        // 进入页面
-                        openSelf();
-                    }
-                } else {
-                    // 开启服务
-                    Config.getConfig(mActivity).setEnableWechat(true);
-                    EventBus.getDefault().post(Boolean.TRUE, Config.EVENT_TAG_UPDATE_FLOAT_STATUS);
-                    updateWFV(true);
-                }
+                boolean enable = !Config.getConfig(mActivity).isEnableAutoTrust();
+                Config.getConfig(mActivity).setEnableAutoTrust(enable);
+                updateWFV(enable);
                 // 更新显示
-                mMainFragment.updateWechatPreference();
+                mMainFragment.updateAutoTrustPreference();
             }
         });
         wFV.setOnLongClickListener(new View.OnLongClickListener() {
@@ -650,9 +638,9 @@ public class MainActivity extends BaseSettingsActivity {
                     Config.getConfig(getActivity()).setEnableWechat((Boolean) newValue);
                     if((Boolean) newValue && !WxBotService.isRunning()) {
                         ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
-//                        return false;
+                        return false;
                     }
-                    ((MainActivity)getActivity()).updateWFV((Boolean) newValue);
+                    EventBus.getDefault().post(Boolean.valueOf((Boolean) newValue), Config.EVENT_TAG_UPDATE_WECHAT_ENABLE_STATUS);
                     updateWechatPreference();
                     return true;
                 }
@@ -745,7 +733,8 @@ public class MainActivity extends BaseSettingsActivity {
             autoTrustPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Config.getConfig(getActivity()).setNotificationServiceEnable((Boolean) newValue);
+                    //Config.getConfig(getActivity()).setEnableAutoTrust((Boolean) newValue);
+                    ((MainActivity)getActivity()).updateWFV((Boolean) newValue);
                     return true;
                 }
             });
@@ -771,6 +760,7 @@ public class MainActivity extends BaseSettingsActivity {
 //                    }
 //                });
 //            }
+
             findPreference("KEY_ABOUT").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
@@ -903,7 +893,7 @@ public class MainActivity extends BaseSettingsActivity {
                 notificationChangeByUser = false;
                 wechatPref.setChecked(false);
             }
-            if (wechatPref.isChecked()) {
+            if (enable) {
                 // 恢复
                 zscrPref.setEnabled(true);
                 cddhPref.setEnabled(true);
@@ -933,6 +923,17 @@ public class MainActivity extends BaseSettingsActivity {
                 }
             } else {
                 floatBtnPref.setChecked(false);
+            }
+        }
+
+        public void updateAutoTrustPreference() {
+            if(autoTrustPref == null) {
+                return;
+            }
+            if(Config.getConfig(getActivity()).isEnableAutoTrust()) {
+                autoTrustPref.setChecked(true);
+            } else {
+                autoTrustPref.setChecked(false);
             }
         }
 
@@ -1025,7 +1026,7 @@ public class MainActivity extends BaseSettingsActivity {
         if (showFloat) {
             showFloat();
         }
-        updateWFV(WxBotService.isEnable(mActivity));
+        //updateWFV(Config.getConfig(mActivity).isEnableAutoTrust());
     }
 
     @Subscriber(tag = Config.EVENT_TAG_ROBOT_SERVICE_DISCONNECT, mode=ThreadMode.MAIN)
@@ -1038,7 +1039,7 @@ public class MainActivity extends BaseSettingsActivity {
             mMainFragment.updateNotifyPreference();
         }
         showOpenAccessibilityServiceDialog();
-        updateWFV(WxBotService.isEnable(mActivity));
+        //updateWFV(Config.getConfig(mActivity).isEnableAutoTrust());
     }
 
     @Subscriber(tag = Config.EVENT_TAG_NOTIFY_LISTENER_SERVICE_DISCONNECT, mode=ThreadMode.MAIN)

@@ -278,7 +278,7 @@ public class V5Application extends Application {
     }
 
     private WindowManager.LayoutParams wmParams= new WindowManager.LayoutParams();
-    public WindowManager.LayoutParams getWechatWmParams() {
+    public WindowManager.LayoutParams getFloatWmParams() {
         return wmParams;
     }
 }
