@@ -28,6 +28,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.Preference;
 import android.preference.SwitchPreference;
 import android.provider.Settings;
@@ -143,7 +144,16 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
      * 开启友盟自动更新
      */
     protected void startUpdateService() {
-        AdManager.getInstance(this).asyncCheckAppUpdate(this);
+//        AdManager.getInstance(this).asyncCheckAppUpdate(this);
+        (new Handler(getMainLooper())).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isForeground) {
+                    Intent i = new Intent(getApplicationContext(), UpdateService.class);
+                    startService(i);
+                }
+            }
+        }, 5000);
     }
 
     @Override
