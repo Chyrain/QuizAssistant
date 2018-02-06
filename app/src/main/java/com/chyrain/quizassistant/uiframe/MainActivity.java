@@ -246,10 +246,6 @@ public class MainActivity extends BaseSettingsActivity {
                 openAccessibilityServiceSettings();
                 V5Application.eventStatistics(this, "menu_service");
                 return true;
-//            case R.id.action_float:
-//                Util.gotoPermission(this);
-//                V5Application.eventStatistics(this, "menu_float");
-//                break;
             case R.id.action_notify:
                 openNotificationServiceSettings();
                 V5Application.eventStatistics(this, "menu_notify");
@@ -402,7 +398,8 @@ public class MainActivity extends BaseSettingsActivity {
         //设置LayoutParams(全局变量）相关参数
         wmParams = V5Application.getInstance().getFloatWmParams();
         wFV = new QuizFloatView(mActivity, wmParams);
-        updateWFV(Config.getConfig(mActivity).isEnableAutoTrust());
+        updateWFVAutoTrust(Config.getConfig(mActivity).isEnableAutoTrust());
+        updateWFVServiceOpen(WxBotService.isEnable(mActivity));
         wFV.getAppIconIv().setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -410,7 +407,7 @@ public class MainActivity extends BaseSettingsActivity {
                 Logger.i(TAG, "浮钮click");
                 boolean enable = !Config.getConfig(mActivity).isEnableAutoTrust();
                 Config.getConfig(mActivity).setEnableAutoTrust(enable);
-                updateWFV(enable);
+                updateWFVAutoTrust(enable);
                 // 更新显示
                 mMainFragment.updateAutoTrustPreference();
             }
@@ -467,13 +464,22 @@ public class MainActivity extends BaseSettingsActivity {
     }
 
     /** 更新浮动窗口显示状态 **/
-    private void updateWFV(boolean light) {
+    private void updateWFVAutoTrust(boolean light) {
         if (wFV == null) {
             Logger.e(TAG, "updateWFV: null wFV");
             return;
         }
         // wFV
-        wFV.updateFloatEnable(light);
+        wFV.updateFloatAutoTrustEnable(light);
+    }
+    /** 更新浮动窗口显示状态 **/
+    private void updateWFVServiceOpen(boolean light) {
+        if (wFV == null) {
+            Logger.e(TAG, "updateWFV: null wFV");
+            return;
+        }
+        // wFV
+        wFV.updateFloatServiceEnable(light);
     }
 
     /** 打开本界面 **/
@@ -642,6 +648,7 @@ public class MainActivity extends BaseSettingsActivity {
                     }
                     EventBus.getDefault().post(Boolean.valueOf((Boolean) newValue), Config.EVENT_TAG_UPDATE_WECHAT_ENABLE_STATUS);
                     updateWechatPreference();
+                    ((MainActivity)getActivity()).updateWFVServiceOpen((Boolean) newValue);
                     return true;
                 }
             });
@@ -734,7 +741,7 @@ public class MainActivity extends BaseSettingsActivity {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     //Config.getConfig(getActivity()).setEnableAutoTrust((Boolean) newValue);
-                    ((MainActivity)getActivity()).updateWFV((Boolean) newValue);
+                    ((MainActivity)getActivity()).updateWFVAutoTrust((Boolean) newValue);
                     return true;
                 }
             });
@@ -1027,6 +1034,7 @@ public class MainActivity extends BaseSettingsActivity {
             showFloat();
         }
         //updateWFV(Config.getConfig(mActivity).isEnableAutoTrust());
+        updateWFVServiceOpen(WxBotService.isEnable(mActivity));
     }
 
     @Subscriber(tag = Config.EVENT_TAG_ROBOT_SERVICE_DISCONNECT, mode=ThreadMode.MAIN)
@@ -1040,6 +1048,7 @@ public class MainActivity extends BaseSettingsActivity {
         }
         showOpenAccessibilityServiceDialog();
         //updateWFV(Config.getConfig(mActivity).isEnableAutoTrust());
+        updateWFVServiceOpen(WxBotService.isEnable(mActivity));
     }
 
     @Subscriber(tag = Config.EVENT_TAG_NOTIFY_LISTENER_SERVICE_DISCONNECT, mode=ThreadMode.MAIN)

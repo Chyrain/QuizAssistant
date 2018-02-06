@@ -53,6 +53,8 @@
     <string name="about_token">机器码</string>
     <string name="about_url">https://chyrain.github.io/app/quizassistant</string>
 
+    <string name="float_unable_tip">请开启机器人开关</string>
+
     <string name="on_check_update_fail">检查更新失败，请检查网络</string>
     <string name="on_update_enable">有新版本可用，建议您下载！</string>
     <string name="on_download_finish">新版本下载完成，现在安装？</string>

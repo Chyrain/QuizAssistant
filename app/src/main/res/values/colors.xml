@@ -27,5 +27,6 @@
     <color name="actionsheet_red">#FD4A2E</color>
     <color name="actionsheet_gray">#8F8F8F</color>
     <color name="actionsheet_divider">@color/alertdialog_line</color><!-- #07F0F0F0 -->
+    <color name="float_unable_bg">#686363</color>
 
 </resources>
