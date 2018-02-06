@@ -11,6 +11,7 @@ import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
 
 public abstract class BaseSettingsActivity extends BaseActivity {
+    Fragment mFragment;
     LinearLayout bannerLayout;
 
     @Override

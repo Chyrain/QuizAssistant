@@ -75,7 +75,8 @@ public class MainActivity extends BaseSettingsActivity {
     private WindowManager.LayoutParams wmParams = null;
     private QuizFloatView wFV = null;
     private boolean permitForFV = false;
-    // 更新receiver
+    // 更新
+    private VersionInfo mUpdateVersionInfo;
     private CheckUpdateReceiver mUpdateReceiver;
     // 免责dialog
     private AlertDialog mAgreementDialog;
@@ -144,12 +145,10 @@ public class MainActivity extends BaseSettingsActivity {
         (new Handler(getMainLooper())).postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (isForeground) {
-                    Intent i = new Intent(getApplicationContext(), UpdateService.class);
-                    startService(i);
-                }
+                Intent i = new Intent(getApplicationContext(), UpdateService.class);
+                startService(i);
             }
-        }, 5000);
+        }, Config.getConfig(this).readBoolean("app_once_token") ? 1500 : 15000);
     }
 
     // [广告]在线更新功能
@@ -209,6 +208,10 @@ public class MainActivity extends BaseSettingsActivity {
             } else {
                 showOpenAccessibilityServiceDialog();
             }
+        }
+        if (mUpdateVersionInfo != null) {
+            alertUpdateInfo(mUpdateVersionInfo);
+            mUpdateVersionInfo = null;
         }
     }
 
@@ -342,7 +345,10 @@ public class MainActivity extends BaseSettingsActivity {
 
     @Override
     public Fragment getSettingsFragment() {
-        mMainFragment = new MainFragment();
+        if (mFragment == null) {
+            mFragment = new MainFragment();
+            mMainFragment = (MainFragment)mFragment;
+        }
         return mMainFragment;
     }
 
@@ -985,6 +991,8 @@ public class MainActivity extends BaseSettingsActivity {
                         VersionInfo versionInfo = (VersionInfo) bundle.getSerializable("versionInfo");
                         if (isForeground) {
                             alertUpdateInfo(versionInfo);
+                        } else {
+                            MainActivity.this.mUpdateVersionInfo = versionInfo;
                         }
                         break;
                 }
