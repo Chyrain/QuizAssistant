@@ -21,6 +21,7 @@ import abc.abc.abc.nm.sp.SpotListener;
 import abc.abc.abc.nm.sp.SpotManager;
 import abc.abc.abc.nm.sp.SpotRequestListener;
 import abc.abc.abc.onlineconfig.OnlineConfigCallBack;
+import abc.abc.abc.os.OffersManager;
 
 public class SplashActivity extends BaseActivity {
 
@@ -68,7 +69,7 @@ public class SplashActivity extends BaseActivity {
         };
 
         Logger.i("AdManager", "enable AD:" + Config.getConfig(this).isEnableAd());
-        // 广告
+        // [有米]广告初始化
         AdManager.getInstance(this).init("acaecce79c2609f5", "afad7c640ff80597", true);
         if (Config.getConfig(this).isEnableAd()) {
             mHandler.postDelayed(callback, 4000);
@@ -142,6 +143,9 @@ public class SplashActivity extends BaseActivity {
                 Logger.e("", "获取在线参数失败:" + key);
             }
         });
+
+        // 积分强广告初始化
+        OffersManager.getInstance(this).onAppLaunch();
 
 //        // 插屏广告
 //        SpotManager.getInstance(this).setImageType(SpotManager.IMAGE_TYPE_VERTICAL);

@@ -85,9 +85,16 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="其他设置">
+
         <Preference
             android:title="更多设置"
             android:key="NOTIFY_SETTINGS"/>
+
+        <Preference
+            android:title="积分任务"
+            android:summary="做任务赚取积分，达到200积分即可开启【全自动托管】权限"
+            android:key="MORE_APPS" />
+
     </PreferenceCategory>
     
     <PreferenceCategory

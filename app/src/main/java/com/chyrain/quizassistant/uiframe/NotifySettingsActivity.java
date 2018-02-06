@@ -26,6 +26,7 @@ import java.util.Date;
 
 import abc.abc.abc.AdManager;
 import abc.abc.abc.onlineconfig.OnlineConfigCallBack;
+import abc.abc.abc.os.PointsManager;
 
 public class NotifySettingsActivity extends BaseSettingsActivity {
 
@@ -51,6 +52,8 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
                 if (key != null) {
                     boolean ad = Boolean.valueOf(value);
                     if (!ad) {
+                        // 去除广告，并直接给200积分
+                        boolean isSuccess = PointsManager.getInstance(NotifySettingsActivity.this).awardPoints(200);
                         Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
                     }
                 }

@@ -55,6 +55,7 @@ public abstract class BaseSettingsActivity extends BaseActivity {
                         @Override
                         public void onRequestFailed() {
                             Logger.e("BaseSettingsActivity", "BannerManager.onRequestFailed");
+                            bannerLayout.setVisibility(View.GONE);
                         }
                     });
             // 将广告条加入到布局中

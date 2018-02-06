@@ -61,8 +61,10 @@ import com.umeng.socialize.UMShareAPI;
 import com.v5kf.client.lib.V5ClientAgent;
 import com.v5kf.client.lib.V5ClientConfig;
 
-import abc.abc.abc.AdManager;
+import abc.abc.abc.listener.Interface_ActivityListener;
 import abc.abc.abc.nm.sp.SpotManager;
+import abc.abc.abc.os.OffersManager;
+import abc.abc.abc.os.PointsManager;
 import abc.abc.abc.update.AppUpdateInfo;
 import abc.abc.abc.update.CheckAppUpdateCallBack;
 
@@ -74,6 +76,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
     private Dialog mTipsDialog;
     private MainFragment mMainFragment;
     private Activity mActivity = this;
+    private Handler mHandler;
 
     // 浮动开关按钮
     private WindowManager wm = null;
@@ -99,38 +102,36 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         Logger.w(TAG, "[onCreate] "+TAG);
         setTitle(R.string.app_name);
 
-        String title = "8.哈撒花撒啊开大餐";
-        String[] rsts = title.split("\\.");
-        if (rsts.length > 0) {
-            Logger.d(TAG, rsts + " success title.split(\".\"): " + rsts[0]);
-        } else {
-            Logger.d(TAG, rsts + " fail title.split(\".\"): " + rsts);
-        }
-
-        // 权限请求
-        if(Build.VERSION.SDK_INT>=23){
-            String[] mPermissionList = new String[]{
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_FINE_LOCATION,
+        mHandler = new Handler();
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // 权限请求
+                if(Build.VERSION.SDK_INT>=23){
+                    String[] mPermissionList = new String[]{
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
 //                Manifest.permission.CALL_PHONE,
-                Manifest.permission.READ_LOGS,
-                Manifest.permission.READ_PHONE_STATE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.SET_DEBUG_APP,
-                Manifest.permission.SYSTEM_ALERT_WINDOW,
+                            Manifest.permission.READ_LOGS,
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.SET_DEBUG_APP,
+                            Manifest.permission.SYSTEM_ALERT_WINDOW,
 //                Manifest.permission.GET_ACCOUNTS,
-                Manifest.permission.WRITE_APN_SETTINGS
-            };
-            ActivityCompat.requestPermissions(this,mPermissionList,123);
-        }
+                            Manifest.permission.WRITE_APN_SETTINGS
+                    };
+                    ActivityCompat.requestPermissions(MainActivity.this, mPermissionList,123);
+                }
 
-        // 显示悬浮窗
-        boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
-        if (showFloat && Config.getConfig(this).readBoolean("app_once_token")) {
-            showFloat();
-        }
-        initReceiver();
-        startUpdateService();
+                // 显示悬浮窗
+                boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
+                if (showFloat && Config.getConfig(MainActivity.this).readBoolean("app_once_token")) {
+                    showFloat();
+                }
+                initReceiver();
+                startUpdateService();
+            }
+        }, 200);
     }
 
     protected void initReceiver() {
@@ -146,7 +147,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
      */
     protected void startUpdateService() {
 //        AdManager.getInstance(this).asyncCheckAppUpdate(this);
-        (new Handler(getMainLooper())).postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent i = new Intent(getApplicationContext(), UpdateService.class);
@@ -229,7 +230,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         Logger.w(TAG, "[onDestroy] "+TAG);
         mTipsDialog = null;
         destroyFloatView();
+        // 广告
         SpotManager.getInstance(this).onAppExit();
+        OffersManager.getInstance(this).onAppExit();
         // 打开过app记录
         Config.getConfig(this).saveBoolean("app_once_token", true);
     }
@@ -407,6 +410,16 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             public void onClick(View v) {
                 Logger.i(TAG, "浮钮click");
                 boolean enable = !Config.getConfig(mActivity).isEnableAutoTrust();
+                // 广告积分判断
+                float pointsBalance = PointsManager.getInstance(MainActivity.this).queryPoints();
+                if (pointsBalance < 200 && enable) {
+                    if (isForeground) {
+                        showUnPointsDialog();
+                    } else {
+                        ShowToast(R.string.overlay_unpoints_message);
+                    }
+                    return;
+                }
                 Config.getConfig(mActivity).setEnableAutoTrust(enable);
                 updateWFVAutoTrust(enable);
                 // 更新显示
@@ -431,7 +444,6 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 return true;
             }
         });
-
 
         //获取WindowManager
         wm = (WindowManager)getApplicationContext().getSystemService(WINDOW_SERVICE);
@@ -583,6 +595,21 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         });
         dialog.setContentView(view);
         dialog.show();
+    }
+
+    /** 积分不足提醒 */
+    private void showUnPointsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle(R.string.dialog_title);
+        builder.setMessage(getString(R.string.overlay_unpoints_message));
+        builder.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 积分任务提醒
+            }
+        });
+        builder.show();
     }
 
     public static class MainFragment extends BaseSettingsFragment {
@@ -742,8 +769,14 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     //Config.getConfig(getActivity()).setEnableAutoTrust((Boolean) newValue);
-                    ((MainActivity)getActivity()).updateWFVAutoTrust((Boolean) newValue);
-                    return true;
+                    float pointsBalance = PointsManager.getInstance(getActivity()).queryPoints();
+                    if (pointsBalance >= 200 || !(Boolean) newValue) {
+                        ((MainActivity) getActivity()).updateWFVAutoTrust((Boolean) newValue);
+                        return true;
+                    } else {
+                        ((MainActivity) getActivity()).showUnPointsDialog();
+                        return false;
+                    }
                 }
             });
 
@@ -862,6 +895,21 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 //                    return true;
 //                }
 //            });
+
+            // 广告墙入口
+            findPreference("MORE_APPS").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    // [广告]自 Youmi Android OfferWall SDK v5.0.0 起, 支持全屏积分墙退出监听回调
+                    OffersManager.getInstance(getActivity()).showOffersWall(new Interface_ActivityListener() {
+                        @Override
+                        public void onActivityDestroy(Context context) {
+                            Logger.d(TAG, "退出广告墙");
+                        }
+                    });
+                    return true;
+                }
+            });
 
             //初始状态
             updateWechatPreference();
