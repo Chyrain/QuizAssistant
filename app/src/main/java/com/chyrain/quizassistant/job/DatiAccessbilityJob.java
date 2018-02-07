@@ -200,15 +200,12 @@ mAITask.stopTask();
 
         Logger.d(TAG, "[clickAtNodeWithContent] content:" + content);
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
-        Logger.i(TAG, "[clickAtNodeWithContent] 0 nodeInfo: " + nodeInfo);
 //        if (nodeInfo == null && getCurrentEvent() != null) {
 //            nodeInfo = getCurrentEvent().getSource();
 //        }
 //        Logger.e(TAG, "[clickAtNodeWithContent] 1 nodeInfo: " + nodeInfo);
         if (nodeInfo == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nodeInfo = getService().findFocus(AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
-
-            Logger.d(TAG, "[clickAtNodeWithContent] 2 nodeInfo: " + nodeInfo);
             if(nodeInfo == null) {
                 Logger.e(TAG, "[clickAtNodeWithContent] rootWindow为空");
                 return;
