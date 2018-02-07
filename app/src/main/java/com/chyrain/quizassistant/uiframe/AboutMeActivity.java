@@ -82,7 +82,7 @@ public class AboutMeActivity extends BaseActivity {
 		// 手机识别码
 		String key = Util.getIMEI(this);
 		if (TextUtils.isEmpty(key)) {
-			key = XGPushConfig.getToken(this);
+			key = Config.DEVICE_TOKEN;
 			if (TextUtils.isEmpty(key)) {
 				key = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
 			} else if (key.length() > 16) {

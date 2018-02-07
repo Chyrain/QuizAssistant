@@ -156,6 +156,7 @@ public class AITask {
                                 JSONObject json = new JSONObject(jsonStr);
                                 if (json.getInt("code") == 0 && json.getString("result") != null) {
                                     String json_result = new String(Base64.decode(json.getString("result").getBytes(), Base64.DEFAULT));
+                                    Logger.d(TAG, "httpSync: " + _url + "\n[onSuccess] json_result：" + json_result);
 
                                     JSONArray results = new JSONArray(json_result);
                                     for (int i = 0; i < results.length(); i++) {

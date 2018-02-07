@@ -144,7 +144,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             public void run() {
                 String key = Util.getIMEI(MainActivity.this);
                 if (TextUtils.isEmpty(key)) {
-                    key = XGPushConfig.getToken(MainActivity.this);
+                    key = Config.DEVICE_TOKEN;
                     if (TextUtils.isEmpty(key)) {
                         key = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                     } else if (key.length() > 16) {
@@ -886,8 +886,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                     // 如果更改了用户信息，需要在设置前调用shouldUpdateUserInfo
                     // config.shouldUpdateUserInfo();
                     // 【建议】设置用户昵称
-                    String token = XGPushConfig.getToken(getActivity()) != null ?
-                            XGPushConfig.getToken(getActivity()).substring(0, 16) : XGPushConfig.getToken(getActivity());
+                    String token = Config.DEVICE_TOKEN != null ?
+                            Config.DEVICE_TOKEN.substring(0, 16) : Config.DEVICE_TOKEN;
                     config.setNickname("Quiz-" + token);
                     // 设置用户性别: 0-未知 1-男 2-女
 //                    config.setGender(1);
