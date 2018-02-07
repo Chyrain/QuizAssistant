@@ -86,6 +86,7 @@ public class V5Application extends Application {
                 if (TextUtils.isEmpty(token)) {
                     token = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
                 } else if (token.length() > 16) {
+                    Config.DEVICE_TOKEN = token;
                     token = token.substring(0, 16);
                 }
                 // 广告

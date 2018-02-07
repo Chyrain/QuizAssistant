@@ -1,6 +1,7 @@
 package com.chyrain.quizassistant.aitask;
 
 import android.text.TextUtils;
+import android.util.Base64;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.V5Application;
@@ -8,13 +9,12 @@ import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.util.HttpResponseHandler;
 import com.chyrain.quizassistant.util.HttpUtil;
 import com.chyrain.quizassistant.util.Logger;
-import com.chyrain.quizassistant.util.Util;
+import com.tencent.android.tpush.XGPushConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -120,15 +120,23 @@ public class AITask {
                         isRunning = false;
                         return;
                     }
-                    final String _url = "http://140.143.49.31/api/ans2?key=" + key + "&wdcallback=" + cbPrefix + "&_=" + (new Date()).getTime();
+                    final  String _url = "https://wdpush.sogoucdn.com/api/anspush?key=" + key + "&wdcallback=" + cbPrefix + "&_=" + (new Date()).getTime();
+//                    final String _url = "https://140.143.49.31/api/ans2?key=" + key + "&wdcallback=" + cbPrefix + "&_=" + (new Date()).getTime();
                     //Logger.i(TAG, "[startTask] request: " + this.url);
                     Map<String, String> headers = new HashMap<>();
-                    //headers.put("Content-Type", "text/html; charset=utf-8");
-                    headers.put("Host", "140.143.49.31");
+                    // 开启了cookie验证，一年有效期，SGS-ID需要生成
+                    String APP_SGS_ID = "SQ3Thn3ruhzpAr89JvBwGsUe2p2LUoWK";
+                    if (!TextUtils.isEmpty(Config.DEVICE_TOKEN)) {
+                        APP_SGS_ID = Config.DEVICE_TOKEN.substring(0, 32);
+                    }
+                    headers.put("Cookie","APP-SGS-ID=" + APP_SGS_ID + ";expires=1549992329924;path=/;domain=.sogoucdn.com");
+//                    headers.put("Content-Type", "text/html; charset=utf-8");
+                    headers.put("Host", "wdpush.sogoucdn.com");
                     headers.put("Accept", "*/*");
                     headers.put("Connection", "keep-alive");
-                    headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 4.4.4; SAMSUNG-SM-N900A Build/tt) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 Mobile Safari/537.36 SogouSearch Android1.0 version3.0 AppVersion/5903");
-                    headers.put("Referer", "http://nb.sa.sogou.com");
+                    headers.put("User-Agent", "Mozilla/5.0 (Linux; Android 4.4.4; SAMSUNG-SM-N900A Build/tt) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 Mobile Safari/537.36 SogouSearch Android1.0 version3.0 AppVersion/5917");
+                    //headers.put("Referer", "https://assistant.sogoucdn.com");
+                    headers.put("Referer", "https://assistant.sogoucdn.com/v5/cheat-sheet?channel=" + key);
                     headers.put("X-Requested-With", "com.sogou.activity.src");
 
                     // 同步请求
@@ -143,10 +151,13 @@ public class AITask {
                         public void onSuccess(int statusCode, String responseString) {
                             String jsonStr = responseString.substring(cbPrefix.length() + 1, responseString.length() - 1);
                             Logger.v(TAG, "httpSync: " + _url + "\n[onSuccess] json：" + jsonStr);
+
                             try {
                                 JSONObject json = new JSONObject(jsonStr);
-                                if (json.getInt("code") == 0) {
-                                    JSONArray results = json.getJSONArray("result");
+                                if (json.getInt("code") == 0 && json.getString("result") != null) {
+                                    String json_result = new String(Base64.decode(json.getString("result").getBytes(), Base64.DEFAULT));
+
+                                    JSONArray results = new JSONArray(json_result);
                                     for (int i = 0; i < results.length(); i++) {
                                         String item = results.getString(i);
                                         JSONObject answer = new JSONObject(item);
