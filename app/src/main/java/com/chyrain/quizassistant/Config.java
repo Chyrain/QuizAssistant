@@ -22,7 +22,8 @@ public class Config {
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
-//    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
+    public static String DEVICE_TOKEN = null;
+    //    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
 //    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
     public static final String URL_HOST = "https://desk.v5kf.com/";//app/quizassistant/
     public static final String SHARE_IMAGE_LINK = URL_HOST + "app/quizassistant/share_img.png";

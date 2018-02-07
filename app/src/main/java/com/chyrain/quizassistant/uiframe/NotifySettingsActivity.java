@@ -27,7 +27,7 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String key = XGPushConfig.getToken(this);
+        String key = Config.DEVICE_TOKEN;
         if (TextUtils.isEmpty(key)) {
             key = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         } else if (key.length() > 16) {

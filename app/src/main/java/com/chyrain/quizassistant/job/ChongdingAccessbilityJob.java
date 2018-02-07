@@ -155,15 +155,16 @@ public class ChongdingAccessbilityJob extends DatiAccessbilityJob {
                         clickAtNodeWithContent("点击观看");
                     }
                 }, 2000);
-            } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        clickAtNodeWithContent("继续观看");
-                    }
-                }, 1000);
-                handleReceiveQuizAnswer();
             }
+//            else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
+//                mHandler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        clickAtNodeWithContent("继续观看");
+//                    }
+//                }, 1000);
+//                handleReceiveQuizAnswer();
+//            }
         }
     }
 

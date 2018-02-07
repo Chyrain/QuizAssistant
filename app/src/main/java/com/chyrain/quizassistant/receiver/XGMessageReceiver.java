@@ -10,6 +10,7 @@
 package com.chyrain.quizassistant.receiver;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -177,6 +178,9 @@ public class XGMessageReceiver extends XGPushBaseReceiver {
 			// 设置device_token
 			if (DeviceUtil.usePush() < 2) {
 				DeviceUtil.setUsePush(DeviceUtil.XGPush);
+			}
+			if (!TextUtils.isEmpty(token)) {
+				Config.DEVICE_TOKEN = token;
 			}
 			Config.getConfig(context).saveString("device_token", token);
 			// 设置v5sdk的device_token

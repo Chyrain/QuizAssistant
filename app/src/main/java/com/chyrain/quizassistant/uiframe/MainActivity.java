@@ -34,6 +34,7 @@ import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -807,8 +808,8 @@ public class MainActivity extends BaseSettingsActivity {
                     // 如果更改了用户信息，需要在设置前调用shouldUpdateUserInfo
                     // config.shouldUpdateUserInfo();
                     // 【建议】设置用户昵称
-                    String token = XGPushConfig.getToken(getActivity()) != null ?
-                            XGPushConfig.getToken(getActivity()).substring(0, 16) : XGPushConfig.getToken(getActivity());
+                    String token = Config.DEVICE_TOKEN != null ?
+                            Config.DEVICE_TOKEN.substring(0, 16) : Config.DEVICE_TOKEN;
                     config.setNickname("Quiz-" + token);
                     // 设置用户性别: 0-未知 1-男 2-女
 //                    config.setGender(1);
@@ -842,6 +843,10 @@ public class MainActivity extends BaseSettingsActivity {
                     // 客户信息键值对，下面为示例（JSONObject）
                     JSONObject customContent = new JSONObject();
                     try {
+                        String imei = Util.getIMEI(getActivity());
+                        if (!TextUtils.isEmpty(imei)) {
+                            customContent.put("IMEI", imei);
+                        }
                         customContent.put("Token", XGPushConfig.getToken(getActivity()));
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -12,9 +12,9 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
+ * 答题对象
  * Created by chyrain on 28/01/2018.
  */
-
 public class QuizBean {
     private static final String TAG = "QuizBean";
 
