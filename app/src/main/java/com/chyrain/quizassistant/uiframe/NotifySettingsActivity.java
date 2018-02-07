@@ -33,39 +33,6 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        String key = XGPushConfig.getToken(this);
-        if (TextUtils.isEmpty(key)) {
-            key = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        } else if (key.length() > 16) {
-            key = key.substring(0, 16);
-        }
-        Logger.i("", "Test :" + "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        Logger.i("", "Test key = " + key);
-        // 在线参数(广告key为token或者密码+日期)
-        AdManager.getInstance(this).asyncGetOnlineConfig(key, new OnlineConfigCallBack() {
-            @Override
-            public void onGetOnlineConfigSuccessful(String key, String value) {
-                // TODO Auto-generated method stub
-                // 获取在线参数成功
-                Logger.i("", "获取在线参数成功:" + key + "->" + value);
-                if (key != null) {
-                    boolean ad = Boolean.valueOf(value);
-                    if (!ad && !Config.getConfig(getApplicationContext()).readBoolean("controlAd")) {
-                        // 去除广告，并直接给200积分
-                        boolean isSuccess = PointsManager.getInstance(NotifySettingsActivity.this).awardPoints(200);
-                        Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
-                    }
-                }
-            }
-
-            @Override
-            public void onGetOnlineConfigFailed(String key) {
-                // TODO Auto-generated method stub
-                // 获取在线参数失败，可能原因有：键值未设置或为空、网络异常、服务器异常
-                Logger.e("", "获取在线参数失败:" + key);
-            }
-        });
     }
 
     @Override

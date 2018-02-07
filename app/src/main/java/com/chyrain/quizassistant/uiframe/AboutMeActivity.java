@@ -23,6 +23,8 @@ import com.chyrain.quizassistant.util.Logger;
 import com.chyrain.quizassistant.util.Util;
 import com.tencent.android.tpush.XGPushConfig;
 
+import java.util.Calendar;
+
 public class AboutMeActivity extends BaseActivity {
 
 	private TextView mAppname;
@@ -76,8 +78,18 @@ public class AboutMeActivity extends BaseActivity {
 				String.format(getString(R.string.v5_version_info), V5Application.getInstance().getVersion())
 				+ ")");
 		mVersionTv.setText(String.format(getString(R.string.v5_version_info), V5Application.getInstance().getVersion()));
-		mTokenTv.setText(XGPushConfig.getToken(this) != null ?
-				XGPushConfig.getToken(this).substring(0, 16) : XGPushConfig.getToken(this));
+
+		// 手机识别码
+		String key = Util.getIMEI(this);
+		if (TextUtils.isEmpty(key)) {
+			key = XGPushConfig.getToken(this);
+			if (TextUtils.isEmpty(key)) {
+				key = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+			} else if (key.length() > 16) {
+				key = key.substring(0, 16);
+			}
+		}
+		mTokenTv.setText(key);
 
 		findViewById(R.id.layout_me).setOnClickListener(new View.OnClickListener() {
 

@@ -28,6 +28,7 @@ import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -665,5 +666,19 @@ public class Util {
             intent.setComponent(cn);
             context.startActivity(intent);
         }
+    }
+
+    /**
+     * 获取手机IMEI号
+     */
+    public static String getIMEI(Context context) {
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(context.TELEPHONY_SERVICE);
+        String imei = null;
+        try {
+            imei = telephonyManager.getDeviceId();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        }
+        return imei;
     }
 }
