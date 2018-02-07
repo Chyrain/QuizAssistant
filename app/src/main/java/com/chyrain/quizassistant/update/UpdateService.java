@@ -104,7 +104,7 @@ public class UpdateService extends Service {
 
 		File filePath = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "quizassistant");
 		File apkfile = new File(filePath, mVInfo.getApkName());
-		Logger.i(TAG, "[addDownloadTask] 下载文件：" + apkfile.getAbsolutePath());
+		Logger.i(TAG, "[addDownloadTask] 下载文件：" + apkfile.getAbsolutePath() + " from:" + mVInfo.getDownloadURL());
 		if (apkfile.exists()) { // 已存在安装包，直接提示安装
 			Logger.i(TAG, "[addDownloadTask] 文件已下载");
 			installApk();
