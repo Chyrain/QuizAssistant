@@ -104,7 +104,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         V5Application.activityStartMain(this);
-        Logger.w(TAG, "[onCreate] "+TAG);
+        Logger.w(TAG, "MainActivity.[onCreate] "+TAG);
         setTitle(R.string.app_name);
 
         mHandler = new Handler();
@@ -161,7 +161,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                         Logger.i("", "获取在线参数成功:" + key + "->" + value);
                         if (key != null) {
                             boolean ad = Boolean.valueOf(value);
-                            if (!ad && !Config.getConfig(getApplicationContext()).readBoolean("controlAd")) {
+                            boolean controlAd = Config.getConfig(getApplicationContext()).readBoolean("controlAd");
+                            float points = PointsManager.getInstance(MainActivity.this).queryPoints();
+                            if (!ad && (!controlAd || points < 200)) {
                                 // 去除广告，并直接给200积分
                                 boolean isSuccess = PointsManager.getInstance(MainActivity.this).awardPoints(200);
                                 Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
@@ -272,7 +274,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Logger.w(TAG, "[onDestroy] "+TAG);
+        Logger.w(TAG, "MainActivity.[onDestroy] "+TAG);
         mTipsDialog = null;
         destroyFloatView();
         // 广告
@@ -391,6 +393,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
 
     @Override
     public Fragment getSettingsFragment() {
+        Logger.i(TAG, "MainActivity.[getSettingsFragment]");
         if (mFragment == null) {
             mFragment = new MainFragment();
             mMainFragment = (MainFragment)mFragment;
@@ -672,8 +675,15 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         private boolean notificationChangeByUser = true;
 
         @Override
+        public void onDestroy() {
+            super.onDestroy();
+            Logger.w(TAG, "MainActivity.[MainFragment.onDestroy]");
+        }
+
+        @Override
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
+            Logger.w(TAG, "MainActivity.[MainFragment.onCreate]");
 
             addPreferencesFromResource(R.xml.main_settings);
 

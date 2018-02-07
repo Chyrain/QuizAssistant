@@ -22,7 +22,7 @@ public class Config {
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
-    public static final boolean JIFEN_WALL = false; // adp:false ad:true 200积分限制，显示积分墙
+    public static final boolean JIFEN_WALL = true; // adp:false ad:true 200积分限制，显示积分墙
     public static String DEVICE_TOKEN = null;
 //    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
 //    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
@@ -33,11 +33,11 @@ public class Config {
 //    public static final String UPDATE_LINK = URL_HOST + "app/quizassistant/download/version.xml";
 //    public static final String APP_LINK = URL_HOST + "app/quizassistant/app.html"; //index.html
     // 检查更新避免缓存，使用：chyrain.com
-    public static final String UPDATE_LINK = "http://chyrain.com/app/quizassistant/download/version.xml";
+    public static final String UPDATE_LINK = "https://chyrain.github.io/app/quizassistant/download/version.xml";
     // webview页面打开用户可获取到URL页面均使用：chyrain.com
-    public static final String APP_LINK = "http://chyrain.com/app/quizassistant/" + (JIFEN_WALL ? "app.html" : "appp.html"); //index.html
-    public static final String INTRO_LINK = "http://chyrain.com/app/quizassistant/" + (JIFEN_WALL ? "intro.html" : "introp.html");
-    public static final String URL_ABOUT = "http://chyrain.com/app/quizassistant/" + (JIFEN_WALL ? "app.html" : "appp.html");
+    public static final String APP_LINK = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "app.html" : "appp.html"); //index.html
+    public static final String INTRO_LINK = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "intro.html" : "introp.html");
+    public static final String URL_ABOUT = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "app.html" : "appp.html");
     public static final String URL_ME = "https://chyrain.github.io/about/";
 
     /* 更新广播 */

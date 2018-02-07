@@ -7,10 +7,12 @@ import android.os.Parcelable;
 import android.view.accessibility.AccessibilityEvent;
 
 import com.chyrain.quizassistant.Config;
+import com.chyrain.quizassistant.R;
 import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.service.IStatusBarNotification;
 import com.chyrain.quizassistant.service.WxBotService;
 import com.chyrain.quizassistant.util.Logger;
+import com.chyrain.quizassistant.util.NotifyHelper;
 
 import java.util.List;
 
@@ -205,19 +207,20 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
             // 查找答案并处理
             handleReceiveQuizAnswer();
             if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-                String id = "";
+                String text = mCurrentQuiz.getResult();
                 int ansIndex = quiz.getAnsIndex();
                 // ans: tv_question
-                if (ansIndex == 0) {
-                    id = "option_first";
-                } else if (ansIndex == 1) {
-                    id = "option_second";
-                } else if (ansIndex == 2) {
-                    id = "option_third";
+                if (ansIndex == 0) {//A.
+                    text = "A." + text;
+                } else if (ansIndex == 1) {//B.
+                    text = "B." + text;
+                } else if (ansIndex == 2) {//C.
+                    text = "C." + text;
                 }
-                // 点击答案选项id
-                if (getConfig().getNoAnswerMode() == 1) {
-                    clickAtNodeWithId(id);
+
+                if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
+                    // 查找答案内容并处理
+                    handleNodeWithContent(text);
                 }
             }
         }
