@@ -22,7 +22,7 @@ public class Config {
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
-    public static final boolean JIFEN_WALL = false; // adp:false ad:true 200积分限制，显示积分墙
+    public static final boolean JIFEN_WALL = true; // adp:false ad:true 200积分限制，显示积分墙
     public static String DEVICE_TOKEN = null;
 //    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
 //    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
@@ -144,8 +144,8 @@ public class Config {
     // 关闭服务
     public static final String EVENT_TAG_STOP_WXBOT = "EVENT_TAG_STOP_WXBOT";
     // 答题渠道变化 accessbilityJob
-    public static final String EVENT_TAG_ACCESSBILITY_JOB_CHANGE = "EVENT_TAG_ACCESSBILITY_JOB_CHANGE";
-    public static final String EVENT_TAG_UPDATE_QUIZ = "EVENT_TAG_UPDATE_QUIZ";
+//    public static final String EVENT_TAG_ACCESSBILITY_JOB_CHANGE = "EVENT_TAG_ACCESSBILITY_JOB_CHANGE";
+    public static final String EVENT_TAG_UPDATE_FLOAT = "EVENT_TAG_UPDATE_FLOAT";
     // 浮动窗口按钮
     public static final String EVENT_TAG_FLOAT_ICON_LONF_CLICK = "EVENT_TAG_FLOAT_ICON_LONF_CLICK";
     public static final String EVENT_TAG_FLOAT_CLICK = "EVENT_TAG_FLOAT_CLICK";

@@ -50,6 +50,7 @@ public class WxBotService extends AccessibilityService {
     private static WxBotService service;
     private AITask mAITask;
     private DatiAccessbilityJob mCurrentJob;
+    private QuizBean mCurrentQuiz;
     private String[] mPackageNames;
 
     /**
@@ -117,10 +118,11 @@ public class WxBotService extends AccessibilityService {
             public void onReceiveNextAnswer(DatiAccessbilityJob job, final QuizBean quiz) {
                 Logger.w(TAG + ":" + job.getTargetPackageName(), quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                         "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
+                mCurrentQuiz = quiz;
                 if (!quiz.isNoanswer()) {
                     job.onReceiveAnswer(quiz);
                 }
-                EventBus.getDefault().post(quiz, Config.EVENT_TAG_UPDATE_QUIZ);
+                EventBus.getDefault().post(service, Config.EVENT_TAG_UPDATE_FLOAT);
             }
         });
     }
@@ -224,6 +226,14 @@ public class WxBotService extends AccessibilityService {
         return super.onKeyEvent(event);
     }
 
+    public QuizBean getCurrentQuiz() {
+        return mCurrentQuiz;
+    }
+
+    public DatiAccessbilityJob getCurrentJob() {
+        return mCurrentJob;
+    }
+
     public static boolean isEnable(Context context) {
         return isRunning() && Config.getConfig(context).isEnableWechat();
     }
@@ -256,7 +266,7 @@ public class WxBotService extends AccessibilityService {
 
     public void onAccessibilityJobChange(DatiAccessbilityJob accessbilityJob) {
         mAITask.setAccessbilityJob(accessbilityJob);
-        EventBus.getDefault().post(accessbilityJob, Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE);
+        EventBus.getDefault().post(service, Config.EVENT_TAG_UPDATE_FLOAT);
     }
 
     public Config getConfig() {

@@ -1189,21 +1189,39 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         }
     }
 
-    @Subscriber(tag = Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE, mode=ThreadMode.MAIN)
-    private void notifyServiceConnect(DatiAccessbilityJob accessbilityJob) {
-        Logger.i(TAG, "<v5kf>EVENT_TAG_ACCESSBILITY_JOB_CHANGE key: " + accessbilityJob.getAppName()
-            + " key: " + accessbilityJob.getJobKey());
-//        Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
-        if (wFV != null) {
-            wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
-        }
-    }
+//    @Subscriber(tag = Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE, mode=ThreadMode.MAIN)
+//    private void notifyServiceConnect(DatiAccessbilityJob accessbilityJob) {
+//        Logger.i(TAG, "<v5kf>EVENT_TAG_ACCESSBILITY_JOB_CHANGE key: " + accessbilityJob.getAppName()
+//            + " key: " + accessbilityJob.getJobKey());
+////        Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
+//        if (wFV != null) {
+//            wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
+//        }
+//    }
 
-    @Subscriber(tag = Config.EVENT_TAG_UPDATE_QUIZ, mode=ThreadMode.MAIN)
-    private void updateCurrentQuiz(QuizBean quiz) {
-        Logger.i(TAG, "<v5kf>EVENT_TAG_UPDATE_QUIZ key: " + quiz);
-        if (wFV != null) {
-            wFV.updateFloatQuiz(quiz);
+    @Subscriber(tag = Config.EVENT_TAG_UPDATE_FLOAT, mode=ThreadMode.MAIN)
+    private void updateCurrentQuiz(WxBotService service) {
+        if (service != null) {
+            String result = null, jobKey = null, appName = null;
+            if (service.getCurrentJob() != null) {
+                jobKey = service.getCurrentJob().getJobKey();
+                appName = service.getCurrentJob().getAppName();
+            }
+            if (service.getCurrentQuiz() != null) {
+                result = (service.getCurrentQuiz().getIndex() > 0 ? service.getCurrentQuiz().getIndex() + "." : "")
+                        + service.getCurrentQuiz().getResult();
+            }
+            Logger.i(TAG, "<v5kf>EVENT_TAG_UPDATE_FLOAT appName: " + appName
+                    + " jobKey:" + jobKey + " result:" + result);
+        } else {
+            Logger.w(TAG, "<v5kf>EVENT_TAG_UPDATE_FLOAT service: " + service);
+        }
+        if (wFV != null && service != null) {
+            wFV.updateFloatQuiz(service.getCurrentQuiz());
+            DatiAccessbilityJob accessbilityJob = service.getCurrentJob();
+            if (accessbilityJob != null) {
+                wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
+            }
         }
 
 //        if (Config.getConfig(MainActivity.this).isEnableShowAnswer()) {

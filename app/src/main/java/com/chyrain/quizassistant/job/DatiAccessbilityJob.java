@@ -207,7 +207,7 @@ mAITask.stopTask();
         if (nodeInfo == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nodeInfo = getService().findFocus(AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
             if(nodeInfo == null) {
-                Logger.e(TAG, "[clickAtNodeWithContent] rootWindow为空");
+                Logger.e(TAG, "[clickAtNodeWithContent] rootWindow为空 content：" + content);
                 return;
             }
         }
@@ -231,7 +231,7 @@ mAITask.stopTask();
         Logger.d(TAG, "[clickAtNodeWithId] id:" + id);
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
         if(nodeInfo == null) {
-            Logger.e(TAG, "[clickAtNodeWithId] rootWindow为空");
+            Logger.e(TAG, "[clickAtNodeWithId] rootWindow为空 id：" + id);
             return;
         }
         AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosById(nodeInfo, getTargetPackageName() + ":id/" + id);
@@ -251,13 +251,14 @@ mAITask.stopTask();
             // 非自动托管不处理
             return;
         }
-
+        Logger.e(TAG + ":" + getTargetPackageName(), "[handleNodeWithContent]:" + content);
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
         if(nodeInfo == null) {
-            Logger.e(TAG + ":" + getTargetPackageName(), "[clickAtNodeWithContent]:" + content + " rootWindow为空");
+            Logger.e(TAG + ":" + getTargetPackageName(), "[clickAtNodeWithContent]:" + content);
             return;
         }
         AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, content);
+        Logger.e(TAG + ":" + getTargetPackageName(), "[handleNodeWithContent] targetNode:" + targetNode + " content:" + content);
         if(targetNode != null) {
             Logger.e(TAG + ":" + getTargetPackageName(), "成功点击(" + content + "):" + targetNode);
             AccessibilityHelper.performClick(targetNode);
