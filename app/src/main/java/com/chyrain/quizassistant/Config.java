@@ -18,11 +18,11 @@ import android.content.SharedPreferences.Editor;
 public class Config {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final int LOG_LEVEL = 5;
-    public static final int DEFAULT_THROTTLE_TIME = 1500; // 【答题】轮询时间间隔
+    public static final int DEFAULT_THROTTLE_TIME = 1000; // 【答题】轮询时间间隔
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
-    public static final boolean JIFEN_WALL = true; // adp:false ad:true 200积分限制，显示积分墙
+    public static final boolean JIFEN_WALL = false; // adp:false ad:true 200积分限制，显示积分墙
     public static String DEVICE_TOKEN = null;
 //    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
 //    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
@@ -38,7 +38,7 @@ public class Config {
     public static final String APP_LINK = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "app.html" : "appp.html"); //index.html
     public static final String INTRO_LINK = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "intro.html" : "introp.html");
     public static final String URL_ABOUT = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "app.html" : "appp.html");
-    public static final String URL_ME = "https://chyrain.github.io/about/";
+    public static final String URL_ME = "https://chyrain.github.io/";
 
     /* 更新广播 */
     public static final String ACTION_ON_UPDATE = "com.chyrain.quizassistant.update.updateservice";
