@@ -37,7 +37,7 @@ public class Config {
     public static final String APP_LINK = "http://chyrain.com/app/quizassistant/app.html"; //index.html
     public static final String INTRO_LINK = "http://chyrain.com/app/quizassistant/intro.html";
     public static final String URL_ABOUT = "http://chyrain.com/app/quizassistant/app.html";
-    public static final String URL_ME = "https://chyrain.github.io/about/";
+    public static final String URL_ME = "https://chyrain.github.io/";
 
     /* 更新广播 */
     public static final String ACTION_ON_UPDATE = "com.chyrain.quizassistant.update.updateservice";
