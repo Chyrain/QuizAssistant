@@ -217,7 +217,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                 text = "C." + text;
             }
 
-            if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
+            if (mCurrentQuiz != null && (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1)) {
                 // 查找答案内容并处理
                 handleNodeWithContent(text);
             }

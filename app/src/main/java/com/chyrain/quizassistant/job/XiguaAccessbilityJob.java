@@ -183,7 +183,7 @@ public class XiguaAccessbilityJob extends DatiAccessbilityJob {
                 id = "option_third";
             }
             // 点击答案选项id
-            if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
+            if (mCurrentQuiz != null && (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1)) {
                 clickAtNodeWithId(id);
             }
         }

@@ -189,7 +189,7 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
             // 答题序号ID：com.yixia.liveshow:id/text_number text:6/10
             // 题目ID：com.yixia.liveshow:id/text_question
             // 点击答案选项id
-            if (getConfig().getNoAnswerMode() == 1) {
+            if (mCurrentQuiz != null && (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1)) {
                 clickAtNodeWithId(id);
             }
         }
