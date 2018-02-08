@@ -160,6 +160,7 @@ public class AITask {
                                     Logger.d(TAG, "httpSync: " + _url + "\n[onSuccess] json_result：" + json_result);
 
                                     JSONArray results = new JSONArray(json_result);
+                                    QuizBean lastQuiz = null;
                                     for (int i = 0; i < results.length(); i++) {
                                         String item = results.getString(i);
                                         JSONObject answer = new JSONObject(item);
@@ -169,8 +170,7 @@ public class AITask {
                                         String result = quiz.getResult();
                                         int ansIndex = quiz.getAnsIndex();
 
-                                        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(result)
-                                                && isMatchChannel(channel, key)) {
+                                        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(result)) {
                                             int index = 0;
                                             try {
                                                 // 解析题目序号
@@ -189,18 +189,33 @@ public class AITask {
                                                 } else {
                                                     mQuizMap.put(title, "");
                                                 }
-                                                if (quiz.isRandom()) {
-                                                    Logger.w(TAG, "答案" + (quiz.isRandom() ? "(随机)" : "") + "：" + result + " 题目：" + title);
+                                                if (isMatchChannel(channel, key)) {
+                                                    if (quiz.isRandom()) {
+                                                        Logger.w(TAG, "答案" + (quiz.isRandom() ? "(随机)" : "") + "：" + result + " 题目：" + title);
+                                                    } else {
+                                                        Logger.e(TAG, "答案" + "：" + result + " 题目：" + title);
+                                                    }
+                                                    if (res == null || res.length() > 0) {
+                                                        // 新题(第一次答题给出随机答案或者有答案的情况下)
+                                                        callback.onReceiveNextAnswer(accessbilityJob, quiz);
+                                                    }
                                                 } else {
-                                                    Logger.e(TAG, "答案" + "：" + result + " 题目：" + title);
-                                                }
-                                                if (res == null || res.length() > 0) {
-                                                    // 新题(第一次答题给出随机答案或者有答案的情况下)
-                                                    callback.onReceiveNextAnswer(accessbilityJob, quiz);
+                                                    if (i == 1 && lastQuiz != null && lastQuiz.getAnswers() != null
+                                                            && lastQuiz.getAnswers().size() >= 2) {
+                                                        quiz.setResult("答题还没有开始");
+                                                    } else {
+                                                        quiz.setResult("获取答案失败");
+                                                    }
+                                                    quiz.setNoanswer(true);
+                                                    if (res == null || res.length() > 0) {
+                                                        // 新题(第一次答题给出随机答案或者有答案的情况下)
+                                                        callback.onReceiveNextAnswer(accessbilityJob, quiz);
+                                                    }
                                                 }
                                             }
                                             callback.onReceiveAnswer(accessbilityJob, quiz);
                                         }
+                                        lastQuiz = quiz;
                                     }
                                 }
                             } catch (JSONException e) {

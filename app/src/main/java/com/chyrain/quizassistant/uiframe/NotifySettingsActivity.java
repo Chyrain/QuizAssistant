@@ -95,6 +95,7 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
                     return true;
                 }
             });
+            adPref.setChecked(Config.getConfig(getActivity()).isEnableAd());
 
             findPreference(Config.KEY_NOTIFY_SOUND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override

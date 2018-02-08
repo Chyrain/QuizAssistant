@@ -18,7 +18,7 @@ import android.content.SharedPreferences.Editor;
 public class Config {
     public static final boolean DEBUG = BuildConfig.DEBUG;
     public static final int LOG_LEVEL = 5;
-    public static final int DEFAULT_THROTTLE_TIME = 1500; // 【答题】轮询时间间隔
+    public static final int DEFAULT_THROTTLE_TIME = 1000; // 【答题】轮询时间间隔
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;

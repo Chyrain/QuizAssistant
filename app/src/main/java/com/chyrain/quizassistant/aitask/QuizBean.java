@@ -26,6 +26,7 @@ public class QuizBean {
 
     private boolean random; // 答不上，随机选答
     private boolean unsure; // 有答案但不确定
+    private boolean noanswer; // 没有答案，不是答题信息，而是提示信息
 
     public QuizBean(String title, ArrayList<String> answers, String result) {
         this.title = title;
@@ -127,5 +128,13 @@ public class QuizBean {
 
     public void setUnsure(boolean unsure) {
         this.unsure = unsure;
+    }
+
+    public boolean isNoanswer() {
+        return noanswer;
+    }
+
+    public void setNoanswer(boolean noanswer) {
+        this.noanswer = noanswer;
     }
 }

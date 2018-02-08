@@ -11,7 +11,7 @@
 
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:title="答题助手浮动窗口"
-            android:summary="开启浮动窗口显示，显示推荐答案与快捷开关，窗口左侧图标为【全自动托管】快捷开关"
+            android:summary="开启桌面悬浮窗，显示推荐答案与快捷开关，窗口左侧图标为【全自动托管】快捷开关"
             android:defaultValue="false"
             android:key="KEY_ENABLE_FLOAT_BUTTON"/>
 

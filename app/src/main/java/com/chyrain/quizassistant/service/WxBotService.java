@@ -75,9 +75,7 @@ public class WxBotService extends AccessibilityService {
         Logger.i(TAG, "WxBotService [onCreate]");
         // 注册对象
         EventBus.getDefault().register(this);
-        
-//        NotifyHelper.sSoundPool = new SoundPool(10, AudioManager.STREAM_RING, 0);
-//        NotifyHelper.sSoundPool.load(getApplicationContext(), R.raw.start,1);
+
         mAccessbilityJobs = new ArrayList<>();
         mPkgAccessbilityJobMap = new HashMap<>();
         mPackageNames = new String[ACCESSBILITY_JOBS.length];
@@ -119,7 +117,9 @@ public class WxBotService extends AccessibilityService {
             public void onReceiveNextAnswer(DatiAccessbilityJob job, final QuizBean quiz) {
                 Logger.w(TAG + ":" + job.getTargetPackageName(), quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                         "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-                job.onReceiveAnswer(quiz);
+                if (!quiz.isNoanswer()) {
+                    job.onReceiveAnswer(quiz);
+                }
                 EventBus.getDefault().post(quiz, Config.EVENT_TAG_UPDATE_QUIZ);
             }
         });

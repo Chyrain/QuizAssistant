@@ -20,7 +20,9 @@ public abstract class BaseSettingsActivity extends BaseActivity {
 
         setContentView(R.layout.activity_setting);
 
-        getFragmentManager().beginTransaction().add(R.id.container, getSettingsFragment()).commitAllowingStateLoss();
+        if (mFragment == null) {
+            getFragmentManager().beginTransaction().add(R.id.container, getSettingsFragment()).commitAllowingStateLoss();
+        }
 
         if(isShowBack()) {
             ActionBar actionBar = getSupportActionBar();
