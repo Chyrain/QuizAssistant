@@ -170,24 +170,21 @@ public class XiguaAccessbilityJob extends DatiAccessbilityJob {
         mCurrentQuiz = quiz;
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-        if (!quiz.isRandom()) {
-            Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-            // 查找答案并处理
-            handleReceiveQuizAnswer();
-            if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-                String id = "";
-                int ansIndex = quiz.getAnsIndex();
-                if (ansIndex == 0) {
-                    id = "option_first";
-                } else if (ansIndex == 1) {
-                    id = "option_second";
-                } else if (ansIndex == 2) {
-                    id = "option_third";
-                }
-                // 点击答案选项id
-                if (getConfig().getNoAnswerMode() == 1) {
-                    clickAtNodeWithId(id);
-                }
+        // 查找答案并处理
+        handleReceiveQuizAnswer();
+        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+            String id = "";
+            int ansIndex = quiz.getAnsIndex();
+            if (ansIndex == 0) {
+                id = "option_first";
+            } else if (ansIndex == 1) {
+                id = "option_second";
+            } else if (ansIndex == 2) {
+                id = "option_third";
+            }
+            // 点击答案选项id
+            if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
+                clickAtNodeWithId(id);
             }
         }
     }

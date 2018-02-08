@@ -202,26 +202,24 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
         mCurrentQuiz = quiz;
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-        if (!quiz.isRandom()) {
-            Logger.i(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-            // 查找答案并处理
-            handleReceiveQuizAnswer();
-            if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-                String text = mCurrentQuiz.getResult();
-                int ansIndex = quiz.getAnsIndex();
-                // ans: tv_question
-                if (ansIndex == 0) {//A.
-                    text = "A." + text;
-                } else if (ansIndex == 1) {//B.
-                    text = "B." + text;
-                } else if (ansIndex == 2) {//C.
-                    text = "C." + text;
-                }
 
-                if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
-                    // 查找答案内容并处理
-                    handleNodeWithContent(text);
-                }
+        // 查找答案并处理
+        handleReceiveQuizAnswer();
+        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+            String text = mCurrentQuiz.getResult();
+            int ansIndex = quiz.getAnsIndex();
+            // ans: tv_question
+            if (ansIndex == 0) {//A.
+                text = "A." + text;
+            } else if (ansIndex == 1) {//B.
+                text = "B." + text;
+            } else if (ansIndex == 2) {//C.
+                text = "C." + text;
+            }
+
+            if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
+                // 查找答案内容并处理
+                handleNodeWithContent(text);
             }
         }
     }

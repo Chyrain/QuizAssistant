@@ -173,27 +173,24 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
 
-        if (!quiz.isRandom()) {
-            Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-            handleReceiveQuizAnswer();
-            if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-                String id = "";
-                int ansIndex = quiz.getAnsIndex();
-                if (ansIndex == 0) {
-                    id = "option_first";
-                } else if (ansIndex == 1) {
-                    id = "option_second";
-                } else if (ansIndex == 2) {
-                    id = "option_third";
-                }
-                // 倒计时ID：tv_time
-                // 当前题号：tv_index
-                // 全部题数：tv_total
-                // 题目ID：tv_question
-                // 点击答案选项id
-                if (getConfig().getNoAnswerMode() == 1) {
-                    clickAtNodeWithId(id);
-                }
+        handleReceiveQuizAnswer();
+        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+            String id = "";
+            int ansIndex = quiz.getAnsIndex();
+            if (ansIndex == 0) {
+                id = "option_first";
+            } else if (ansIndex == 1) {
+                id = "option_second";
+            } else if (ansIndex == 2) {
+                id = "option_third";
+            }
+            // 倒计时ID：tv_time
+            // 当前题号：tv_index
+            // 全部题数：tv_total
+            // 题目ID：tv_question
+            // 点击答案选项id
+            if (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1) {
+                clickAtNodeWithId(id);
             }
         }
     }

@@ -22,7 +22,7 @@ public class Config {
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
-    public static final boolean JIFEN_WALL = false; // adp:false ad:true 200积分限制，显示积分墙
+    public static final boolean JIFEN_WALL = true; // adp:false ad:true 200积分限制，显示积分墙
     public static String DEVICE_TOKEN = null;
 //    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
 //    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/

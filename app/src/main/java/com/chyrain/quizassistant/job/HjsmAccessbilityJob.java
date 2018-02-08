@@ -173,27 +173,24 @@ public class HjsmAccessbilityJob extends DatiAccessbilityJob {
         mCurrentQuiz = quiz;
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
-        if (!quiz.isRandom()) {
-            Logger.e(TAG, "clickAtNodeWithContent 查找点击:" + quiz.getResult());
-            handleReceiveQuizAnswer();
-            if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-                String id = "";
-                int ansIndex = quiz.getAnsIndex();
-                if (ansIndex == 0) {
-                    id = "option_one";
-                } else if (ansIndex == 1) {
-                    id = "option_two";
-                } else if (ansIndex == 2) {
-                    id = "option_three";
-                }
-                // 答题dialog ID：com.yixia.liveshow:id/answer_mode_dialog => inner_dialog_container
-                // 倒计时ID ImageView:timer_down
-                // 答题序号ID：com.yixia.liveshow:id/text_number text:6/10
-                // 题目ID：com.yixia.liveshow:id/text_question
-                // 点击答案选项id
-                if (getConfig().getNoAnswerMode() == 1) {
-                    clickAtNodeWithId(id);
-                }
+        handleReceiveQuizAnswer();
+        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+            String id = "";
+            int ansIndex = quiz.getAnsIndex();
+            if (ansIndex == 0) {
+                id = "option_one";
+            } else if (ansIndex == 1) {
+                id = "option_two";
+            } else if (ansIndex == 2) {
+                id = "option_three";
+            }
+            // 答题dialog ID：com.yixia.liveshow:id/answer_mode_dialog => inner_dialog_container
+            // 倒计时ID ImageView:timer_down
+            // 答题序号ID：com.yixia.liveshow:id/text_number text:6/10
+            // 题目ID：com.yixia.liveshow:id/text_question
+            // 点击答案选项id
+            if (getConfig().getNoAnswerMode() == 1) {
+                clickAtNodeWithId(id);
             }
         }
     }
