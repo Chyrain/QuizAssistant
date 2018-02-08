@@ -132,8 +132,10 @@ public class SplashActivity extends BaseActivity {
             public void onGetOnlineConfigSuccessful(String key, String value) {
                 // 获取在线参数成功
                 Logger.i("", "获取在线参数成功:" + key + "->" + value);
+                boolean ad = Boolean.valueOf(value);
                 if (key != null && !Config.getConfig(getApplicationContext()).readBoolean("controlAd")) {
-                    boolean ad = Boolean.valueOf(value);
+                    Config.getConfig(getApplicationContext()).setEnableAd(ad);
+                } else if (!ad) {
                     Config.getConfig(getApplicationContext()).setEnableAd(ad);
                 }
             }

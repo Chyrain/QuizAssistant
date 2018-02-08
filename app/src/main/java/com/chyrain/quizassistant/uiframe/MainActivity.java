@@ -137,48 +137,6 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 startUpdateService();
             }
         }, 200);
-
-        // 获取个人广告开关在线参数
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                String key = Util.getIMEI(MainActivity.this);
-                if (TextUtils.isEmpty(key)) {
-                    key = Config.DEVICE_TOKEN;
-                    if (TextUtils.isEmpty(key)) {
-                        key = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-                    } else if (key.length() > 16) {
-                        key = key.substring(0, 16);
-                    }
-                }
-                Logger.i("", "Test :" + "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-                Logger.i("", "Test key = " + key);
-                // 在线参数(广告key为token或者密码+日期)
-                AdManager.getInstance(MainActivity.this).asyncGetOnlineConfig(key, new OnlineConfigCallBack() {
-                    @Override
-                    public void onGetOnlineConfigSuccessful(String key, String value) {
-                        // 获取在线参数成功
-                        Logger.i("", "获取在线参数成功:" + key + "->" + value);
-                        if (key != null) {
-                            boolean ad = Boolean.valueOf(value);
-                            boolean controlAd = Config.getConfig(getApplicationContext()).readBoolean("controlAd");
-                            float points = PointsManager.getInstance(MainActivity.this).queryPoints();
-                            if (!ad && (!controlAd || points < 200)) {
-                                // 去除广告，并直接给200积分
-                                boolean isSuccess = PointsManager.getInstance(MainActivity.this).awardPoints(200);
-                                Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onGetOnlineConfigFailed(String key) {
-                        // 获取在线参数失败，可能原因有：键值未设置或为空、网络异常、服务器异常
-                        Logger.e("", "获取在线参数失败:" + key);
-                    }
-                });
-            }
-        }, 2000);
     }
 
     protected void initReceiver() {
@@ -263,6 +221,49 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         if (mUpdateVersionInfo != null) {
             alertUpdateInfo(mUpdateVersionInfo);
             mUpdateVersionInfo = null;
+        }
+
+        if (Config.getConfig(this).isEnableAd()) {
+            // 获取个人广告开关在线参数
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String key = Util.getIMEI(MainActivity.this);
+                    if (TextUtils.isEmpty(key)) {
+                        key = Config.DEVICE_TOKEN;
+                        if (TextUtils.isEmpty(key)) {
+                            key = "AD1303753897" + Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+                        } else if (key.length() > 16) {
+                            key = key.substring(0, 16);
+                        }
+                    }
+                    Logger.i("", "在线参数 key = " + key);
+                    // 在线参数(广告key为token或者密码+日期)
+                    AdManager.getInstance(MainActivity.this).asyncGetOnlineConfig(key, new OnlineConfigCallBack() {
+                        @Override
+                        public void onGetOnlineConfigSuccessful(String key, String value) {
+                            // 获取在线参数成功
+                            Logger.i("", "获取在线参数成功:" + key + " -> " + value);
+                            if (key != null) {
+                                boolean ad = Boolean.valueOf(value);
+                                boolean controlAd = Config.getConfig(getApplicationContext()).readBoolean("controlAd");
+                                float points = PointsManager.getInstance(MainActivity.this).queryPoints();
+                                if (!ad && (!controlAd || points < 200)) {
+                                    // 去除广告，并直接给200积分
+                                    boolean isSuccess = PointsManager.getInstance(MainActivity.this).awardPoints(200);
+                                    Config.getConfig(getApplicationContext()).saveBoolean("controlAd", true);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onGetOnlineConfigFailed(String key) {
+                            // 获取在线参数失败，可能原因有：键值未设置或为空、网络异常、服务器异常
+                            Logger.e("", "获取在线参数失败:" + key);
+                        }
+                    });
+                }
+            }, 2000);
         }
     }
 
@@ -459,8 +460,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 Logger.i(TAG, "浮钮click");
                 boolean enable = !Config.getConfig(mActivity).isEnableAutoTrust();
                 // 广告积分判断
-                float pointsBalance = PointsManager.getInstance(MainActivity.this).queryPoints();
-                if (Config.JIFEN_WALL && pointsBalance < 200 && enable) {
+                float pointsBalance = PointsManager.getInstance(mActivity).queryPoints();
+                if (Config.JIFEN_WALL && Config.getConfig(mActivity).isEnableAd() && pointsBalance < 200 && enable) {
                     if (isForeground) {
                         showUnPointsDialog();
                     } else {
@@ -825,7 +826,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     //Config.getConfig(getActivity()).setEnableAutoTrust((Boolean) newValue);
                     float pointsBalance = PointsManager.getInstance(getActivity()).queryPoints();
-                    if (!Config.JIFEN_WALL || pointsBalance >= 200 || !(Boolean) newValue) {
+                    if (!Config.JIFEN_WALL || !Config.getConfig(getActivity()).isEnableAd() || pointsBalance >= 200 || !(Boolean) newValue) {
                         ((MainActivity) getActivity()).updateWFVAutoTrust((Boolean) newValue);
                         return true;
                     } else {
@@ -959,7 +960,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             PreferenceCategory categoryPref = (PreferenceCategory) getPreferenceScreen().getPreference(2);
             // 广告墙入口
             Preference moreApps = findPreference("MORE_APPS");
-            if (Config.JIFEN_WALL) {
+            if (Config.JIFEN_WALL && Config.getConfig(getActivity()).isEnableAd()) {
                 moreApps.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
