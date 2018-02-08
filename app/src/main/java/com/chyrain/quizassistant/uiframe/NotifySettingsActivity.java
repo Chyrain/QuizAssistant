@@ -96,6 +96,7 @@ public class NotifySettingsActivity extends BaseSettingsActivity {
                 }
             });
             adPref.setChecked(Config.getConfig(getActivity()).isEnableAd());
+            categoryPref.removePreference(adPref); // [广告]无广告版本
 
             findPreference(Config.KEY_NOTIFY_SOUND).setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override

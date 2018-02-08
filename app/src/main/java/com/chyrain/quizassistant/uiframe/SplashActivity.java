@@ -84,7 +84,7 @@ public class SplashActivity extends BaseActivity {
 //        });
 
         if (Config.getConfig(this).isEnableAd()) {
-            mHandler.postDelayed(callback, 2000);
+            mHandler.postDelayed(callback, 800);
 
 //            // [广告]预加载插屏广告
 //            SpotManager.getInstance(this).requestSpot(new SpotRequestListener() {
@@ -134,7 +134,7 @@ public class SplashActivity extends BaseActivity {
 //                }
 //            });
         } else {
-            mHandler.postDelayed(callback, 1000);
+            mHandler.postDelayed(callback, 800);
         }
 
 //        // [广告]插屏广告
