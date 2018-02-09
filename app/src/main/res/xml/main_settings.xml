@@ -57,6 +57,18 @@
             android:summary="开启【黄金十秒】直播答题助手"
             android:icon="@mipmap/settings_ic_hjsm"
             android:key="KEY_ENABLE_HJSM"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="疯狂夺金"
+            android:summary="开启优酷视频【疯狂夺金】直播答题助手"
+            android:icon="@mipmap/settings_ic_youku"
+            android:key="KEY_ENABLE_YK"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
+            android:title="知识英雄"
+            android:summary="开启小猿搜题【知识英雄】直播答题助手"
+            android:icon="@mipmap/settings_ic_zsyx"
+            android:key="KEY_ENABLE_ZSYX"/>
 
     </PreferenceCategory>
 

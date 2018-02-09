@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/accessibility_description"
     android:accessibilityEventTypes="typeNotificationStateChanged|typeWindowStateChanged|typeWindowContentChanged|typeWindowsChanged"
-    android:packageNames="com.yixia.liveshow,com.ss.android.article.video,com.inke.trivia,com.chongdingdahui.app,com.huajiao"
+    android:packageNames="com.fenbi.android.solar,com.youku.phone,com.yixia.liveshow,com.ss.android.article.video,com.inke.trivia,com.chongdingdahui.app,com.huajiao"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:notificationTimeout="100"
     android:accessibilityFlags="flagDefault"

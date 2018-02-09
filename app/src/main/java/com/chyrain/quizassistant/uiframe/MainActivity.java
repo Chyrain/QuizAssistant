@@ -679,6 +679,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         private SwitchPreference xiguaPref;
         private SwitchPreference huajiaoPref;
         private SwitchPreference hjsmPref;
+        private SwitchPreference ykPref;
+        private SwitchPreference taobaoPref;
+        private SwitchPreference zhyxPref; // 小猿搜题 知识英雄
         private SwitchPreference floatBtnPref;
         private SwitchPreference autoTrustPref;
 //        private SwitchPreference showAnswerPref;
@@ -813,6 +816,30 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 }
             });
 
+            //优酷疯狂夺金开关
+            ykPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_YK);
+            ykPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
+            //优酷疯狂夺金开关
+            zhyxPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_ZSYX);
+            zhyxPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
             //浮动按钮开关
             floatBtnPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_FLOAT_BUTTON);
             floatBtnPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -908,8 +935,6 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 public boolean onPreferenceClick(Preference preference) {
                     V5ClientConfig config = V5ClientConfig.getInstance(getActivity());
                     // V5客服系统客户端配置
-                    // config.setShowLog(true); // 显示日志，默认为true
-
                     /*** 客户信息设置 ***/
                     // 如果更改了用户信息，需要在设置前调用shouldUpdateUserInfo
                     // config.shouldUpdateUserInfo();
@@ -917,35 +942,8 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                     String token = Config.DEVICE_TOKEN != null ?
                             Config.DEVICE_TOKEN.substring(0, 16) : Config.DEVICE_TOKEN;
                     config.setNickname("Quiz-" + token);
-                    // 设置用户性别: 0-未知 1-男 2-女
-//                    config.setGender(1);
-                    // 【建议】设置用户头像URL
-//                    config.setAvatar("http://debugimg-10013434.image.myqcloud.com/fe1382d100019cfb572b1934af3d2c04/thumbnail");
-                    /**
-                     *【建议】设置用户OpenId，以识别不同登录用户，不设置则默认由SDK生成，替代v1.2.0之前的uid,
-                     *  openId将透传到座席端(长度32字节以内，建议使用含字母数字和下划线的字符串，尽量不用特殊字符，若含特殊字符系统会进行URL encode处理，影响最终长度和座席端获得的结果)
-                     *	若您是旧版本SDK用户，只是想升级，为兼容旧版，避免客户信息改变可继续使用config.setUid，可不用openId
-                     */
-//                    config.setOpenId("android_sdk_test");
-                    //config.setUid(uid); //【弃用】请使用setOpenId替代
-                    // 设置用户VIP等级(0-5)
-//                    config.setVip(0);
                     // 使用消息推送时需设置device_token:集成第三方推送(腾讯信鸽、百度云推)或自定义推送地址时设置此参数以在离开会话界面时接收推送消息
                     config.setDeviceToken(XGPushConfig.getToken(getActivity()));
-
-//                    // [1.3.0新增]设置V5系统内置的客户基本信息，区别于setUserInfo，这是V5系统内置字段
-//                    JSONObject baseInfo = new JSONObject();
-//                    try {
-//                        baseInfo.put("country", "中国");
-//                        baseInfo.put("province", "广东");
-//                        baseInfo.put("city", "深圳");
-//                        baseInfo.put("language", "zh-cn");
-//                        // nickname,gender,avatar,vip也可在此设置
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    config.setBaseInfo(baseInfo);
-
                     // 客户信息键值对，下面为示例（JSONObject）
                     JSONObject customContent = new JSONObject();
                     try {

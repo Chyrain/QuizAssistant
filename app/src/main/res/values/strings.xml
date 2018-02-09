@@ -14,7 +14,7 @@
     <string name="app_intro">使用说明</string>
 
     <string name="main_name">答题辅助</string>
-    <string name="accessibility_description">启动直播答题辅助服务，帮您找到答案并自动作答，【必须开启】，否则无法自动答题。\n目前支持《芝士超人》《冲顶大会》《西瓜视频》《花椒直播》《黄金十秒》等App的直播答题。\n注：答案来自AI机器人，不确保答案正确性，从历史数据来看平均正确率约为85%。</string>
+    <string name="accessibility_description">启动直播答题辅助服务，帮您找到答案并自动作答，【必须开启】，否则无法自动答题。\n目前支持《芝士超人》《冲顶大会》《西瓜视频》《花椒直播》《黄金十秒》《疯狂夺金》《知识英雄》等App的直播答题。\n注：答案来自AI机器人，不确保答案正确性，从历史数据来看平均正确率约为85%。</string>
     <string name="service_name">V5答题助手（直播答题赢奖金）</string>
     <string name="open_service_title">需要开启辅助服务才能正常使用</string>
     <string name="open_service_button">打开辅助服务</string>

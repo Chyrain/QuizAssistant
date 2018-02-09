@@ -6,6 +6,8 @@ import android.os.Build;
 import android.text.TextUtils;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import com.chyrain.quizassistant.util.Logger;
+
 import java.lang.reflect.Field;
 import java.util.List;
 
@@ -91,6 +93,45 @@ public final class AccessibilityHelper {
             return nodeInfo;
         }
         return findParentNodeInfosByClassName(nodeInfo.getParent(), className);
+    }
+
+    public static AccessibilityNodeInfo findClickableChildNodeInfo(AccessibilityNodeInfo nodeInfo) {
+        if(nodeInfo == null) {
+            return null;
+        }
+        if (nodeInfo.isClickable()) {
+            return nodeInfo;
+        }
+        if (nodeInfo.getChildCount() > 0) {
+            for (int i = 0; i < nodeInfo.getChildCount(); i++) {
+                AccessibilityNodeInfo item = nodeInfo.getChild(i);
+                if (item.isClickable()) {
+                    return item;
+                } else {
+                    item = findClickableChildNodeInfo(item);
+                    if (item != null) {
+                        return item;
+                    }
+                }
+            }
+        } else {
+            return null;
+        }
+        return null;
+    }
+
+    public static void performClickChildOfNodeInfo(AccessibilityNodeInfo nodeInfo, String id) {
+        if(nodeInfo == null || id == null) {
+            return;
+        }
+        AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosById(nodeInfo, id);
+        Logger.i("AccessibilityHelper", "[performClickChildOfNodeInfo] 查找点击(id=" + id + ") targetNode:" + targetNode);
+        if(targetNode != null) {
+            Logger.e("AccessibilityHelper", "[performClickChildOfNodeInfo] 查找点击(id=" + id + "):" + targetNode);
+            AccessibilityNodeInfo clickNode = findClickableChildNodeInfo(targetNode);
+            Logger.e("AccessibilityHelper", "[performClickChildOfNodeInfo] 成功点击(id=" + id + "):" + clickNode);
+            performClick(clickNode);
+        }
     }
 
     private static final Field sSourceNodeField;

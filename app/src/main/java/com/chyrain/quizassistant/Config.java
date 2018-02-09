@@ -75,6 +75,8 @@ public class Config {
     public static final String KEY_ENABLE_INKE = "KEY_ENABLE_INKE"; // 允许映客直播=>芝士超人
     public static final String KEY_ENABLE_HUAJIAO = "KEY_ENABLE_HUAJIAO"; // 允许花椒直播=>百万赢家
     public static final String KEY_ENABLE_HJSM = "KEY_ENABLE_HJSM"; // 允许黄金十秒
+    public static final String KEY_ENABLE_YK = "KEY_ENABLE_YK"; // 允许优酷 疯狂夺金
+    public static final String KEY_ENABLE_ZSYX = "KEY_ENABLE_ZSYX"; // 允许小猿搜题 知识英雄
     public static final String KEY_AUTO_TRUST = "KEY_AUTO_TRUST"; // 启用全自动托管
     public static final String KEY_SHOW_ANSWER = "KEY_SHOW_ANSWER"; // 启用答案推荐
     public static final String KEY_THROTTLE_TIME = "KEY_THROTTLE_TIME"; // 答案轮询间隔
@@ -262,6 +264,28 @@ public class Config {
     public void setEnableHJSM(boolean enable) {
         Editor editor = preferences.edit();
         editor.putBoolean(KEY_ENABLE_HJSM, enable);
+        editor.commit();
+    }
+
+    /** 是否启动优酷疯狂夺金辅助服务 **/
+    public boolean isEnableYK() {
+        return preferences.getBoolean(KEY_ENABLE_YK, true);
+    }
+
+    public void setEnableYK(boolean enable) {
+        Editor editor = preferences.edit();
+        editor.putBoolean(KEY_ENABLE_YK, enable);
+        editor.commit();
+    }
+
+    /** 是否启动小猿搜题知识英雄辅助服务 **/
+    public boolean isEnableZSYX() {
+        return preferences.getBoolean(KEY_ENABLE_ZSYX, true);
+    }
+
+    public void setEnableZSYX(boolean enable) {
+        Editor editor = preferences.edit();
+        editor.putBoolean(KEY_ENABLE_ZSYX, enable);
         editor.commit();
     }
 

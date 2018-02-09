@@ -239,7 +239,27 @@ mAITask.stopTask();
             Logger.e(TAG, "[clickAtNodeWithId] 成功点击(id=" + id + "):" + targetNode);
             AccessibilityHelper.performClick(targetNode);
             mCurrentQuiz = null; //已点击则置空
+        } else {
+            Logger.w(TAG, "[clickAtNodeWithId] 节点为空 id：" + id);
         }
+    }
+
+    /**
+     * 点击带指定id的node里买的一个可点击node
+     * @param id 布局id
+     */
+    protected void clickAtChildNodeWithId(String id) {
+        if (!getConfig().isEnableAutoTrust()) {
+            // 非自动托管不处理
+            return;
+        }
+        AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
+        if(nodeInfo == null) {
+            Logger.e(TAG, "[clickAtChildNodeWithId] rootWindow为空 id：" + id);
+            return;
+        }
+        Logger.i(TAG, "[clickAtChildNodeWithId] clickAtChildNodeWithId id：" + id);
+        AccessibilityHelper.performClickChildOfNodeInfo(nodeInfo, getTargetPackageName() + ":id/" + id);
     }
 
     /**

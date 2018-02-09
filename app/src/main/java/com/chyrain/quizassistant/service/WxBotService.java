@@ -32,7 +32,9 @@ import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.job.HjsmAccessbilityJob;
 import com.chyrain.quizassistant.job.HuajiaoAccessbilityJob;
 import com.chyrain.quizassistant.job.InkeAccessbilityJob;
+import com.chyrain.quizassistant.job.XiaoyuanAccessbilityJob;
 import com.chyrain.quizassistant.job.XiguaAccessbilityJob;
+import com.chyrain.quizassistant.job.YoukuAccessbilityJob;
 import com.chyrain.quizassistant.job.ZhishiAccessbilityJob;
 import com.chyrain.quizassistant.util.Logger;
 import com.chyrain.quizassistant.util.NotifyHelper;
@@ -62,7 +64,9 @@ public class WxBotService extends AccessibilityService {
             XiguaAccessbilityJob.class,
 //            InkeAccessbilityJob.class, // 暂不支持22:30场
             HuajiaoAccessbilityJob.class,
-            HjsmAccessbilityJob.class
+            HjsmAccessbilityJob.class,
+            YoukuAccessbilityJob.class,
+            XiaoyuanAccessbilityJob.class
     };
     /**
      * 所支持的答题平台任务对象实例
@@ -168,12 +172,12 @@ public class WxBotService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
         Logger.i(TAG, "[WxBotService -> onServiceConnected]");
-        AccessibilityServiceInfo serviceInfo = new AccessibilityServiceInfo();
-        serviceInfo.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
-        serviceInfo.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
-        serviceInfo.packageNames = mPackageNames;
-        serviceInfo.notificationTimeout=100;
-        setServiceInfo(serviceInfo);
+//        AccessibilityServiceInfo serviceInfo = new AccessibilityServiceInfo();
+//        serviceInfo.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
+//        serviceInfo.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
+//        serviceInfo.packageNames = mPackageNames;
+//        serviceInfo.notificationTimeout=100;
+//        setServiceInfo(serviceInfo);
 
         service = this;
         //发送广播，已经连接上了
