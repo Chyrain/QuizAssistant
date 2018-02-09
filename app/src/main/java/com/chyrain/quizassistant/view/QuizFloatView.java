@@ -103,6 +103,8 @@ public class QuizFloatView extends LinearLayout {
     public void updateFloatQuiz(QuizBean quiz) {
         if (quiz != null) {
             mCurrentQuiz = quiz;
+        } else {
+            return;
         }
         Logger.i(TAG, "[updateFloatQuiz] result:" + quiz.getResult() + " quiz:" + mCurrentQuiz);
         if (mAnswerTv != null && mCurrentQuiz != null) {
@@ -161,9 +163,9 @@ public class QuizFloatView extends LinearLayout {
                 (mCurrentQuiz != null && mCurrentQuiz.getIndex() > 0 ? mCurrentQuiz.getIndex() + "题" : "")
                 + "推荐答案：");
         }
-        if (mAnswerTv != null) {
-            mAnswerTv.setText("小五给您推荐答案");
-        }
+//        if (mAnswerTv != null) {
+//            mAnswerTv.setText("小五给您推荐答案");
+//        }
     }
 
 

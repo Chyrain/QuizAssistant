@@ -1217,11 +1217,11 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
             Logger.w(TAG, "<v5kf>EVENT_TAG_UPDATE_FLOAT service: " + service);
         }
         if (wFV != null && service != null) {
-            wFV.updateFloatQuiz(service.getCurrentQuiz());
             DatiAccessbilityJob accessbilityJob = service.getCurrentJob();
             if (accessbilityJob != null) {
                 wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
             }
+            wFV.updateFloatQuiz(service.getCurrentQuiz());
         }
 
 //        if (Config.getConfig(MainActivity.this).isEnableShowAnswer()) {
