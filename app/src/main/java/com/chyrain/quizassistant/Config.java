@@ -33,7 +33,7 @@ public class Config {
 //    public static final String UPDATE_LINK = URL_HOST + "app/quizassistant/download/version.xml";
 //    public static final String APP_LINK = URL_HOST + "app/quizassistant/app.html"; //index.html
     // 检查更新避免缓存，使用：chyrain.com
-    public static final String UPDATE_LINK = "https://chyrain.github.io/app/quizassistant/download/version.xml";
+    public static final String UPDATE_LINK = "https://chyrain.github.io/app/quizassistant/download/" + (JIFEN_WALL ? "version_ad.xml" : "version.xml");
     // webview页面打开用户可获取到URL页面均使用：chyrain.com
     public static final String APP_LINK = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "app.html" : "appp.html"); //index.html
     public static final String INTRO_LINK = "https://chyrain.github.io/app/quizassistant/" + (JIFEN_WALL ? "intro.html" : "introp.html");
