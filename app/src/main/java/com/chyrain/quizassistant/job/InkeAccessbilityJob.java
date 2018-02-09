@@ -181,7 +181,7 @@ public class InkeAccessbilityJob extends DatiAccessbilityJob {
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
         // 查找答案并处理
         handleReceiveQuizAnswer();
-        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+        if (mCurrentQuiz != null && getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
             String id = "";
             int ansIndex = quiz.getAnsIndex();
             // ans: tv_question

@@ -174,7 +174,7 @@ public class ZhishiAccessbilityJob extends DatiAccessbilityJob {
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
 
         handleReceiveQuizAnswer();
-        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+        if (mCurrentQuiz != null && getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
             String id = "";
             int ansIndex = quiz.getAnsIndex();
             if (ansIndex == 0) {

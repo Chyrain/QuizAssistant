@@ -129,16 +129,23 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                     };
                     ActivityCompat.requestPermissions(MainActivity.this, mPermissionList,123);
                 }
-
-                // 显示悬浮窗
-                boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
-                if (showFloat && Config.getConfig(MainActivity.this).readBoolean("app_once_token")) {
-                    showFloat();
-                }
-                initReceiver();
                 startUpdateService();
             }
         }, 200);
+
+        // 显示悬浮窗
+        boolean showFloat = Config.getConfig(getApplicationContext()).isEnableFloatButton();
+        if (showFloat && Config.getConfig(MainActivity.this).readBoolean("app_once_token")) {
+            showFloat();
+        }
+        initReceiver();
+
+        // 检测开启AccessbilityService
+        if (!WxBotService.isRunning() && Config.getConfig(this).isEnableWechat()) {
+            Intent i = new Intent(getApplicationContext(), WxBotService.class);
+            startService(i);
+            Logger.w(TAG, "onCreate手动开启 WxBotService");
+        }
     }
 
     protected void initReceiver() {
@@ -819,6 +826,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                     return true;
                 }
             });
+            floatBtnPref.setChecked(Config.getConfig(getActivity()).isEnableFloatButton());
 
             findPreference("NOTIFY_SETTINGS").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
