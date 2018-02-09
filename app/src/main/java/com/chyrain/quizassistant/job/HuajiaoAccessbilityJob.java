@@ -125,7 +125,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                         public void run() {
                             //点击浮动按钮进入百万赢家页面
                             clickAtNodeWithContent("百万赢家");
-                            clickAtNodeWithId("urgent_activity_img");
+//                            clickAtNodeWithId("urgent_activity_img");
                         }
                     }, 3000);
                 }
@@ -164,8 +164,8 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //点击浮动按钮进入百万赢家页面
-                            clickAtNodeWithId("urgent_activity_img");
+//                            //点击浮动按钮进入百万赢家页面
+//                            clickAtNodeWithId("urgent_activity_img");
                             // 进入答题页面
                             clickAtNodeWithContent("开始答题");
                         }
