@@ -36,16 +36,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.V5Application;
-import com.chyrain.quizassistant.aitask.QuizBean;
 import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.service.WxBotNotificationService;
 import com.chyrain.quizassistant.service.WxBotService;
@@ -600,6 +601,13 @@ public class MainActivity extends BaseSettingsActivity {
         private boolean notificationChangeByUser = true;
 
         @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = super.onCreateView(inflater, container, savedInstanceState);
+            v.setBackgroundColor(getResources().getColor(R.color.v5_white));
+            return v;
+        }
+
+        @Override
         public void onViewCreated(View view, Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
 
@@ -802,8 +810,6 @@ public class MainActivity extends BaseSettingsActivity {
                 public boolean onPreferenceClick(Preference preference) {
                     V5ClientConfig config = V5ClientConfig.getInstance(getActivity());
                     // V5客服系统客户端配置
-                    // config.setShowLog(true); // 显示日志，默认为true
-
                     /*** 客户信息设置 ***/
                     // 如果更改了用户信息，需要在设置前调用shouldUpdateUserInfo
                     // config.shouldUpdateUserInfo();
@@ -811,34 +817,8 @@ public class MainActivity extends BaseSettingsActivity {
                     String token = Config.DEVICE_TOKEN != null ?
                             Config.DEVICE_TOKEN.substring(0, 16) : Config.DEVICE_TOKEN;
                     config.setNickname("Quiz-" + token);
-                    // 设置用户性别: 0-未知 1-男 2-女
-//                    config.setGender(1);
-                    // 【建议】设置用户头像URL
-//                    config.setAvatar("http://debugimg-10013434.image.myqcloud.com/fe1382d100019cfb572b1934af3d2c04/thumbnail");
-                    /**
-                     *【建议】设置用户OpenId，以识别不同登录用户，不设置则默认由SDK生成，替代v1.2.0之前的uid,
-                     *  openId将透传到座席端(长度32字节以内，建议使用含字母数字和下划线的字符串，尽量不用特殊字符，若含特殊字符系统会进行URL encode处理，影响最终长度和座席端获得的结果)
-                     *	若您是旧版本SDK用户，只是想升级，为兼容旧版，避免客户信息改变可继续使用config.setUid，可不用openId
-                     */
-//                    config.setOpenId("android_sdk_test");
-                    //config.setUid(uid); //【弃用】请使用setOpenId替代
-                    // 设置用户VIP等级(0-5)
-//                    config.setVip(0);
                     // 使用消息推送时需设置device_token:集成第三方推送(腾讯信鸽、百度云推)或自定义推送地址时设置此参数以在离开会话界面时接收推送消息
                     config.setDeviceToken(XGPushConfig.getToken(getActivity()));
-
-//                    // [1.3.0新增]设置V5系统内置的客户基本信息，区别于setUserInfo，这是V5系统内置字段
-//                    JSONObject baseInfo = new JSONObject();
-//                    try {
-//                        baseInfo.put("country", "中国");
-//                        baseInfo.put("province", "广东");
-//                        baseInfo.put("city", "深圳");
-//                        baseInfo.put("language", "zh-cn");
-//                        // nickname,gender,avatar,vip也可在此设置
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    config.setBaseInfo(baseInfo);
 
                     // 客户信息键值对，下面为示例（JSONObject）
                     JSONObject customContent = new JSONObject();
@@ -1078,21 +1058,39 @@ public class MainActivity extends BaseSettingsActivity {
         }
     }
 
-    @Subscriber(tag = Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE, mode=ThreadMode.MAIN)
-    private void notifyServiceConnect(DatiAccessbilityJob accessbilityJob) {
-        Logger.i(TAG, "<v5kf>EVENT_TAG_ACCESSBILITY_JOB_CHANGE key: " + accessbilityJob.getAppName()
-            + " key: " + accessbilityJob.getJobKey());
-//        Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
-        if (wFV != null) {
-            wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
-        }
-    }
+//    @Subscriber(tag = Config.EVENT_TAG_ACCESSBILITY_JOB_CHANGE, mode=ThreadMode.MAIN)
+//    private void notifyServiceConnect(DatiAccessbilityJob accessbilityJob) {
+//        Logger.i(TAG, "<v5kf>EVENT_TAG_ACCESSBILITY_JOB_CHANGE key: " + accessbilityJob.getAppName()
+//            + " key: " + accessbilityJob.getJobKey());
+////        Toast.makeText(MainActivity.this, "答题助手切换到 " + accessbilityJob.getAppName(), Toast.LENGTH_LONG).show();
+//        if (wFV != null) {
+//            wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
+//        }
+//    }
 
-    @Subscriber(tag = Config.EVENT_TAG_UPDATE_QUIZ, mode=ThreadMode.MAIN)
-    private void updateCurrentQuiz(QuizBean quiz) {
-        Logger.i(TAG, "<v5kf>EVENT_TAG_UPDATE_QUIZ key: " + quiz);
-        if (wFV != null) {
-            wFV.updateFloatQuiz(quiz);
+    @Subscriber(tag = Config.EVENT_TAG_UPDATE_FLOAT, mode=ThreadMode.MAIN)
+    private void updateCurrentQuiz(WxBotService service) {
+        if (service != null) {
+            String result = null, jobKey = null, appName = null;
+            if (service.getCurrentJob() != null) {
+                jobKey = service.getCurrentJob().getJobKey();
+                appName = service.getCurrentJob().getAppName();
+            }
+            if (service.getCurrentQuiz() != null) {
+                result = (service.getCurrentQuiz().getIndex() > 0 ? service.getCurrentQuiz().getIndex() + "." : "")
+                        + service.getCurrentQuiz().getResult();
+            }
+            Logger.i(TAG, "<v5kf>EVENT_TAG_UPDATE_FLOAT appName: " + appName
+                    + " jobKey:" + jobKey + " result:" + result);
+        } else {
+            Logger.w(TAG, "<v5kf>EVENT_TAG_UPDATE_FLOAT service: " + service);
+        }
+        if (wFV != null && service != null) {
+            DatiAccessbilityJob accessbilityJob = service.getCurrentJob();
+            if (accessbilityJob != null) {
+                wFV.updateFloatJob(accessbilityJob.getAppName(), accessbilityJob.getJobKey());
+            }
+            wFV.updateFloatQuiz(service.getCurrentQuiz());
         }
 
 //        if (Config.getConfig(MainActivity.this).isEnableShowAnswer()) {

@@ -150,10 +150,13 @@ public class AITask {
 
                         @Override
                         public void onSuccess(int statusCode, String responseString) {
-                            String jsonStr = responseString.substring(cbPrefix.length() + 1, responseString.length() - 1);
-                            Logger.v(TAG, "httpSync: " + _url + "\n[onSuccess] json：" + jsonStr);
-
+                            Logger.v(TAG, "httpSync: " + _url + "\n[onSuccess] responseString：" + responseString);
                             try {
+                                if (responseString == null || responseString.length() <= cbPrefix.length()) {
+                                    Logger.w(TAG, "responseString error:" + responseString);
+                                    return;
+                                }
+                                String jsonStr = responseString.substring(cbPrefix.length() + 1, responseString.length() - 1);
                                 JSONObject json = new JSONObject(jsonStr);
                                 if (json.getInt("code") == 0 && json.getString("result") != null) {
                                     String json_result = new String(Base64.decode(json.getString("result").getBytes(), Base64.DEFAULT));
@@ -219,6 +222,8 @@ public class AITask {
                                     }
                                 }
                             } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }

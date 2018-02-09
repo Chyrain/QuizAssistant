@@ -123,7 +123,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                         public void run() {
                             //点击浮动按钮进入百万赢家页面
                             clickAtNodeWithContent("百万赢家");
-                            clickAtNodeWithId("urgent_activity_img");
+//                            clickAtNodeWithId("urgent_activity_img");
                         }
                     }, 3000);
                 }
@@ -162,8 +162,8 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            //点击浮动按钮进入百万赢家页面
-                            clickAtNodeWithId("urgent_activity_img");
+//                            //点击浮动按钮进入百万赢家页面
+//                            clickAtNodeWithId("urgent_activity_img");
                             // 进入答题页面
                             clickAtNodeWithContent("开始答题");
                         }
@@ -180,7 +180,7 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
                 }
             } else if (mCurrentWindow == WINDOW_QUIZ_PAGE) {
                 //clickAtNodeWithContent("继续观看");
-                handleReceiveQuizAnswer();
+                clickAnswer();
             }
         }
     }
@@ -200,11 +200,18 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
         mCurrentQuiz = quiz;
         Logger.w(TAG, quiz.getIndex() + " [onReceiveNextAnswer] title: " + quiz.getTitle() +
                 "  answers: " + quiz.getAnswers() +  "  answer: " + quiz.getResult());
+        clickAnswer();
+    }
+
+    private void clickAnswer() {
+        if (mCurrentQuiz == null) {
+            return;
+        }
         // 查找答案并处理
         handleReceiveQuizAnswer();
         if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
             String text = mCurrentQuiz.getResult();
-            int ansIndex = quiz.getAnsIndex();
+            int ansIndex = mCurrentQuiz.getAnsIndex();
             // ans: tv_question
             if (ansIndex == 0) {//A.
                 text = "A." + text;
@@ -213,8 +220,11 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
             } else if (ansIndex == 2) {//C.
                 text = "C." + text;
             }
-            // 点击答案选项id
+            Logger.w(TAG, mCurrentQuiz.getIndex() + " [onReceiveNextAnswer.isEnableAutoTrust] title: " + mCurrentQuiz.getTitle() +
+                    "  mCurrentQuiz: " + mCurrentQuiz + "  text: " + text);
             if (mCurrentQuiz != null && (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1)) {
+                Logger.w(TAG, mCurrentQuiz.getIndex() + " [onReceiveNextAnswer.isEnableAutoTrust.handleNodeWithContent] title: " + mCurrentQuiz.getTitle() +
+                        "  mCurrentQuiz: " + mCurrentQuiz + "  text: " + text);
                 // 查找答案内容并处理
                 handleNodeWithContent(text);
             }
