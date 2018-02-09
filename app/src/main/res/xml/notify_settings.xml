@@ -19,7 +19,7 @@
         <EditTextPreference
             android:title="设置搜索答案时间间隔"
             android:summary="循环监控当前题号的答案，时间间隔建议在500-3000范围（频率太高耗流量多，太低获取答案时效慢）"
-            android:defaultValue="1500"
+            android:defaultValue="1000"
             android:key="KEY_THROTTLE_TIME"
             android:inputType="number"
             android:dialogTitle="建议在500-3000范围"
