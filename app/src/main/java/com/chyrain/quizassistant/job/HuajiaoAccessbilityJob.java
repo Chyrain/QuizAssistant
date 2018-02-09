@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.os.Build;
 import android.os.Parcelable;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 
 import com.chyrain.quizassistant.Config;
 import com.chyrain.quizassistant.R;
@@ -209,27 +210,67 @@ public class HuajiaoAccessbilityJob extends DatiAccessbilityJob {
         if (mCurrentQuiz == null) {
             return;
         }
-        // 查找答案并处理
-        handleReceiveQuizAnswer();
-        if (getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
-            String text = mCurrentQuiz.getResult();
-            int ansIndex = mCurrentQuiz.getAnsIndex();
-            // ans: tv_question
-            if (ansIndex == 0) {//A.
-                text = "A." + text;
-            } else if (ansIndex == 1) {//B.
-                text = "B." + text;
-            } else if (ansIndex == 2) {//C.
-                text = "C." + text;
-            }
-            Logger.w(TAG, mCurrentQuiz.getIndex() + " [onReceiveNextAnswer.isEnableAutoTrust] title: " + mCurrentQuiz.getTitle() +
-                    "  mCurrentQuiz: " + mCurrentQuiz +  "  text: " + text);
-            if (mCurrentQuiz != null && (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1)) {
-                Logger.w(TAG, mCurrentQuiz.getIndex() + " [onReceiveNextAnswer.isEnableAutoTrust.handleNodeWithContent] title: " + mCurrentQuiz.getTitle() +
-                        "  mCurrentQuiz: " + mCurrentQuiz +  "  text: " + text);
-                // 查找答案内容并处理
-                handleNodeWithContent(text);
-            }
-        }
+        // 花椒直播答案选项在webview中暂不支持自动点击
+        mCurrentQuiz = null;
+        return;
+////        // 查找答案并处理
+////        handleReceiveQuizAnswer();
+//        if (mCurrentQuiz != null && getConfig().isEnableAutoTrust()) { // 机器人托管自动回复
+//            String text = mCurrentQuiz.getResult();
+//            int ansIndex = mCurrentQuiz.getAnsIndex();
+//            // ans: tv_question
+//            if (ansIndex == 0) {//A.
+//                text = "A." + text;
+//            } else if (ansIndex == 1) {//B.
+//                text = "B." + text;
+//            } else if (ansIndex == 2) {//C.
+//                text = "C." + text;
+//            }
+////            Logger.w(TAG, mCurrentQuiz.getIndex() + " [onReceiveNextAnswer.isEnableAutoTrust] title: " + mCurrentQuiz.getTitle() +
+////                    "  mCurrentQuiz: " + mCurrentQuiz +  "  text: " + text);
+////            if (mCurrentQuiz != null && (!mCurrentQuiz.isRandom() || getConfig().getNoAnswerMode() == 1)) {
+////                Logger.w(TAG, mCurrentQuiz.getIndex() + " [onReceiveNextAnswer.isEnableAutoTrust.handleNodeWithContent] title: " + mCurrentQuiz.getTitle() +
+////                        "  mCurrentQuiz: " + mCurrentQuiz +  "  text: " + text);
+////                // 查找答案内容并处理
+////                handleNodeWithContent(text);
+////            }
+//
+//            // 获得id: livewebview -> WebView
+//            AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
+//            if(nodeInfo == null) {
+//                Logger.e(TAG, "[getlivewebviewNodeWithId] rootWindow为空 id：livewebview");
+//                return;
+//            }
+//            AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosById(nodeInfo, getTargetPackageName() + ":id/livewebview");
+//            if(targetNode != null) {
+//                Logger.e(TAG, "[clickAtNodeWithId] 成功获取(id = livewebview):" + targetNode);
+//                AccessibilityNodeInfo webViewNode = targetNode.getChild(0);
+//                Logger.e(TAG, "[clickAtNodeWithId] webViewNode:" + webViewNode);
+//                if (webViewNode != null && webViewNode.getChildCount() > 0) {
+//                    webViewNode = webViewNode.getChild(0);
+////                Logger.e(TAG, "[clickAtNodeWithId] webViewNode.getChildCount:" + webViewNode.getChildCount()
+////                    + " child:" + webViewNode);
+//                    if (webViewNode != null) {
+//                        Logger.w(TAG, "[clickAtNodeWithId] webViewNode.getChildCount:" + webViewNode.getChildCount());
+//                        for (int i = 0; i < webViewNode.getChildCount(); i++) {
+//                            AccessibilityNodeInfo nodeinfo = webViewNode.getChild(i);
+//                            if (nodeinfo != null) {
+//                                Logger.i(TAG, "child at " + i + " nodeinfo:" + nodeinfo);
+//                                if (i == 6 && nodeinfo.getChildCount() > 0) {
+//                                    Logger.e(TAG, "点击 ListView:" + nodeinfo + " 下的分享按钮：" + nodeinfo.getChild(0));
+//                                    AccessibilityHelper.performClick(nodeinfo.getChild(0));
+//                                }
+//                            }
+//                        }
+//
+////                        AccessibilityNodeInfo textNode = AccessibilityHelper.findNodeInfosByText(webViewNode, text);
+////                        if(textNode != null) {
+////                            Logger.e(TAG, "[clickAtNodeWithContent] 成功点击(" + text + "):" + textNode);
+////                            AccessibilityHelper.performClick(textNode);
+////                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }
