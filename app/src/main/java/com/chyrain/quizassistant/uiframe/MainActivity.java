@@ -38,9 +38,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
@@ -679,6 +681,13 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         public void onDestroy() {
             super.onDestroy();
             Logger.w(TAG, "MainActivity.[MainFragment.onDestroy]");
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View v = super.onCreateView(inflater, container, savedInstanceState);
+            v.setBackgroundColor(getResources().getColor(R.color.v5_white));
+            return v;
         }
 
         @Override
