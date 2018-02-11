@@ -681,7 +681,7 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
         private SwitchPreference hjsmPref;
         private SwitchPreference ykPref;
         private SwitchPreference taobaoPref;
-        private SwitchPreference zhyxPref; // 小猿搜题 知识英雄
+        private SwitchPreference zsyxPref; // 小猿搜题 知识英雄
         private SwitchPreference floatBtnPref;
         private SwitchPreference autoTrustPref;
 //        private SwitchPreference showAnswerPref;
@@ -828,9 +828,21 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 }
             });
 
-            //优酷疯狂夺金开关
-            zhyxPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_ZSYX);
-            zhyxPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            //淘宝点题成金开关
+            taobaoPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_TB);
+            taobaoPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    if((Boolean) newValue && !WxBotService.isRunning()) {
+                        ((MainActivity)getActivity()).showOpenAccessibilityServiceDialog();
+                    }
+                    return true;
+                }
+            });
+
+            //小猿搜题知识英雄金开关
+            zsyxPref = (SwitchPreference) findPreference(Config.KEY_ENABLE_ZSYX);
+            zsyxPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     if((Boolean) newValue && !WxBotService.isRunning()) {
@@ -1038,6 +1050,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 xiguaPref.setEnabled(true);
                 huajiaoPref.setEnabled(true);
                 hjsmPref.setEnabled(true);
+                ykPref.setEnabled(true);
+                zsyxPref.setEnabled(true);
+                taobaoPref.setEnabled(true);
             } else {
                 // 不可用
                 zscrPref.setEnabled(false);
@@ -1045,6 +1060,9 @@ public class MainActivity extends BaseSettingsActivity implements CheckAppUpdate
                 xiguaPref.setEnabled(false);
                 huajiaoPref.setEnabled(false);
                 hjsmPref.setEnabled(false);
+                ykPref.setEnabled(false);
+                zsyxPref.setEnabled(false);
+                taobaoPref.setEnabled(false);
             }
         }
 

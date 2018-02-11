@@ -22,7 +22,7 @@ public class Config {
 
     public static final int DEFAULT_NIGHT_START = 23;
     public static final int DEFAULT_NIGHT_END = 7;
-    public static final boolean JIFEN_WALL = false; // adp:false ad:true 200积分限制，显示积分墙
+    public static final boolean JIFEN_WALL = true; // adp:false ad:true 200积分限制，显示积分墙
     public static String DEVICE_TOKEN = null;
 //    public static final String URL_HOST = "https://chyrain.com/";//app/quizassistant/
 //    public static final String URL_HOST = "https://chyrain.github.io/";//app/quizassistant/
@@ -77,6 +77,7 @@ public class Config {
     public static final String KEY_ENABLE_HJSM = "KEY_ENABLE_HJSM"; // 允许黄金十秒
     public static final String KEY_ENABLE_YK = "KEY_ENABLE_YK"; // 允许优酷 疯狂夺金
     public static final String KEY_ENABLE_ZSYX = "KEY_ENABLE_ZSYX"; // 允许小猿搜题 知识英雄
+    public static final String KEY_ENABLE_TB = "KEY_ENABLE_TB"; // 允许淘宝 点题成金
     public static final String KEY_AUTO_TRUST = "KEY_AUTO_TRUST"; // 启用全自动托管
     public static final String KEY_SHOW_ANSWER = "KEY_SHOW_ANSWER"; // 启用答案推荐
     public static final String KEY_THROTTLE_TIME = "KEY_THROTTLE_TIME"; // 答案轮询间隔
@@ -275,6 +276,17 @@ public class Config {
     public void setEnableYK(boolean enable) {
         Editor editor = preferences.edit();
         editor.putBoolean(KEY_ENABLE_YK, enable);
+        editor.commit();
+    }
+
+    /** 是否启动淘宝点题成金辅助服务 **/
+    public boolean isEnableTB() {
+        return preferences.getBoolean(KEY_ENABLE_TB, true);
+    }
+
+    public void setEnableTB(boolean enable) {
+        Editor editor = preferences.edit();
+        editor.putBoolean(KEY_ENABLE_TB, enable);
         editor.commit();
     }
 

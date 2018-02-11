@@ -190,15 +190,15 @@ mAITask.stopTask();
 
     /**
      * 点击带指定文本的node
-     * @param content 内容
+     * @param contents 内容
      */
-    protected void clickAtNodeWithContent(String content) {
+    protected void clickAtNodeWithContent(String... contents) {
         if (!getConfig().isEnableAutoTrust()) {
             // 非自动托管不处理
             return;
         }
 
-        Logger.d(TAG, "[clickAtNodeWithContent] content:" + content);
+        Logger.d(TAG, "[clickAtNodeWithContent] content:" + contents);
         AccessibilityNodeInfo nodeInfo = getService().getRootInActiveWindow();
 //        if (nodeInfo == null && getCurrentEvent() != null) {
 //            nodeInfo = getCurrentEvent().getSource();
@@ -207,13 +207,13 @@ mAITask.stopTask();
         if (nodeInfo == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             nodeInfo = getService().findFocus(AccessibilityNodeInfo.FOCUS_ACCESSIBILITY);
             if(nodeInfo == null) {
-                Logger.e(TAG, "[clickAtNodeWithContent] rootWindow为空 content：" + content);
+                Logger.e(TAG, "[clickAtNodeWithContent] rootWindow为空 content：" + contents);
                 return;
             }
         }
-        AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosByText(nodeInfo, content);
+        AccessibilityNodeInfo targetNode = AccessibilityHelper.findNodeInfosByTexts(nodeInfo, contents);
         if(targetNode != null) {
-            Logger.e(TAG, "[clickAtNodeWithContent] 成功点击(" + content + "):" + targetNode);
+            Logger.e(TAG, "[clickAtNodeWithContent] 成功点击(" + contents + "):" + targetNode);
             AccessibilityHelper.performClick(targetNode);
         }
     }

@@ -32,6 +32,7 @@ import com.chyrain.quizassistant.job.DatiAccessbilityJob;
 import com.chyrain.quizassistant.job.HjsmAccessbilityJob;
 import com.chyrain.quizassistant.job.HuajiaoAccessbilityJob;
 import com.chyrain.quizassistant.job.InkeAccessbilityJob;
+import com.chyrain.quizassistant.job.TaobaoAccessbilityJob;
 import com.chyrain.quizassistant.job.XiaoyuanAccessbilityJob;
 import com.chyrain.quizassistant.job.XiguaAccessbilityJob;
 import com.chyrain.quizassistant.job.YoukuAccessbilityJob;
@@ -66,7 +67,8 @@ public class WxBotService extends AccessibilityService {
             HuajiaoAccessbilityJob.class,
             HjsmAccessbilityJob.class,
             YoukuAccessbilityJob.class,
-            XiaoyuanAccessbilityJob.class
+            XiaoyuanAccessbilityJob.class,
+            TaobaoAccessbilityJob.class
     };
     /**
      * 所支持的答题平台任务对象实例

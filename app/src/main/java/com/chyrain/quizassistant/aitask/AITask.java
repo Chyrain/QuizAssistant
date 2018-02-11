@@ -204,9 +204,9 @@ public class AITask {
                                                 } else {
                                                     if (i == 1 && lastQuiz != null && lastQuiz.getAnswers() != null
                                                             && lastQuiz.getAnswers().size() >= 2) {
-                                                        quiz.setResult("答题还没有开始");
+                                                        quiz.setResult("暂没有获取到答案");
                                                     } else {
-                                                        quiz.setResult("获取答案失败");
+                                                        quiz.setResult("没有获取到答案");
                                                     }
                                                     quiz.setNoanswer(true);
                                                     if (res == null || res.length() > 0) {

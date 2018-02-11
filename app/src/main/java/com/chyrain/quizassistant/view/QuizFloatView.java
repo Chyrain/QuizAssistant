@@ -154,6 +154,9 @@ public class QuizFloatView extends LinearLayout {
             case "疯狂夺金":
                 mCurrentImageId = R.mipmap.settings_ic_youku;
                 break;
+            case "点题成金":
+                mCurrentImageId = R.mipmap.settings_ic_dtcj;
+                break;
             case "知识英雄":
                 mCurrentImageId = R.mipmap.settings_ic_zsyx;
                 break;

@@ -65,6 +65,12 @@
             android:key="KEY_ENABLE_YK"/>
         <com.chyrain.quizassistant.view.CustomSwitchPreference
             android:defaultValue="true"
+            android:title="点题成金"
+            android:summary="开启淘宝【点题成金】直播答题助手"
+            android:icon="@mipmap/settings_ic_dtcj"
+            android:key="KEY_ENABLE_TB"/>
+        <com.chyrain.quizassistant.view.CustomSwitchPreference
+            android:defaultValue="true"
             android:title="知识英雄"
             android:summary="开启小猿搜题【知识英雄】直播答题助手"
             android:icon="@mipmap/settings_ic_zsyx"
