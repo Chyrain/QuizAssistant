@@ -39,6 +39,7 @@ public class TaobaoAccessbilityJob extends DatiAccessbilityJob {
     private static final int WINDOW_QUIZ_PAGE = 2; // 答题页
     private static final int WINDOW_OTHER_PAGE = 3; // App内其他页面
     private static final int WINDOW_READY_PAGE = 4; // 答题准备页
+    private static final int WINDOW_LIVEHOME_PAGE = 5; // 淘宝直播主页
 
     @Override
     public void onCreateJob(WxBotService service) {
@@ -134,8 +135,20 @@ public class TaobaoAccessbilityJob extends DatiAccessbilityJob {
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            // 进入答题页面
+                            // 进入淘宝直播主页
                             clickAtNodeWithContent("正在直播分钱，火速前往");
+                        }
+                    }, 2000);
+                }
+            } else if (event.getClassName().equals("com.taobao.taolive.TaoLiveHomepageActivity")) {
+                mLastWindow = mCurrentWindow;
+                mCurrentWindow = WINDOW_LIVEHOME_PAGE;
+                if (getConfig().isEnableAutoTrust()) {
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            // 进入答题准备页面
+                            clickAtNodeWithId("taolive_tbtv_layout");
                         }
                     }, 2000);
                 }
@@ -161,9 +174,15 @@ public class TaobaoAccessbilityJob extends DatiAccessbilityJob {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        clickAtNodeWithContent("淘宝直播", "点题成金");
+                        // 进入淘宝直播主页
+                        clickAtNodeWithContent("淘宝直播", "点题成金", "");
                     }
                 }, 2000);
+            } else if (mCurrentWindow == WINDOW_LIVEHOME_PAGE) {
+                if (getConfig().isEnableAutoTrust()) {
+                    // 进入答题准备页面
+                    clickAtNodeWithId("taolive_tbtv_layout");
+                }
             } else if (mCurrentWindow == WINDOW_READY_PAGE) {
                 if (getConfig().isEnableAutoTrust()) {
                     // 进入答题页面
